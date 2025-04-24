@@ -179,7 +179,6 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
       height: 500,
       resizable: true,
       dragDrop: [],
-      tabs: [],
       scrollY: [".sheet-body"],
       minWidth: 600,
       minHeight: 400,

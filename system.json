@@ -3,17 +3,24 @@
   "title": "IKRPG",
   "id": "ikrpg",
   "version": "1.0.0",
-  "author": "Seu Nome",
-  "description": "Sistema baseado no Iron Kingdoms RPG.",
+  "authors": [
+    {
+      "name": "Breno Baiardi",
+      "url": "https://github.com/BrenoBaiardi",
+      "flags": {}
+    }
+  ],
+  "description": "Iron Kingdoms RPG game system",
   "scripts": [],
-  "esmodules": ["module/ikrpg.js"],
+  "esmodules": [
+    "module/ikrpg.js"
+  ],
   "styles": [],
   "languages": [],
   "packs": [],
-  "actorTypes": ["character"],
-  "defaultType": "character",
-  "system": "ikrpg",
-  "minimumCoreVersion": "12",
-  "compatibleCoreVersion": "12",
+  "compatibility": {
+    "minimum": "12.0",
+    "verified": "12.331"
+  },
   "license": "MIT"
 }
