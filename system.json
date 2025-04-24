@@ -1,0 +1,19 @@
+{
+  "name": "ikrpg",
+  "title": "IKRPG",
+  "id": "ikrpg",
+  "version": "1.0.0",
+  "author": "Seu Nome",
+  "description": "Sistema baseado no Iron Kingdoms RPG.",
+  "scripts": [],
+  "esmodules": ["module/ikrpg.js"],
+  "styles": [],
+  "languages": [],
+  "packs": [],
+  "actorTypes": ["character"],
+  "defaultType": "character",
+  "system": "ikrpg",
+  "minimumCoreVersion": "12",
+  "compatibleCoreVersion": "12",
+  "license": "MIT"
+}
