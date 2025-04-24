@@ -5,14 +5,6 @@
          "npc"
       ],
       "character": {
-         "prototypeToken": {
-            "actorLink": true,
-            "bar1": {
-               "attribute": "system.hp"
-            },
-            "displayName": 20,
-            "displayBars": 40
-         },
          "hp": {
             "value": 0,
             "max": 0
@@ -256,7 +248,15 @@
                "attr": "PER",
                "level": 0
             }
-         ]
+         ],
+         "prototypeToken": {
+            "actorLink": true,
+            "bar1": {
+               "attribute": "system.hp"
+            },
+            "displayName": 20,
+            "displayBars": 40
+         }
       },
       "npc": {
          "hp": 0,

@@ -11,6 +11,19 @@ Hooks.once("init", function () {
   });
 });
 
+Hooks.on("preCreateActor", (actor, data, options, userId) => {
+  if (actor.type === "character") {
+    actor.updateSource({
+      prototypeToken: {
+        actorLink: true,
+        bar1: { attribute: "hp" },
+        displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
+        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER
+      }
+    });
+  }
+});
+
 const SKILL_LIST = [
   "Sneak",
   "Detection",
