@@ -13,6 +13,11 @@ Hooks.once("init", function () {
     types: ["npc"],
     makeDefault: true
   });
+
+  CONFIG.Combat.initiative = {
+    formula: "2d6 + @init",
+    decimals: 0
+  };
 });
 
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
@@ -65,6 +70,17 @@ class IKRPGActor extends Actor {  // runs every time sheet is changed
 
   }
 
+  getInitiativeRoll(combatant, options) {
+    const init = this.system.derivedAttributes?.INIT || 0;
+    return new Roll("2d6 + @init", { init }).evaluate({ async: false });
+  }
+
+  getRollData() {
+    const data = super.getRollData();
+    data.init = this.system.derivedAttributes?.INIT || 0;
+    return data;
+  }
+
 }
 
 class IKRPGBasicNPCSheet extends ActorSheet {
@@ -84,6 +100,28 @@ class IKRPGBasicNPCSheet extends ActorSheet {
     const data = super.getData();
     data.system = this.actor.system;
     return data;
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    html.find(".hp-plus").click(ev => {
+      ev.preventDefault();
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      if (hp.value < hp.max) {
+        hp.value += 1;
+        this.actor.update({ "system.hp.value": hp.value });
+      }
+    });
+
+    html.find(".hp-minus").click(ev => {
+      ev.preventDefault();
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      if (hp.value > 0) {
+        hp.value -= 1;
+        this.actor.update({ "system.hp.value": hp.value });
+      }
+    });
   }
 }
 
@@ -112,6 +150,24 @@ class IKRPGActorSheet extends ActorSheet {
 
   async activateListeners(html) {
     super.activateListeners(html);
+
+    html.find(".hp-plus").click(ev => {
+      ev.preventDefault();
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      if (hp.value < hp.max) {
+        hp.value += 1;
+        this.actor.update({ "system.hp.value": hp.value });
+      }
+    });
+
+    html.find(".hp-minus").click(ev => {
+      ev.preventDefault();
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      if (hp.value > 0) {
+        hp.value -= 1;
+        this.actor.update({ "system.hp.value": hp.value });
+      }
+    });
 
     // Rolar atributo
     html.find(".roll-attr").click(async ev => {

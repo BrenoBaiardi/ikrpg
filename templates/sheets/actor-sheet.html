@@ -15,9 +15,13 @@
         <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
           style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;" />
 
-        <div class="flexrow" style="justify-content: center; gap: 0.5rem;">
+        <div class="flexrow" style="justify-content: center; gap: 0.5rem; align-items: center;">
           <label>HP</label>
+
+          <button type="button" class="hp-minus">-</button>
           <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;" />
+          <button type="button" class="hp-plus">+</button>
+
           <label>Max</label>
           <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled style="width: 4ch;" />
         </div>
