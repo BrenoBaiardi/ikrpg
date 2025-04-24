@@ -26,6 +26,14 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
       }
     });
   }
+  if (actor.type === "npc") {
+    actor.updateSource({
+      prototypeToken: {
+        actorLink: false,
+        bar1: { attribute: "hp" }
+      }
+    });
+  }
 });
 
 const SKILL_LIST = [
@@ -61,7 +69,7 @@ class IKRPGActor extends Actor {  // runs every time sheet is changed
 
 class IKRPGBasicNPCSheet extends ActorSheet {
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["ikrpg", "sheet", "npc"],
       template: "systems/ikrpg/templates/sheets/npc-sheet.html",
       width: 700,
@@ -81,7 +89,7 @@ class IKRPGBasicNPCSheet extends ActorSheet {
 
 class IKRPGActorSheet extends ActorSheet {
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["ikrpg", "sheet", "actor"],
       template: "systems/ikrpg/templates/sheets/actor-sheet.html",
       width: 700,

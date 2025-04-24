@@ -25,16 +25,16 @@
             "INT": 0
          },
          "secondaryAttributes": {
-            "STR": 0,
             "SPD": 0,
+            "STR": 0,
             "PRW": 0,
             "POI": 0,
-            "PER": 0,
-            "ARC": 0
+            "ARC": 0,
+            "PER": 0
          },
          "derivedAttributes": {
-            "WILL": 0,
             "INIT": 0,
+            "WILL": 0,
             "DEF": 0,
             "ARM": 0
          },
@@ -259,30 +259,42 @@
          }
       },
       "npc": {
-         "system": {
-            "hp": {
-               "value": 0,
-               "max": 0
-            },
-            "mainAttributes": {
-               "STR": 0,
-               "AGI": 0,
-               "INT": 0
-            },
-            "secondaryAttributes": {
-               "PHY": 0,
-               "PER": 0,
-               "POI": 0,
-               "SPD": 0,
-               "PRW": 0,
-               "ARC": 0
-            },
-            "derivedAttributes": {
-               "WILL": 0,
-               "DEF": 0,
-               "ARM": 0,
-               "INIT": 0
-            }
+         "hp": {
+            "value": 0,
+            "max": 0
+         },
+         "mainAttributes": {
+            "PHY": 0,
+            "AGI": 0,
+            "INT": 0
+         },
+         "secondaryAttributes": {
+            "SPD": 0,
+            "STR": 0,
+            "PRW": 0,
+            "POI": 0,
+            "ARC": 0,
+            "PER": 0
+         },
+         "derivedAttributes": {
+            "INIT": 0,
+            "WILL": 0,
+            "DEF": 0,
+            "ARM": 0
+         },
+         "modifiers": {
+            "WILL": [
+               0
+            ],
+            "INIT": [
+               0
+            ],
+            "DEF": [
+               0
+            ],
+            "ARM": [
+               0
+            ]
          },
          "prototypeToken": {
             "actorLink": true,
