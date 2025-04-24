@@ -11,17 +11,15 @@
       </div>
 
       <!-- Nome e HP -->
-      <div class="name-hp" style="flex: 1;">
+      <div class="name-hp" style="width: fit-content;">
         <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
           style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;" />
 
-        <div class="flexrow" style="justify-content: center; gap: 0.5rem; align-items: center;">
+        <div class="flexrow" style="width: fit-content; gap: 0.5rem; align-items: center; flex-wrap: nowrap;">
           <label>HP</label>
-
-          <button type="button" class="hp-minus">-</button>
+          <button type="button" class="hp-minus" style="width: 5px; height: 30px;">-</button>
           <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;" />
-          <button type="button" class="hp-plus">+</button>
-
+          <button type="button" class="hp-plus" style="width: 5px; height: 30px;">+</button>
           <label>Max</label>
           <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled style="width: 4ch;" />
         </div>
@@ -48,96 +46,100 @@
     </div>
   </header>
 
-  <section class="sheet-body">
-    <h2>Atributos</h2>
-    <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
+  <section class="sheet-body" style="flex: 1 1 auto; overflow-y: auto;">
+    <nav class="sheet-tabs tabs" data-group="primary">
+      <a class="item" data-tab="attributes">Atributos</a>
+      <a class="item" data-tab="skills">Perícias</a>
+    </nav>
+    <div class="tab" data-group="primary" data-tab="attributes">
+      <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
 
-      <!-- Coluna da esquerda: Main Attributes -->
-      <div class="attribute-block" style="flex: 1;">
-        <h3>Principal</h3>
-        <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-          {{#each system.mainAttributes as |value key|}}
-          <div class="attribute">
-            <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
-            <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}" />
+        <!-- Coluna da esquerda: Main Attributes -->
+        <div class="attribute-block" style="flex: 1;">
+          <h3>Principal</h3>
+          <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            {{#each system.mainAttributes as |value key|}}
+            <div class="attribute">
+              <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
+              <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}" />
+            </div>
+            {{/each}}
           </div>
-          {{/each}}
         </div>
-      </div>
 
-      <!-- Coluna da direita: Secondary Attributes -->
-      <div class="attribute-block" style="flex: 1;">
-        <h3>Secundarios</h3>
-        <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-          {{#each system.secondaryAttributes as |value key|}}
-          <div class="attribute">
-            <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
-            <input type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}" />
+        <!-- Coluna da direita: Secondary Attributes -->
+        <div class="attribute-block" style="flex: 1;">
+          <h3>Secundarios</h3>
+          <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            {{#each system.secondaryAttributes as |value key|}}
+            <div class="attribute">
+              <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
+              <input type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}" />
+            </div>
+            {{/each}}
           </div>
-          {{/each}}
         </div>
-      </div>
 
-      <!-- Outra Coluna : derived Attributes -->
-      <div class="attribute-block" style="flex: 1;">
-        <h3>Derivados</h3>
-        <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-          {{#each system.derivedAttributes as |value key|}}
-          <div class="attribute">
-            <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
-            <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled />
+        <!-- Outra Coluna : derived Attributes -->
+        <div class="attribute-block" style="flex: 1;">
+          <h3>Derivados</h3>
+          <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+            {{#each system.derivedAttributes as |value key|}}
+            <div class="attribute">
+              <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
+              <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled />
+            </div>
+            {{/each}}
           </div>
-          {{/each}}
         </div>
-      </div>
 
+      </div>
     </div>
+    <div class="tab" data-group="primary" data-tab="skills">
+      <table class="skills-table">
+        <thead>
+          <tr>
+            <th style="width: auto; padding: 0.5rem;">Nome</th>
+            <th style="width: 8ch; padding: 0.5rem">Atributo</th>
+            <th style="width: 4ch; padding: 0.5rem">Nível</th>
+            <th style="width: 30px; padding: 0.5rem">Rolar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each system.skills}}
+          <tr>
+            <td>
+              {{this.name}}
+              <input type="hidden" name="system.skills.{{@index}}.name" value="{{this.name}}" />
+            </td>
 
-    <h2>Perícias</h2>
-    <table class="skills-table">
-      <thead>
-        <tr>
-          <th style="width: auto; padding: 0.5rem;">Nome</th>
-          <th style="width: 8ch; padding: 0.5rem">Atributo</th>
-          <th style="width: 4ch; padding: 0.5rem">Nível</th>
-          <th style="width: 30px; padding: 0.5rem">Rolar</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each system.skills}}
-        <tr>
-          <td>
-            {{this.name}}
-            <input type="hidden" name="system.skills.{{@index}}.name" value="{{this.name}}" />
-          </td>
+            <td>
+              <select name="system.skills.{{@index}}.attr" style="width: 100%;">
+                <option value="SOC" {{#if (eq "SOC" this.attr)}}selected{{/if}}>--</option>
 
-          <td>
-            <select name="system.skills.{{@index}}.attr" style="width: 100%;">
-              <option value="SOC" {{#if (eq "SOC" this.attr)}}selected{{/if}}>--</option>
+                {{#each ../system.mainAttributes as |val attrKey|}}
+                <option value="{{attrKey}}" {{#if (eq attrKey ../this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                {{/each}}
 
-              {{#each ../system.mainAttributes as |val attrKey|}}
-              <option value="{{attrKey}}" {{#if (eq attrKey ../this.attr)}}selected{{/if}}>{{attrKey}}</option>
-              {{/each}}
+                {{#each ../system.secondaryAttributes as |val attrKey|}}
+                <option value="{{attrKey}}" {{#if (eq attrKey ../this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                {{/each}}
+              </select>
+            </td>
 
-              {{#each ../system.secondaryAttributes as |val attrKey|}}
-              <option value="{{attrKey}}" {{#if (eq attrKey ../this.attr)}}selected{{/if}}>{{attrKey}}</option>
-              {{/each}}
-            </select>
-          </td>
+            <td style="text-align: center;">
+              <input type="number" name="system.skills.{{@index}}.level" value="{{this.level}}" min="0"
+                style="width: 3ch; text-align: center;" />
+            </td>
 
-          <td style="text-align: center;">
-            <input type="number" name="system.skills.{{@index}}.level" value="{{this.level}}" min="0"
-              style="width: 3ch; text-align: center;" />
-          </td>
-
-          <td style="text-align: center;">
-            <button type="button" class="roll-skill" data-idx="{{@index}}">🎲</button>
-          </td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
-
+            <td style="text-align: center;">
+              <button type="button" class="roll-skill" data-idx="{{@index}}">🎲</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
   </section>
 
 </form>

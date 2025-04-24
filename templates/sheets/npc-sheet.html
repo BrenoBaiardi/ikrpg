@@ -6,22 +6,21 @@
                 <img src="{{actor.img}}" data-edit="img"
                     style="width: 128px; height: 128px; object-fit: cover; border-radius: 8px;" />
             </div>
-
             <!-- Nome e HP -->
-            <div style="flex: 1;">
-                <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do NPC"
+            <div class="name-hp" style="width: fit-content;">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
                     style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;" />
-                <div class="flexrow" style="justify-content: center; gap: 0.5rem; align-items: center;">
+
+                <div class="flexrow" style="width: fit-content; gap: 0.5rem; align-items: center; flex-wrap: nowrap;">
                     <label>HP</label>
-
-                    <button type="button" class="hp-minus">-</button>
+                    <button type="button" class="hp-minus" style="width: 5px; height: 30px;">-</button>
                     <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;" />
-                    <button type="button" class="hp-plus">+</button>
-
+                    <button type="button" class="hp-plus" style="width: 5px; height: 30px;">+</button>
                     <label>Max</label>
                     <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled style="width: 4ch;" />
                 </div>
             </div>
+
         </div>
     </header>
 

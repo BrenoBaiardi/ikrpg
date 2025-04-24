@@ -90,7 +90,7 @@ class IKRPGBaseSheet extends ActorSheet {
     // Botões de HP
     html.find(".hp-plus").click(ev => {
       ev.preventDefault();
-      const hp = duplicate(this.actor.system.hp);
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
       if (hp.value < hp.max) {
         hp.value += 1;
         this.actor.update({ "system.hp.value": hp.value });
@@ -99,7 +99,7 @@ class IKRPGBaseSheet extends ActorSheet {
 
     html.find(".hp-minus").click(ev => {
       ev.preventDefault();
-      const hp = duplicate(this.actor.system.hp);
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
       if (hp.value > 0) {
         hp.value -= 1;
         this.actor.update({ "system.hp.value": hp.value });
@@ -182,7 +182,14 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
       tabs: [],
       scrollY: [".sheet-body"],
       minWidth: 600,
-      minHeight: 400
+      minHeight: 400,
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "attributes"
+        }
+      ]
     });
   }
 
