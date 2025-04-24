@@ -20,7 +20,7 @@ const SKILL_LIST = [
   "Great Weapon"
 ];
 
-class IKRPGActor extends Actor {
+class IKRPGActor extends Actor {  // runs every time sheet is changed
   prepareData() {
     super.prepareData();
     const data = this.system;
