@@ -9,6 +9,36 @@ Hooks.once("init", function () {
     types: ["character"],
     makeDefault: true
   });
+  Actors.registerSheet("ikrpg", IKRPGBasicNPCSheet, {
+    types: ["npc"],
+    makeDefault: true
+  });
+
+  CONFIG.Combat.initiative = {
+    formula: "2d6 + @init",
+    decimals: 0
+  };
+});
+
+Hooks.on("preCreateActor", (actor, data, options, userId) => {
+  if (actor.type === "character") {
+    actor.updateSource({
+      prototypeToken: {
+        actorLink: true,
+        bar1: { attribute: "hp" },
+        displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
+        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER
+      }
+    });
+  }
+  if (actor.type === "npc") {
+    actor.updateSource({
+      prototypeToken: {
+        actorLink: false,
+        bar1: { attribute: "hp" }
+      }
+    });
+  }
 });
 
 const SKILL_LIST = [
@@ -20,7 +50,7 @@ const SKILL_LIST = [
   "Great Weapon"
 ];
 
-class IKRPGActor extends Actor {
+class IKRPGActor extends Actor {  // runs every time sheet is changed
   prepareData() {
     super.prepareData();
     const data = this.system;
@@ -40,26 +70,41 @@ class IKRPGActor extends Actor {
 
   }
 
-}
-
-class IKRPGActorSheet extends ActorSheet {
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      classes: ["ikrpg", "sheet", "actor"],
-      template: "systems/ikrpg/templates/sheets/actor-sheet.html",
-      width: 600,
-      height: 400
-    });
+  getInitiativeRoll(combatant, options) {
+    const init = this.system.derivedAttributes?.INIT || 0;
+    return new Roll("2d6 + @init", { init }).evaluate({ async: false });
   }
 
-  getData() {
-    const data = super.getData();
-    data.system = this.actor.system;
+  getRollData() {
+    const data = super.getRollData();
+    data.init = this.system.derivedAttributes?.INIT || 0;
     return data;
   }
 
-  async activateListeners(html) {
+}
+
+class IKRPGBaseSheet extends ActorSheet {
+  activateListeners(html) {
     super.activateListeners(html);
+
+    // Botões de HP
+    html.find(".hp-plus").click(ev => {
+      ev.preventDefault();
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      if (hp.value < hp.max) {
+        hp.value += 1;
+        this.actor.update({ "system.hp.value": hp.value });
+      }
+    });
+
+    html.find(".hp-minus").click(ev => {
+      ev.preventDefault();
+      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      if (hp.value > 0) {
+        hp.value -= 1;
+        this.actor.update({ "system.hp.value": hp.value });
+      }
+    });
 
     // Rolar atributo
     html.find(".roll-attr").click(async ev => {
@@ -95,5 +140,67 @@ class IKRPGActorSheet extends ActorSheet {
         flavor: `Teste de ${skill.name}`
       });
     });
+
+  }
+}
+
+
+class IKRPGBasicNPCSheet extends IKRPGBaseSheet {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      classes: ["ikrpg", "sheet", "npc"],
+      template: "systems/ikrpg/templates/sheets/npc-sheet.html",
+      width: 700,
+      height: 500,
+      resizable: true,
+      minWidth: 600,
+      minHeight: 400
+    });
+  }
+
+  getData() {
+    const data = super.getData();
+    data.system = this.actor.system;
+    return data;
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+  }
+}
+
+
+class IKRPGActorSheet extends IKRPGBaseSheet {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      classes: ["ikrpg", "sheet", "actor"],
+      template: "systems/ikrpg/templates/sheets/actor-sheet.html",
+      width: 700,
+      height: 500,
+      resizable: true,
+      dragDrop: [],
+      tabs: [],
+      scrollY: [".sheet-body"],
+      minWidth: 600,
+      minHeight: 400,
+      tabs: [
+        {
+          navSelector: ".sheet-tabs",
+          contentSelector: ".sheet-body",
+          initial: "attributes"
+        }
+      ]
+    });
+  }
+
+  getData() {
+    const data = super.getData();
+    data.system = this.actor.system;
+    data.isNPC = this.actor.type === "npc";
+    return data;
+  }
+
+  async activateListeners(html) {
+    super.activateListeners(html);
   }
 }
