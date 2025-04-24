@@ -9,6 +9,10 @@ Hooks.once("init", function () {
     types: ["character"],
     makeDefault: true
   });
+  Actors.registerSheet("ikrpg", IKRPGBasicNPCSheet, {
+    types: ["npc"],
+    makeDefault: true
+  });
 });
 
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
@@ -55,6 +59,26 @@ class IKRPGActor extends Actor {  // runs every time sheet is changed
 
 }
 
+class IKRPGBasicNPCSheet extends ActorSheet {
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+      classes: ["ikrpg", "sheet", "npc"],
+      template: "systems/ikrpg/templates/sheets/npc-sheet.html",
+      width: 700,
+      height: 500,
+      resizable: true,
+      minWidth: 600,
+      minHeight: 400
+    });
+  }
+
+  getData() {
+    const data = super.getData();
+    data.system = this.actor.system;
+    return data;
+  }
+}
+
 class IKRPGActorSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -74,6 +98,7 @@ class IKRPGActorSheet extends ActorSheet {
   getData() {
     const data = super.getData();
     data.system = this.actor.system;
+    data.isNPC = this.actor.type === "npc";
     return data;
   }
 

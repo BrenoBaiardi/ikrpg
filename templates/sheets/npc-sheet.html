@@ -1,0 +1,69 @@
+<form class="ikrpg sheet npc" autocomplete="off">
+    <header class="sheet-header" style="padding: 0.5rem;">
+        <div class="flexrow" style="align-items: center; gap: 1rem;">
+            <!-- Imagem do NPC -->
+            <div class="profile-img">
+                <img src="{{actor.img}}" data-edit="img"
+                    style="width: 128px; height: 128px; object-fit: cover; border-radius: 8px;" />
+            </div>
+
+            <!-- Nome e HP -->
+            <div style="flex: 1;">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do NPC"
+                    style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;" />
+                <div class="flexrow" style="justify-content: center; gap: 0.5rem;">
+                    <label>HP</label>
+                    <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;" />
+                    <label>Max</label>
+                    <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled style="width: 4ch;" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="sheet-body" style="padding: 1rem;">
+        <h2>Atributos</h2>
+        <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
+
+            <!-- Atributos principais -->
+            <div class="attribute-block" style="flex: 1;">
+                <h3>Principais</h3>
+                <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    {{#each system.mainAttributes as |value key|}}
+                    <div class="attribute">
+                        <label>{{key}}</label>
+                        <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}" />
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <!-- Atributos secundários -->
+            <div class="attribute-block" style="flex: 1;">
+                <h3>Secundários</h3>
+                <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    {{#each system.secondaryAttributes as |value key|}}
+                    <div class="attribute">
+                        <label>{{key}}</label>
+                        <input type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}" />
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            <!-- Atributos derivados -->
+            <div class="attribute-block" style="flex: 1;">
+                <h3>Derivados</h3>
+                <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    {{#each system.derivedAttributes as |value key|}}
+                    <div class="attribute">
+                        <label>{{key}}</label>
+                        <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled />
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+        </div>
+    </section>
+</form>
