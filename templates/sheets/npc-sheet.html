@@ -35,7 +35,7 @@
                 <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     {{#each system.mainAttributes as |value key|}}
                     <div class="attribute">
-                        <label>{{key}}</label>
+                        <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
                         <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}" />
                     </div>
                     {{/each}}
@@ -48,7 +48,7 @@
                 <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     {{#each system.secondaryAttributes as |value key|}}
                     <div class="attribute">
-                        <label>{{key}}</label>
+                        <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
                         <input type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}" />
                     </div>
                     {{/each}}
@@ -61,7 +61,7 @@
                 <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     {{#each system.derivedAttributes as |value key|}}
                     <div class="attribute">
-                        <label>{{key}}</label>
+                        <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
                         <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled />
                     </div>
                     {{/each}}

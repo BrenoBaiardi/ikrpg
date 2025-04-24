@@ -83,31 +83,14 @@ class IKRPGActor extends Actor {  // runs every time sheet is changed
 
 }
 
-class IKRPGBasicNPCSheet extends ActorSheet {
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["ikrpg", "sheet", "npc"],
-      template: "systems/ikrpg/templates/sheets/npc-sheet.html",
-      width: 700,
-      height: 500,
-      resizable: true,
-      minWidth: 600,
-      minHeight: 400
-    });
-  }
-
-  getData() {
-    const data = super.getData();
-    data.system = this.actor.system;
-    return data;
-  }
-
+class IKRPGBaseSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    // Botões de HP
     html.find(".hp-plus").click(ev => {
       ev.preventDefault();
-      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      const hp = duplicate(this.actor.system.hp);
       if (hp.value < hp.max) {
         hp.value += 1;
         this.actor.update({ "system.hp.value": hp.value });
@@ -116,53 +99,7 @@ class IKRPGBasicNPCSheet extends ActorSheet {
 
     html.find(".hp-minus").click(ev => {
       ev.preventDefault();
-      const hp = foundry.utils.duplicate(this.actor.system.hp);
-      if (hp.value > 0) {
-        hp.value -= 1;
-        this.actor.update({ "system.hp.value": hp.value });
-      }
-    });
-  }
-}
-
-class IKRPGActorSheet extends ActorSheet {
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["ikrpg", "sheet", "actor"],
-      template: "systems/ikrpg/templates/sheets/actor-sheet.html",
-      width: 700,
-      height: 500,
-      resizable: true,
-      dragDrop: [],
-      tabs: [],
-      scrollY: [".sheet-body"],
-      minWidth: 600,
-      minHeight: 400
-    });
-  }
-
-  getData() {
-    const data = super.getData();
-    data.system = this.actor.system;
-    data.isNPC = this.actor.type === "npc";
-    return data;
-  }
-
-  async activateListeners(html) {
-    super.activateListeners(html);
-
-    html.find(".hp-plus").click(ev => {
-      ev.preventDefault();
-      const hp = foundry.utils.duplicate(this.actor.system.hp);
-      if (hp.value < hp.max) {
-        hp.value += 1;
-        this.actor.update({ "system.hp.value": hp.value });
-      }
-    });
-
-    html.find(".hp-minus").click(ev => {
-      ev.preventDefault();
-      const hp = foundry.utils.duplicate(this.actor.system.hp);
+      const hp = duplicate(this.actor.system.hp);
       if (hp.value > 0) {
         hp.value -= 1;
         this.actor.update({ "system.hp.value": hp.value });
@@ -203,5 +140,60 @@ class IKRPGActorSheet extends ActorSheet {
         flavor: `Teste de ${skill.name}`
       });
     });
+
+  }
+}
+
+
+class IKRPGBasicNPCSheet extends IKRPGBaseSheet {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      classes: ["ikrpg", "sheet", "npc"],
+      template: "systems/ikrpg/templates/sheets/npc-sheet.html",
+      width: 700,
+      height: 500,
+      resizable: true,
+      minWidth: 600,
+      minHeight: 400
+    });
+  }
+
+  getData() {
+    const data = super.getData();
+    data.system = this.actor.system;
+    return data;
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+  }
+}
+
+
+class IKRPGActorSheet extends IKRPGBaseSheet {
+  static get defaultOptions() {
+    return foundry.utils.mergeObject(super.defaultOptions, {
+      classes: ["ikrpg", "sheet", "actor"],
+      template: "systems/ikrpg/templates/sheets/actor-sheet.html",
+      width: 700,
+      height: 500,
+      resizable: true,
+      dragDrop: [],
+      tabs: [],
+      scrollY: [".sheet-body"],
+      minWidth: 600,
+      minHeight: 400
+    });
+  }
+
+  getData() {
+    const data = super.getData();
+    data.system = this.actor.system;
+    data.isNPC = this.actor.type === "npc";
+    return data;
+  }
+
+  async activateListeners(html) {
+    super.activateListeners(html);
   }
 }
