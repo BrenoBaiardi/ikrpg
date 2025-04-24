@@ -1,16 +1,29 @@
-<form class="ikrpg sheet actor" autocomplete="off">
+<form class="ikrpg sheet actor" autocomplete="off" style="min-width: 600px; min-height: 400px;">
+
   <header class="sheet-header">
 
-    <h1 style="text-align:center; padding: 0.5rem;">
-      <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
-        style="text-align:center; font-size:1.5rem; width:100%;" />
-      <div class="flexrow">
-        <label>HP</label>
-        <input type="number" name="system.hp.value" value="{{system.hp.value}}" />
-        <label>Max</label>
-        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled />
+    <div class="flexrow" style="align-items: center; gap: 1rem; padding: 0.5rem;">
+
+      <!-- Imagem do personagem -->
+      <div class="profile-img">
+        <img src="{{actor.img}}" data-edit="img"
+          style="width: 128px; height: 128px; object-fit: cover; border-radius: 8px;" />
       </div>
-    </h1>
+
+      <!-- Nome e HP -->
+      <div class="name-hp" style="flex: 1;">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
+          style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;" />
+
+        <div class="flexrow" style="justify-content: center; gap: 0.5rem;">
+          <label>HP</label>
+          <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;" />
+          <label>Max</label>
+          <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled style="width: 4ch;" />
+        </div>
+      </div>
+
+    </div>
 
 
 

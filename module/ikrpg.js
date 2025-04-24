@@ -47,8 +47,14 @@ class IKRPGActorSheet extends ActorSheet {
     return mergeObject(super.defaultOptions, {
       classes: ["ikrpg", "sheet", "actor"],
       template: "systems/ikrpg/templates/sheets/actor-sheet.html",
-      width: 600,
-      height: 400
+      width: 700,
+      height: 500,
+      resizable: true,
+      dragDrop: [],
+      tabs: [],
+      scrollY: [".sheet-body"],
+      minWidth: 600,
+      minHeight: 400
     });
   }
 

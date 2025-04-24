@@ -5,6 +5,14 @@
          "npc"
       ],
       "character": {
+         "prototypeToken": {
+            "actorLink": true,
+            "bar1": {
+               "attribute": "system.hp"
+            },
+            "displayName": 20,
+            "displayBars": 40
+         },
          "hp": {
             "value": 0,
             "max": 0
