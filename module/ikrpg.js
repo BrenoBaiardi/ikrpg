@@ -281,6 +281,55 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             };
             this.actor.createEmbeddedDocuments("Item", [itemData]);
         });
+
+        html.find(".item-roll").click(async ev => {
+            ev.preventDefault();
+
+            // Identifica o item clicado
+            const li = ev.currentTarget.closest(".item");
+            const item = this.actor.items.get(li.dataset.itemId);
+            if (!item) return;
+
+            // Nome da skill associada
+            const skillName = item.system.skill;
+            if (!skillName) {
+                ui.notifications.warn(`O item ${item.name} não tem uma perícia atribuída.`);
+                return;
+            }
+
+            // Converte para array se for objeto indexado
+            const militarySkills = Object.values(this.actor.system.militarySkills || {});
+            const skill = militarySkills.find(s => s.name === skillName);
+
+            if (!skill) {
+                ui.notifications.warn(`O personagem não possui a perícia militar "${skillName}".`);
+                return;
+            }
+
+            // Atributo vinculado à perícia
+            const attrValue = this.actor.system.mainAttributes?.[skill.attr]
+                ?? this.actor.system.secondaryAttributes?.[skill.attr]
+                ?? 0;
+
+            const skillLevel = skill.level || 0;
+            const atkMod = item.system.attackMod || 0;
+
+            const roll = new Roll("2d6 + @attr + @skill + @atk", {
+                attr: attrValue,
+                skill: skillLevel,
+                atk: atkMod
+            });
+
+            await roll.evaluate({ async: true });
+
+            roll.toMessage({
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                flavor: `Ataque com <strong>${item.name}</strong> usando <em>${skillName}</em>`
+            });
+        });
+
+
+
     }
 }
 

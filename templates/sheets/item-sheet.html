@@ -1,61 +1,109 @@
 <form class="ikrpg item-sheet" autocomplete="off">
     <header class="sheet-header">
-        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:100%" /></h1>
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:100%"/></h1>
     </header>
 
     <section class="sheet-body" style="padding: 0.5rem;">
         <div class="form-group">
             <label>Tipo</label>
-            <input type="text" value="{{item.type}}" disabled />
+            <input type="text" value="{{item.type}}" disabled/>
         </div>
 
         {{#if (eq item.type "meleeWeapon")}}
         <div class="form-group">
             <label>Custo</label>
-            <input type="text" name="system.cost" value="{{system.cost}}" />
+            <input type="text" name="system.cost" value="{{system.cost}}"/>
         </div>
         <div class="form-group">
             <label>Perícia</label>
-            <input type="text" name="system.skill" value="{{system.skill}}" />
+            <select name="system.skill">
+                <option value="">—</option>
+                <option value="Archery" {{#if (eq system.skill
+                "Archery")}}selected{{/if}}>Archery</option>
+                <option value="Crossbow" {{#if (eq system.skill
+                "Crossbow")}}selected{{/if}}>Crossbow</option>
+                <option value="Great Weapon" {{#if (eq system.skill
+                "Great Weapon")}}selected{{/if}}>Great Weapon</option>
+                <option value="Hand Weapon" {{#if (eq system.skill
+                "Hand Weapon")}}selected{{/if}}>Hand Weapon</option>
+                <option value="Lance" {{#if (eq system.skill
+                "Lance")}}selected{{/if}}>Lance</option>
+                <option value="Light Artillery" {{#if (eq system.skill
+                "Light Artillery")}}selected{{/if}}>Light Artillery</option>
+                <option value="Pistol" {{#if (eq system.skill
+                "Pistol")}}selected{{/if}}>Pistol</option>
+                <option value="Rifle" {{#if (eq system.skill
+                "Rifle")}}selected{{/if}}>Rifle</option>
+                <option value="Shield" {{#if (eq system.skill
+                "Shield")}}selected{{/if}}>Shield</option>
+                <option value="Thrown Weapon" {{#if (eq system.skill
+                "Thrown Weapon")}}selected{{/if}}>Thrown Weapon</option>
+                <option value="Unarmed Combat" {{#if (eq system.skill
+                "Unarmed Combat")}}selected{{/if}}>Unarmed Combat</option>
+            </select>
         </div>
         <div class="form-group">
             <label>Mod. de Ataque</label>
-            <input type="number" name="system.attackMod" value="{{system.attackMod}}" />
+            <input type="number" name="system.attackMod" value="{{system.attackMod}}"/>
         </div>
         <div class="form-group">
             <label>POW</label>
-            <input type="number" name="system.pow" value="{{system.pow}}" />
+            <input type="number" name="system.pow" value="{{system.pow}}"/>
         </div>
         {{/if}}
 
         {{#if (eq item.type "rangedWeapon")}}
         <div class="form-group">
             <label>Munição</label>
-            <input type="text" name="system.ammo" value="{{system.ammo}}" />
+            <input type="text" name="system.ammo" value="{{system.ammo}}"/>
         </div>
         <div class="form-group">
             <label>Alcance Eficaz</label>
-            <input type="text" name="system.effectiveRange" value="{{system.effectiveRange}}" />
+            <input type="text" name="system.effectiveRange" value="{{system.effectiveRange}}"/>
         </div>
         <div class="form-group">
             <label>Alcance Máximo</label>
-            <input type="text" name="system.extremeRange" value="{{system.extremeRange}}" />
+            <input type="text" name="system.extremeRange" value="{{system.extremeRange}}"/>
         </div>
         <div class="form-group">
             <label>Perícia</label>
-            <input type="text" name="system.skill" value="{{system.skill}}" />
+            <select name="system.skill">
+                <option value="">—</option>
+                <option value="Archery" {{#if (eq system.skill
+                "Archery")}}selected{{/if}}>Archery</option>
+                <option value="Crossbow" {{#if (eq system.skill
+                "Crossbow")}}selected{{/if}}>Crossbow</option>
+                <option value="Great Weapon" {{#if (eq system.skill
+                "Great Weapon")}}selected{{/if}}>Great Weapon</option>
+                <option value="Hand Weapon" {{#if (eq system.skill
+                "Hand Weapon")}}selected{{/if}}>Hand Weapon</option>
+                <option value="Lance" {{#if (eq system.skill
+                "Lance")}}selected{{/if}}>Lance</option>
+                <option value="Light Artillery" {{#if (eq system.skill
+                "Light Artillery")}}selected{{/if}}>Light Artillery</option>
+                <option value="Pistol" {{#if (eq system.skill
+                "Pistol")}}selected{{/if}}>Pistol</option>
+                <option value="Rifle" {{#if (eq system.skill
+                "Rifle")}}selected{{/if}}>Rifle</option>
+                <option value="Shield" {{#if (eq system.skill
+                "Shield")}}selected{{/if}}>Shield</option>
+                <option value="Thrown Weapon" {{#if (eq system.skill
+                "Thrown Weapon")}}selected{{/if}}>Thrown Weapon</option>
+                <option value="Unarmed Combat" {{#if (eq system.skill
+                "Unarmed Combat")}}selected{{/if}}>Unarmed Combat</option>
+            </select>
         </div>
         <div class="form-group">
             <label>Mod. de Ataque</label>
-            <input type="number" name="system.attackMod" value="{{system.attackMod}}" />
+            <input type="number" name="system.attackMod" value="{{system.attackMod}}"/>
         </div>
         <div class="form-group">
             <label>POW</label>
-            <input type="number" name="system.pow" value="{{system.pow}}" />
+            <input type="number" name="system.pow" value="{{system.pow}}"/>
         </div>
         <div class="form-group">
             <label>AOE</label>
-            <input type="text" name="system.aoe" value="{{system.aoe}}" />
+            <input type="text" name="system.aoe" value="{{system.aoe}}"/>
         </div>
         {{/if}}
 

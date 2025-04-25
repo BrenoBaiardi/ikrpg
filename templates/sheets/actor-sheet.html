@@ -57,9 +57,11 @@
     <table class="item-table" style="width: 100%; border-collapse: collapse;">
         <thead>
         <tr>
-            <th style="text-align: left;">Nome</th>
+            <th style="text-align: center;"> </th>
+            <th style="text-align: center;">Nome</th>
             <th style="text-align: center;">Tipo</th>
             <th style="text-align: center;">POW</th>
+            <th style="text-align: center;">mod</th>
             <th style="text-align: center;">Perícia</th>
             <th style="text-align: center;">✎</th>
             <th style="text-align: center;">🗑</th>
@@ -68,9 +70,13 @@
         <tbody>
         {{#each items as |item|}}
         <tr class="item" data-item-id="{{item._id}}" style="border-bottom: 1px solid #444;">
-            <td>{{item.name}}</td>
+            <td style="text-align: center;">
+                <button type="button" class="item-roll" title="roll">🎲</button>
+            </td>
+            <td style="padding: 10px">{{item.name}}</td>
             <td style="text-align: center;">{{item.type}}</td>
             <td style="text-align: center;">{{item.system.pow}}</td>
+            <td style="text-align: center;">{{item.system.attackMod}}</td>
             <td style="text-align: center;">{{item.system.skill}}</td>
             <td style="text-align: center;">
                 <button type="button" class="item-edit" title="Editar">✎</button>
