@@ -19,6 +19,7 @@
       "faith": "",
       "level": "",
       "totalXP": 0,
+      "items": [],
       "mainAttributes": {
         "PHY": 0,
         "AGI": 0,
@@ -363,9 +364,57 @@
   },
   "Item": {
     "types": [
-      "item",
-      "feature",
+      "meleeWeapon",
+      "rangedWeapon",
+      "armor",
+      "equipment",
       "spell"
-    ]
+    ],
+    "templates": {
+      "meleeWeapon": {
+        "system": {
+          "skill": "",
+          "attackMod": 0,
+          "pow": 0,
+          "cost": "",
+          "description": ""
+        }
+      },
+      "rangedWeapon": {
+        "system": {
+          "skill": "",
+          "attackMod": 0,
+          "pow": 0,
+          "ammo": "",
+          "effectiveRange": "",
+          "extremeRange": "",
+          "aoe": "",
+          "cost": "",
+          "description": ""
+        }
+      },
+      "armor": {
+        "system": {
+          "armorBonus": 0,
+          "penalty": "",
+          "cost": "",
+          "description": ""
+        }
+      },
+      "equipment": {
+        "system": {
+          "cost": "",
+          "description": ""
+        }
+      },
+      "spell": {
+        "system": {
+          "effect": "",
+          "cost": "",
+          "cooldown": "",
+          "description": ""
+        }
+      }
+    }
   }
 }

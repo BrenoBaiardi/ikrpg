@@ -1,0 +1,67 @@
+<form class="ikrpg item-sheet" autocomplete="off">
+    <header class="sheet-header">
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:100%" /></h1>
+    </header>
+
+    <section class="sheet-body" style="padding: 0.5rem;">
+        <div class="form-group">
+            <label>Tipo</label>
+            <input type="text" value="{{item.type}}" disabled />
+        </div>
+
+        {{#if (eq item.type "meleeWeapon")}}
+        <div class="form-group">
+            <label>Custo</label>
+            <input type="text" name="system.cost" value="{{system.cost}}" />
+        </div>
+        <div class="form-group">
+            <label>Perícia</label>
+            <input type="text" name="system.skill" value="{{system.skill}}" />
+        </div>
+        <div class="form-group">
+            <label>Mod. de Ataque</label>
+            <input type="number" name="system.attackMod" value="{{system.attackMod}}" />
+        </div>
+        <div class="form-group">
+            <label>POW</label>
+            <input type="number" name="system.pow" value="{{system.pow}}" />
+        </div>
+        {{/if}}
+
+        {{#if (eq item.type "rangedWeapon")}}
+        <div class="form-group">
+            <label>Munição</label>
+            <input type="text" name="system.ammo" value="{{system.ammo}}" />
+        </div>
+        <div class="form-group">
+            <label>Alcance Eficaz</label>
+            <input type="text" name="system.effectiveRange" value="{{system.effectiveRange}}" />
+        </div>
+        <div class="form-group">
+            <label>Alcance Máximo</label>
+            <input type="text" name="system.extremeRange" value="{{system.extremeRange}}" />
+        </div>
+        <div class="form-group">
+            <label>Perícia</label>
+            <input type="text" name="system.skill" value="{{system.skill}}" />
+        </div>
+        <div class="form-group">
+            <label>Mod. de Ataque</label>
+            <input type="number" name="system.attackMod" value="{{system.attackMod}}" />
+        </div>
+        <div class="form-group">
+            <label>POW</label>
+            <input type="number" name="system.pow" value="{{system.pow}}" />
+        </div>
+        <div class="form-group">
+            <label>AOE</label>
+            <input type="text" name="system.aoe" value="{{system.aoe}}" />
+        </div>
+        {{/if}}
+
+        <div class="form-group">
+            <label>Descrição</label>
+            <textarea name="system.description">{{system.description}}</textarea>
+        </div>
+    </section>
+</form>
