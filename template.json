@@ -376,7 +376,6 @@
           "skill": "",
           "attackMod": 0,
           "pow": 0,
-          "cost": "",
           "description": ""
         }
       },
@@ -389,7 +388,6 @@
           "effectiveRange": "",
           "extremeRange": "",
           "aoe": "",
-          "cost": "",
           "description": ""
         }
       },
@@ -397,20 +395,17 @@
         "system": {
           "armorBonus": 0,
           "penalty": "",
-          "cost": "",
           "description": ""
         }
       },
       "equipment": {
         "system": {
-          "cost": "",
           "description": ""
         }
       },
       "spell": {
         "system": {
           "effect": "",
-          "cost": "",
           "cooldown": "",
           "description": ""
         }
