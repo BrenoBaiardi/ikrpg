@@ -104,6 +104,17 @@
         </div>
         {{/if}}
 
+        {{#if (eq item.type "armor")}}
+        <div class="form-group">
+            <label>Armor</label>
+            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}"/>
+        </div>
+        <div class="form-group">
+            <label>Penalty</label>
+            <input type="number" name="system.penalty" value="{{system.penalty}}"/>
+        </div>
+        {{/if}}
+
         <div class="form-group">
             <label>Descrição</label>
             <textarea name="system.description">{{system.description}}</textarea>
