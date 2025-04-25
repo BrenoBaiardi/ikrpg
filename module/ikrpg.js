@@ -240,9 +240,14 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             minHeight: 900,
             tabs: [
                 {
-                    navSelector: ".sheet-tabs",
+                    navSelector: ".sheet-primary-tabs",
                     contentSelector: ".sheet-body",
                     initial: "attributes"
+                },
+                {
+                    navSelector: ".sheet-item-tabs",
+                    contentSelector: ".sheet-items",
+                    initial: "melee"
                 }
             ]
         });
