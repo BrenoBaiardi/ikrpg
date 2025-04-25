@@ -394,7 +394,7 @@
       "armor": {
         "system": {
           "armorBonus": 0,
-          "penalty": "",
+          "penalty": 0,
           "description": ""
         }
       },

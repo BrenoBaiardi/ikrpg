@@ -75,10 +75,18 @@ class IKRPGActor extends Actor {
 
         data.hp.max = phy + int + agi;
 
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd;
+        // ===== Armor integration =====
+        // Uses first armor found for now
+        const armor = this.items.find(i => i.type === "armor");
+
+        const armorBonus = armor ? (armor.system.armorBonus || 0) : 0;
+        const armorPenalty = armor ? (armor.system.penalty || 0) : 0; //treated in html to always be converted to negative or 0
+
+
+        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + armorPenalty;
         data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
         data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
-        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy;
+        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + armorBonus;
     }
 
     getInitiativeRoll() {
