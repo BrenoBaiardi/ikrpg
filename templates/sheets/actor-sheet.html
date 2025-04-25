@@ -49,7 +49,9 @@
   <section class="sheet-body" style="flex: 1 1 auto; overflow-y: auto;">
     <nav class="sheet-tabs tabs" data-group="primary">
       <a class="item" data-tab="attributes">Atributos</a>
-      <a class="item" data-tab="skills">Perícias</a>
+      <a class="item" data-tab="occupationalSkills">Perícias Ocupacionais</a>
+      <a class="item" data-tab="militarySkills">Perícias Militares</a>
+
     </nav>
     <div class="tab" data-group="primary" data-tab="attributes">
       <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
@@ -95,7 +97,7 @@
 
       </div>
     </div>
-    <div class="tab" data-group="primary" data-tab="skills">
+    <div class="tab" data-group="primary" data-tab="occupationalSkills">
       <table class="skills-table">
         <thead>
           <tr>
@@ -106,15 +108,15 @@
           </tr>
         </thead>
         <tbody>
-          {{#each system.skills}}
+          {{#each system.occupationalSkills}}
           <tr>
             <td>
               {{this.name}}
-              <input type="hidden" name="system.skills.{{@index}}.name" value="{{this.name}}" />
+              <input type="hidden" name="system.occupationalSkills.{{@index}}.name" value="{{this.name}}" />
             </td>
 
             <td>
-              <select name="system.skills.{{@index}}.attr" style="width: 100%;">
+              <select name="system.occupationalSkills.{{@index}}.attr" style="width: 100%;">
                 <option value="SOC" {{#if (eq "SOC" this.attr)}}selected{{/if}}>--</option>
 
                 {{#each ../system.mainAttributes as |val attrKey|}}
@@ -128,7 +130,7 @@
             </td>
 
             <td style="text-align: center;">
-              <input type="number" name="system.skills.{{@index}}.level" value="{{this.level}}" min="0"
+              <input type="number" name="system.occupationalSkills.{{@index}}.level" value="{{this.level}}" min="0"
                 style="width: 3ch; text-align: center;" />
             </td>
 
@@ -140,6 +142,46 @@
         </tbody>
       </table>
     </div>
+
+    <h3 style="margin-top: 1rem;">Perícias Militares</h3>
+    <table class="skills-table">
+      <thead>
+      <tr>
+        <th style="width: auto; padding: 0.5rem;">Nome</th>
+        <th style="width: 8ch; padding: 0.5rem">Atributo</th>
+        <th style="width: 4ch; padding: 0.5rem">Nível</th>
+        <th style="width: 30px; padding: 0.5rem">Rolar</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each system.militarySkills}}
+      <tr>
+        <td>
+          {{this.name}}
+          <input type="hidden" name="system.militarySkills.{{@index}}.name" value="{{this.name}}" />
+        </td>
+        <td>
+          <select name="system.militarySkills.{{@index}}.attr" style="width: 100%;">
+            {{#each ../system.mainAttributes as |val attrKey|}}
+            <option value="{{attrKey}}" {{#if (eq attrKey ../this.attr)}}selected{{/if}}>{{attrKey}}</option>
+            {{/each}}
+            {{#each ../system.secondaryAttributes as |val attrKey|}}
+            <option value="{{attrKey}}" {{#if (eq attrKey ../this.attr)}}selected{{/if}}>{{attrKey}}</option>
+            {{/each}}
+          </select>
+        </td>
+        <td style="text-align: center;">
+          <input type="number" name="system.militarySkills.{{@index}}.level" value="{{this.level}}" min="0"
+                 style="width: 3ch; text-align: center;" />
+        </td>
+        <td style="text-align: center;">
+          <button type="button" class="roll-military-skill" data-idx="{{@index}}">🎲</button>
+        </td>
+      </tr>
+      {{/each}}
+      </tbody>
+    </table>
+
   </section>
 
 </form>

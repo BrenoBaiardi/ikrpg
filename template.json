@@ -1,314 +1,371 @@
 {
-   "Actor": {
-      "types": [
-         "character",
-         "npc"
-      ],
-      "character": {
-         "hp": {
-            "value": 0,
-            "max": 0
-         },
-         "player": "",
-         "archetype": "",
-         "race": "",
-         "careers": "",
-         "height": "",
-         "weight": "",
-         "sex": "",
-         "faith": "",
-         "level": "",
-         "totalXP": 0,
-         "mainAttributes": {
-            "PHY": 0,
-            "AGI": 0,
-            "INT": 0
-         },
-         "secondaryAttributes": {
-            "SPD": 0,
-            "STR": 0,
-            "PRW": 0,
-            "POI": 0,
-            "ARC": 0,
-            "PER": 0
-         },
-         "derivedAttributes": {
-            "INIT": 0,
-            "WILL": 0,
-            "DEF": 0,
-            "ARM": 0
-         },
-         "modifiers": {
-            "WILL": [
-               0
-            ],
-            "INIT": [
-               0
-            ],
-            "DEF": [
-               0
-            ],
-            "ARM": [
-               0
-            ]
-         },
-         "skills": [
-            {
-               "name": "Alchemy",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Animal Handling",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Bribery",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Climbing",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Command",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Craft",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Cryptography",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Deception",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Detection",
-               "attr": "PER",
-               "level": 0
-            },
-            {
-               "name": "Disguise",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Driving",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Escape Artist",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Etiquette",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Fell Calling",
-               "attr": "POI",
-               "level": 0
-            },
-            {
-               "name": "Forensic Science",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Forgery",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Gambling",
-               "attr": "PER",
-               "level": 0
-            },
-            {
-               "name": "Intimidation",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Interrogation",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Jumping",
-               "attr": "PHY",
-               "level": 0
-            },
-            {
-               "name": "Law",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Lock Picking",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Lore",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Mechanikal Engineering",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Medicine",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Navigation",
-               "attr": "PER",
-               "level": 0
-            },
-            {
-               "name": "Negotiation",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Oratory",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Pickpocket",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Research",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Riding",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Rope Use",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Sailing",
-               "attr": "INT",
-               "level": 0
-            },
-            {
-               "name": "Seduction",
-               "attr": "SOC",
-               "level": 0
-            },
-            {
-               "name": "Sneak",
-               "attr": "AGI",
-               "level": 0
-            },
-            {
-               "name": "Streetwise",
-               "attr": "PER",
-               "level": 0
-            },
-            {
-               "name": "Survival",
-               "attr": "PER",
-               "level": 0
-            },
-            {
-               "name": "Swimming",
-               "attr": "STR",
-               "level": 0
-            },
-            {
-               "name": "Tracking",
-               "attr": "PER",
-               "level": 0
-            }
-         ],
-         "prototypeToken": {
-            "actorLink": true,
-            "bar1": {
-               "attribute": "system.hp"
-            },
-            "displayName": 20,
-            "displayBars": 40
-         }
+  "Actor": {
+    "types": [
+      "character",
+      "npc"
+    ],
+    "character": {
+      "hp": {
+        "value": 0,
+        "max": 0
       },
-      "npc": {
-         "hp": {
-            "value": 0,
-            "max": 0
-         },
-         "mainAttributes": {
-            "PHY": 0,
-            "AGI": 0,
-            "INT": 0
-         },
-         "secondaryAttributes": {
-            "SPD": 0,
-            "STR": 0,
-            "PRW": 0,
-            "POI": 0,
-            "ARC": 0,
-            "PER": 0
-         },
-         "derivedAttributes": {
-            "INIT": 0,
-            "WILL": 0,
-            "DEF": 0,
-            "ARM": 0
-         },
-         "modifiers": {
-            "WILL": [
-               0
-            ],
-            "INIT": [
-               0
-            ],
-            "DEF": [
-               0
-            ],
-            "ARM": [
-               0
-            ]
-         },
-         "prototypeToken": {
-            "actorLink": true,
-            "bar1": {
-               "attribute": "system.hp"
-            }
-         }
+      "player": "",
+      "archetype": "",
+      "race": "",
+      "careers": "",
+      "height": "",
+      "weight": "",
+      "sex": "",
+      "faith": "",
+      "level": "",
+      "totalXP": 0,
+      "mainAttributes": {
+        "PHY": 0,
+        "AGI": 0,
+        "INT": 0
+      },
+      "secondaryAttributes": {
+        "SPD": 0,
+        "STR": 0,
+        "PRW": 0,
+        "POI": 0,
+        "ARC": 0,
+        "PER": 0
+      },
+      "derivedAttributes": {
+        "INIT": 0,
+        "WILL": 0,
+        "DEF": 0,
+        "ARM": 0
+      },
+      "modifiers": {
+        "WILL": [
+          0
+        ],
+        "INIT": [
+          0
+        ],
+        "DEF": [
+          0
+        ],
+        "ARM": [
+          0
+        ]
+      },
+      "occupationalSkills": [
+        {
+          "name": "Alchemy",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Animal Handling",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Bribery",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Climbing",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Command",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Craft",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Cryptography",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Deception",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Detection",
+          "attr": "PER",
+          "level": 0
+        },
+        {
+          "name": "Disguise",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Driving",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Escape Artist",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Etiquette",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Fell Calling",
+          "attr": "POI",
+          "level": 0
+        },
+        {
+          "name": "Forensic Science",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Forgery",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Gambling",
+          "attr": "PER",
+          "level": 0
+        },
+        {
+          "name": "Intimidation",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Interrogation",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Jumping",
+          "attr": "PHY",
+          "level": 0
+        },
+        {
+          "name": "Law",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Lock Picking",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Lore",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Mechanikal Engineering",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Medicine",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Navigation",
+          "attr": "PER",
+          "level": 0
+        },
+        {
+          "name": "Negotiation",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Oratory",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Pickpocket",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Research",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Riding",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Rope Use",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Sailing",
+          "attr": "INT",
+          "level": 0
+        },
+        {
+          "name": "Seduction",
+          "attr": "SOC",
+          "level": 0
+        },
+        {
+          "name": "Sneak",
+          "attr": "AGI",
+          "level": 0
+        },
+        {
+          "name": "Streetwise",
+          "attr": "PER",
+          "level": 0
+        },
+        {
+          "name": "Survival",
+          "attr": "PER",
+          "level": 0
+        },
+        {
+          "name": "Swimming",
+          "attr": "STR",
+          "level": 0
+        },
+        {
+          "name": "Tracking",
+          "attr": "PER",
+          "level": 0
+        }
+      ],
+      "militarySkills": [
+        {
+          "name": "Archery",
+          "attr": "POI",
+          "level": 0
+        },
+        {
+          "name": "Crossbow",
+          "attr": "POI",
+          "level": 0
+        },
+        {
+          "name": "Great Weapon",
+          "attr": "PRW",
+          "level": 0
+        },
+        {
+          "name": "Hand Weapon",
+          "attr": "PRW",
+          "level": 0
+        },
+        {
+          "name": "Lance",
+          "attr": "PRW",
+          "level": 0
+        },
+        {
+          "name": "Light Artillery",
+          "attr": "POI",
+          "level": 0
+        },
+        {
+          "name": "Pistol",
+          "attr": "POI",
+          "level": 0
+        },
+        {
+          "name": "Rifle",
+          "attr": "POI",
+          "level": 0
+        },
+        {
+          "name": "Shield",
+          "attr": "PRW",
+          "level": 0
+        },
+        {
+          "name": "Thrown Weapon",
+          "attr": "PRW",
+          "level": 0
+        },
+        {
+          "name": "Unarmed Combat",
+          "attr": "PRW",
+          "level": 0
+        }
+      ],
+      "prototypeToken": {
+        "actorLink": true,
+        "bar1": {
+          "attribute": "system.hp"
+        },
+        "displayName": 20,
+        "displayBars": 40
       }
-   },
-   "Item": {
-      "types": [
-         "item",
-         "feature",
-         "spell"
-      ]
-   }
+    },
+    "npc": {
+      "hp": {
+        "value": 0,
+        "max": 0
+      },
+      "mainAttributes": {
+        "PHY": 0,
+        "AGI": 0,
+        "INT": 0
+      },
+      "secondaryAttributes": {
+        "SPD": 0,
+        "STR": 0,
+        "PRW": 0,
+        "POI": 0,
+        "ARC": 0,
+        "PER": 0
+      },
+      "derivedAttributes": {
+        "INIT": 0,
+        "WILL": 0,
+        "DEF": 0,
+        "ARM": 0
+      },
+      "modifiers": {
+        "WILL": [
+          0
+        ],
+        "INIT": [
+          0
+        ],
+        "DEF": [
+          0
+        ],
+        "ARM": [
+          0
+        ]
+      },
+      "prototypeToken": {
+        "actorLink": true,
+        "bar1": {
+          "attribute": "system.hp"
+        }
+      }
+    }
+  },
+  "Item": {
+    "types": [
+      "item",
+      "feature",
+      "spell"
+    ]
+  }
 }

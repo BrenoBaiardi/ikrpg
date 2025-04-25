@@ -12,7 +12,7 @@ export class IKRPGActorDataModel extends foundry.abstract.DataModel {
         PER: new foundry.data.fields.NumberField({ initial: 0 }),
         ARC: new foundry.data.fields.NumberField({ initial: 0 })
       }),
-      skills: new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField({
+      occupationalSkills: new foundry.data.fields.ArrayField(new foundry.data.fields.SchemaField({
         name: new foundry.data.fields.StringField({ initial: "" }),
         attr: new foundry.data.fields.StringField({ initial: "STR" }),
         level: new foundry.data.fields.NumberField({ initial: 0 })

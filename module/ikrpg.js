@@ -158,7 +158,7 @@ class IKRPGBaseSheet extends ActorSheet {
     html.find(".roll-skill").click(async ev => {
       ev.preventDefault();
       const idx = Number(ev.currentTarget.dataset.idx);
-      const skill = this.actor.system.skills?.[idx];
+      const skill = this.actor.system.occupationalSkills?.[idx];
 
       const attrValue = this.actor.system.mainAttributes?.[skill.attr]
           ?? this.actor.system.secondaryAttributes?.[skill.attr]
@@ -176,6 +176,26 @@ class IKRPGBaseSheet extends ActorSheet {
         flavor: `Teste de ${skill.name}`
       });
     });
+
+    html.find(".roll-military-skill").click(async ev => {
+      ev.preventDefault();
+      const idx = Number(ev.currentTarget.dataset.idx);
+      const skill = this.actor.system.militarySkills?.[idx];
+
+      const attrValue = this.actor.system.mainAttributes?.[skill.attr]
+          ?? this.actor.system.secondaryAttributes?.[skill.attr]
+          ?? 0;
+      const level = skill.level || 0;
+
+      const roll = new Roll("2d6 + @attr + @lvl", { attr: attrValue, lvl: level });
+      await roll.evaluate({ async: true });
+
+      roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: `Perícia Militar: ${skill.name}`
+      });
+    });
+
   }
 }
 
