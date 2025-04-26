@@ -16,3 +16,33 @@
     flex: 0 0 calc(50% - 0.25rem); /* Cada tag ocupa metade da linha */
     text-align: center;
 }
+
+h2, h3 {
+    margin: 0.5rem 0;
+    font-weight: bold;
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 0.25rem;
+}
+
+button.item-edit, button.item-delete, button.item-roll {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.item-table, .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.item-table th, .item-table td,
+.skills-table th, .skills-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.item-table tr:hover,
+.skills-table tr:hover {
+    background-color: #f0f0f0;
+}
