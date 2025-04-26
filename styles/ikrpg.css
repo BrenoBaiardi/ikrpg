@@ -16,3 +16,182 @@
     flex: 0 0 calc(50% - 0.25rem); /* Cada tag ocupa metade da linha */
     text-align: center;
 }
+
+h2, h3 {
+    font-weight: bold;
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 0.25rem;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tabs .nav-item {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tabbed-area {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 0.2rem;
+    margin: 0.5rem;
+}
+
+.sheet-item-tabs {
+    background-color: #f8f8f8;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+.sheet-primary-tabs {
+    background-color: #eef2f7;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+button.item-edit, button.item-delete, button.item-roll {
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+button.item-create {
+    flex: 0 0 auto;
+    width: auto;
+}
+
+.item-table, .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.item-table th, .item-table td,
+.skills-table th, .skills-table td {
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.item-table tr:hover,
+.skills-table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.sheet-ikrpg {
+    min-width: 600px;
+    min-height: 400px;
+}
+
+.header-flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+#img-profile{
+    width: 200px;
+    height: 200px;
+    max-width: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+    background: #aaaaaa;
+}
+
+.char-name-input {
+    text-align: center;
+    font-size: 1.5rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.name-hp {
+    width: fit-content;
+}
+
+.character-name-container {
+    text-align: left;
+    width: 100%;
+    padding: 0.25rem;
+}
+
+.ikrpg.sheet.actor .character-name {
+    font-size: 2rem;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background: transparent;
+    text-align: left;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+    line-height: normal;
+    color: #333;
+    box-shadow: none;
+    height: auto;
+}
+
+.character-name:focus {
+    border-bottom-color: #66afe9;
+}
+
+
+.hp-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: #f9f9f9;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.hp-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.hp-group input[type="number"] {
+    width: 5ch;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.hp-button {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background: white;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.hp-max-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.hp-label input[type="number"] {
+    width: 5ch;
+    text-align: center;
+    font-size: 1rem;
+}
+
+
+.info-block {
+    padding: 0.5rem;
+}
