@@ -79,14 +79,16 @@ class IKRPGActor extends Actor {
         // Uses first armor found for now
         const armor = this.items.find(i => i.type === "armor");
 
-        const armorBonus = armor ? (armor.system.armorBonus || 0) : 0;
-        const armorPenalty = armor ? (armor.system.penalty || 0) : 0; //treated in html to always be converted to negative or 0
 
+        const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
 
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + armorPenalty;
+        const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
+        const totalArmorPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.penalty || 0), 0); //treated in html to always be converted to negative or 0
+
+        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorPenalty;
         data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
         data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
-        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + armorBonus;
+        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
     }
 
     getInitiativeRoll() {

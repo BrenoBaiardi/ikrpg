@@ -149,6 +149,7 @@
                 <thead>
                 <tr>
                     <th>Nome</th>
+                    <th>Equipada</th>
                     <th>Bônus ARM</th>
                     <th>Penalidade</th>
                     <th>✎</th>
@@ -160,6 +161,13 @@
                 {{#if (eq item.type "armor")}}
                 <tr class="item" data-item-id="{{item._id}}">
                     <td>{{item.name}}</td>
+                    <td style="text-align:center;">
+                        {{#if item.system.isEquipped}}
+                        ✅
+                        {{else}}
+                        ⚪
+                        {{/if}}
+                    </td>
                     <td style="text-align: center;">{{item.system.armorBonus}}</td>
                     <td style="text-align: center;">{{item.system.penalty}}</td>
                     <td style="text-align: center;">

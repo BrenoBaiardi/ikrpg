@@ -395,6 +395,7 @@
         "system": {
           "armorBonus": 0,
           "penalty": 0,
+          "isEquipped": false,
           "description": ""
         }
       },
