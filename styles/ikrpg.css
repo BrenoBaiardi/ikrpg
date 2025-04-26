@@ -18,7 +18,6 @@
 }
 
 h2, h3 {
-    margin: 0.5rem 0;
     font-weight: bold;
     border-bottom: 1px solid #aaa;
     padding-bottom: 0.25rem;
@@ -78,23 +77,82 @@ button.item-edit, button.item-delete, button.item-roll {
     width: fit-content;
 }
 
-.hp-controls {
+.character-name-container {
+    text-align: left;
+    width: 100%;
+    padding: 0.25rem;
+}
+
+.ikrpg.sheet.actor .character-name {
+    font-size: 2rem;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background: transparent;
+    text-align: left;
+    margin: 0 auto;
+    padding: 0.5rem 0;
+    line-height: normal;
+    color: #333;
+    box-shadow: none;
+    height: auto;
+}
+
+.character-name:focus {
+    border-bottom-color: #66afe9;
+}
+
+
+.hp-bar {
     display: flex;
-    width: fit-content;
-    gap: 0.5rem;
     align-items: center;
-    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 1rem;
+    background: #f9f9f9;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.hp-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.hp-group input[type="number"] {
+    width: 5ch;
+    text-align: center;
+    font-size: 1rem;
 }
 
 .hp-button {
     width: 24px;
     height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background: white;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 
-.hp-input {
-    width: 8ch;
-    text-align: center;
+.hp-max-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
 }
+
+.hp-label input[type="number"] {
+    width: 5ch;
+    text-align: center;
+    font-size: 1rem;
+}
+
 
 .info-block {
     padding: 0.5rem;
