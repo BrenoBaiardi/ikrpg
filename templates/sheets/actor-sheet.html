@@ -1,32 +1,30 @@
-<form class="ikrpg sheet actor" autocomplete="off" style="min-width: 600px; min-height: 400px;">
+<form class="ikrpg sheet actor sheet-ikrpg" autocomplete="off">
 
     <header class="sheet-header">
 
-        <div class="flexrow" style="align-items: center; gap: 1rem; padding: 0.5rem;">
+        <div class="flexrow header-flex">
 
             <!-- Imagem do personagem -->
             <div class="profile-img">
-                <img src="{{actor.img}}" data-edit="img" alt="character portrait"
-                     style="width: 128px; height: 128px; object-fit: cover; border-radius: 8px;"/>
+                <img src="{{actor.img}}" class="profile-img" data-edit="img" alt="character portrait"/>
             </div>
 
             <!-- Nome e HP -->
-            <div class="name-hp" style="width: fit-content;">
-                <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
+            <div class="name-hp">
+                <input name="name" class="char-name-input" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
                        style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;"/>
 
-                <div class="flexrow" style="width: fit-content; gap: 0.5rem; align-items: center; flex-wrap: nowrap;">
+                <div class="flexrow hp-controls">
 
-                    <button type="button" class="hp-minus" style="width: 5px; height: 30px;">-</button>
+                    <button type="button" class="hp-minus hp-button" >-</button>
                     <label>
                         HP
-                        <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 8ch;"/>
+                        <input type="number" class="hp-input" name="system.hp.value" value="{{system.hp.value}}"/>
                     </label>
-                    <button type="button" class="hp-plus" style="width: 5px; height: 30px;">+</button>
+                    <button type="button" class="hp-plus hp-button">+</button>
                     <label>
                         Max
-                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled
-                               style="width: 8ch;"/>
+                        <input type="number" class="hp-input" name="system.hp.max" value="{{system.hp.max}}" disabled/>
                     </label>
                 </div>
             </div>
@@ -34,7 +32,7 @@
         </div>
 
 
-        <div class="info-block" style="padding: 0.5rem;">
+        <div class="info-block">
             <h2>Informações</h2>
             <div class="flexrow">
                 <div><label>Jogador:<input type="text" name="system.player" value="{{system.player}}"/></label></div>

@@ -46,3 +46,56 @@ button.item-edit, button.item-delete, button.item-roll {
 .skills-table tr:hover {
     background-color: #f0f0f0;
 }
+
+.sheet-ikrpg {
+    min-width: 600px;
+    min-height: 400px;
+}
+
+.header-flex {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+.profile-img img {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+.char-name-input {
+    text-align: center;
+    font-size: 1.5rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.name-hp {
+    width: fit-content;
+}
+
+.hp-controls {
+    display: flex;
+    width: fit-content;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.hp-button {
+    width: 24px;
+    height: 24px;
+}
+
+.hp-input {
+    width: 8ch;
+    text-align: center;
+}
+
+.info-block {
+    padding: 0.5rem;
+}
