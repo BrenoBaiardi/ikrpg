@@ -23,6 +23,12 @@ h2, h3 {
     padding-bottom: 0.25rem;
 }
 
+.attribute {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .tabs {
     display: flex;
     flex-wrap: wrap;

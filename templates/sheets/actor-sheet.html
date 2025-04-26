@@ -247,7 +247,7 @@
                             {{#each system.mainAttributes as |value key|}}
                             <div class="attribute">
                                 <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
-                                    <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}"/>
+                                    <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}" value="{{value}}"/>
                                 </label>
                             </div>
                             {{/each}}

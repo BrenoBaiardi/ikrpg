@@ -68,96 +68,6 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
-// Só criar o hook uma única vez
-Hooks.once("ready", () => {
-    document.addEventListener("click", async (ev) => {
-        if (ev.target.classList.contains("attack-roll")) {
-            const itemId = ev.target.dataset.itemId;
-            const messageId = ev.target.closest(".message")?.dataset.messageId;
-            const message = game.messages.get(messageId);
-            const actor = game.actors.get(message?.speaker?.actor);
-            if (!actor) return;
-            const item = actor.items.get(itemId);
-            if (!item) return;
-
-            // Attack logic
-            const skillName = item.system.skill;
-            const militarySkills = Object.values(actor.system.militarySkills || {});
-            const skill = militarySkills.find(s => s.name === skillName);
-            if (!skill) return;
-
-            const attrValue = actor.system.mainAttributes?.[skill.attr]
-                ?? actor.system.secondaryAttributes?.[skill.attr]
-                ?? 0;
-            const skillLevel = skill.level || 0;
-            const attackMod = item.system.attackMod || 0;
-
-            const roll = new Roll("2d6 + @attr + @skill + @atk", {
-                attr: attrValue,
-                skill: skillLevel,
-                atk: attackMod
-            });
-            await roll.evaluate({async: true});
-
-            let flavor = `<h3>🎯 Attack Roll: ${item.name}</h3>`;
-            const target = game.user.targets.first();
-            if (target) {
-                const targetDEF = target.actor?.system?.derivedAttributes?.DEF ?? null;
-                if (targetDEF !== null) {
-                    const success = roll.total >= targetDEF;
-                    flavor += `<p>Target: <strong>${target.name}</strong> (DEF ${targetDEF})</p>`;
-                    flavor += success
-                        ? `<p style="color: green;">✅ Hit!</p>`
-                        : `<p style="color: red;">❌ Miss!</p>`;
-                }
-            } else {
-                flavor += `<p><em>No target selected.</em></p>`;
-            }
-
-            await roll.toMessage({
-                speaker: ChatMessage.getSpeaker({actor}),
-                flavor: flavor
-            });
-        }
-
-        if (ev.target.classList.contains("damage-roll")) {
-            const itemId = ev.target.dataset.itemId;
-            const messageId = ev.target.closest(".message")?.dataset.messageId;
-            const message = game.messages.get(messageId);
-            const actor = game.actors.get(message?.speaker?.actor);
-            if (!actor) return;
-            const item = actor.items.get(itemId);
-            if (!item) return;
-
-            const pow = item.system.pow || 0;
-            const roll = new Roll(`2d6 + ${pow}`);
-            await roll.evaluate({ async: true });
-
-            const target = game.user.targets.first();
-            if (!target) {
-                ui.notifications.warn("⚠️ No target selected. Damage not applied.");
-                return roll.toMessage({
-                    speaker: ChatMessage.getSpeaker({ actor }),
-                    flavor: `<h3>💥 Damage Roll: ${item.name}</h3><p><em>No target selected.</em></p>`
-                });
-            }
-
-            // Aplica o dano usando a função existente
-            const result = await target.actor.applyDamage(roll.total);
-
-            // Mensagem detalhada usando o resultado da função
-            await roll.toMessage({
-                speaker: ChatMessage.getSpeaker({ actor }),
-                flavor: `<h3>💥 Damage Roll: ${item.name}</h3>
-             <p>Target: <strong>${target.name}</strong></p>
-             <p>Rolled: <strong>${result.damageInput}</strong> vs ARM ${result.armUsed}</p>
-             <p>Damage Applied: <strong>${result.damageApplied}</strong></p>
-             <p>HP Remaining: <strong>${result.hpAfter}</strong></p>`
-            });
-        }
-    });
-});
-
 // ================================
 // 🧬 CLASSE BASE DE ATORES
 // ================================
@@ -252,7 +162,11 @@ class IKRPGBaseSheet extends ActorSheet {
 
         // Rolar atributos
         html.find(".roll-attr").click(async ev => {
+            // Ignores clicks from input
+            if (ev.target.tagName.toLowerCase() === "input") return;
+
             ev.preventDefault();
+
             const attr = ev.currentTarget.dataset.attr;
             const value = this.actor.system.mainAttributes?.[attr]
                 ?? this.actor.system.secondaryAttributes?.[attr]
@@ -413,29 +327,157 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             const item = this.actor.items.get(li.dataset.itemId);
             if (!item) return;
 
-            // Identificar alvo se existir
-            let target = game.user.targets.first();
-            let targetInfo = target ? `<p>🎯 Target: <strong>${target.name}</strong></p>` : `<p>🎯 Target: <em>None</em></p>`;
+            // Identificar alvos
+            const targets = Array.from(game.user.targets);
+
+            let targetInfo = targets.length > 0
+                ? `<p>🎯 Alvos: ${targets.map(t => `<strong>${t.name}</strong>`).join(", ")}</p>`
+                : `<p>🎯 Sem alvos</p>`;
 
             const content = `
-    <div class="chat-weapon-roll">
-        <h3>${item.name}</h3>
-        ${targetInfo}
-        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-            <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
-            <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+        <div class="chat-weapon-roll">
+            <h3>${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
         </div>
-    </div>
     `;
 
             ChatMessage.create({
-                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                speaker: ChatMessage.getSpeaker({actor: this.actor}),
                 content: content
             });
         });
-
     }
 }
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+
+    // Botão de Ataque
+    html.find(".attack-roll").click(async ev => {
+        ev.preventDefault();
+        const itemId = ev.currentTarget.dataset.itemId;
+        const actor = game.actors.get(message.speaker.actor);
+        const item = actor?.items.get(itemId);
+
+        if (!item) return;
+
+        const skillName = item.system.skill;
+        const militarySkills = Object.values(actor.system.militarySkills || {});
+        const skill = militarySkills.find(s => s.name === skillName);
+
+        if (!skill) {
+            ui.notifications.warn(`O personagem não possui a perícia militar "${skillName}".`);
+            return;
+        }
+
+        // Atributo vinculado à perícia militar (normalmente PRW ou POI)
+        const attrValue = actor.system.mainAttributes?.[skill.attr]
+            ?? actor.system.secondaryAttributes?.[skill.attr]
+            ?? 0;
+
+        const skillLevel = skill.level || 0;
+        const attackMod = item.system.attackMod || 0;
+
+        const roll = new Roll("2d6 + @attr + @skill + @atk", {
+            attr: attrValue,
+            skill: skillLevel,
+            atk: attackMod
+        });
+
+        await roll.evaluate({async: true});
+
+        // Primeiro: Mostrar a rolagem no chat
+        await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({actor}),
+            flavor: `<h3>Resultado do ataque de ${item.name}</h3>`
+        });
+
+        const targets = Array.from(game.user.targets);
+
+        if (targets.length > 0) {
+            let results = targets.map(t => {
+                const targetActor = t.actor;
+                const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
+                const success = roll.total >= targetDef;
+                return `<strong ${success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`} </strong> Contra ${t.name}: DEF ${targetDef} `;
+            }).join("<br>");
+
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor}),
+                content: `
+                <h3>Resultado do Ataque (${item.name})</h3>
+                ${results}
+            `
+            });
+        }
+    });
+
+
+    // Botão de Dano
+    html.find(".damage-roll").click(async ev => {
+        ev.preventDefault();
+        const itemId = ev.currentTarget.dataset.itemId;
+        const actor = game.actors.get(message.speaker.actor);
+        const item = actor?.items.get(itemId);
+
+        if (!item) return;
+
+        // Rolar dano primeiro e mostrar a fórmula
+        const damageRoll = new Roll("2d6 + @pow", {
+            pow: item.system.pow || 0
+        });
+        await damageRoll.evaluate({async: true});
+
+        // Primeiro: Mostrar a rolagem no chat
+        await damageRoll.toMessage({
+            speaker: ChatMessage.getSpeaker({actor}),
+            flavor: `<h3>Dano de ${item.name}</h3>`
+        });
+
+        // Depois: Criar os botões para aplicar dano
+        const targets = Array.from(game.user.targets);
+
+        const buttons = targets.map(t => `
+        <button type="button" class="apply-damage" data-target-id="${t.id}" data-damage="${damageRoll.total}">
+            Aplicar ${damageRoll.total} em ${t.name}
+        </button>`).join("<br>");
+
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({actor}),
+            content: `
+            <h3>Aplicar Dano (${item.name})</h3>
+            ${buttons}
+        `
+        });
+    });
+
+
+    // Botão de Aplicar Dano
+    html.find(".apply-damage").click(async ev => {
+        ev.preventDefault();
+        const targetId = ev.currentTarget.dataset.targetId;
+        const damage = Number(ev.currentTarget.dataset.damage);
+
+        const token = canvas.tokens.get(targetId);
+        const actor = token?.actor;
+
+        if (!actor) {
+            ui.notifications.error("Target not found!");
+            return;
+        }
+
+        if (typeof actor.applyDamage === "function") {
+            actor.applyDamage(damage);
+        } else {
+            ui.notifications.warn("Target actor does not support damage application.");
+        }
+    });
+
+});
+
 
 // ================================
 // 🧟 FICHA DE NPC
