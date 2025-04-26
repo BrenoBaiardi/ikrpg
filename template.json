@@ -376,6 +376,7 @@
           "skill": "",
           "attackMod": 0,
           "pow": 0,
+          "tags": [],
           "description": ""
         }
       },
@@ -384,6 +385,7 @@
           "skill": "",
           "attackMod": 0,
           "pow": 0,
+          "tags": [],
           "ammo": "",
           "effectiveRange": "",
           "extremeRange": "",
@@ -394,7 +396,8 @@
       "armor": {
         "system": {
           "armorBonus": 0,
-          "penalty": "",
+          "penalty": 0,
+          "isEquipped": false,
           "description": ""
         }
       },

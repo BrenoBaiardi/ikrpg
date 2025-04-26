@@ -29,6 +29,16 @@ Hooks.once("init", function () {
     Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
 });
 
+// =======================
+//  Helpers
+// =======================
+Handlebars.registerHelper('tagsToString', function(tags) {
+    if (Array.isArray(tags)) {
+        return tags.join(", ");
+    }
+    return "";
+});
+
 // ================================
 // 🎯 GANCHOS DE CRIAÇÃO DE ATORES
 // ================================
@@ -75,10 +85,20 @@ class IKRPGActor extends Actor {
 
         data.hp.max = phy + int + agi;
 
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd;
+        // ===== Armor integration =====
+        // Uses first armor found for now
+        const armor = this.items.find(i => i.type === "armor");
+
+
+        const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
+
+        const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
+        const totalArmorPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.penalty || 0), 0); //treated in html to always be converted to negative or 0
+
+        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorPenalty;
         data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
         data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
-        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy;
+        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
     }
 
     getInitiativeRoll() {
@@ -207,7 +227,7 @@ class IKRPGBaseSheet extends ActorSheet {
 // ==============
 class IKRPGItemSheet extends ItemSheet {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "item"],
             template: "systems/ikrpg/templates/sheets/item-sheet.html",
             width: 400,
@@ -215,6 +235,15 @@ class IKRPGItemSheet extends ItemSheet {
         });
     }
 
+    async _updateObject(event, formData) {
+        if (typeof formData["system.tags"] === "string") {
+            formData["system.tags"] = formData["system.tags"]
+                .split(",")
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+        }
+        return super._updateObject(event, formData);
+    }
 
     getData() {
         const data = super.getData();

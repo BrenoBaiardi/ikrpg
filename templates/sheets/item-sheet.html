@@ -1,12 +1,17 @@
 <form class="ikrpg item-sheet" autocomplete="off">
     <header class="sheet-header">
-        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:100%"/></h1>
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:90%"/></h1>
     </header>
 
     <section class="sheet-body" style="padding: 0.5rem;">
         <div class="form-group">
             <label>Tipo</label>
             <input type="text" value="{{item.type}}" disabled/>
+        </div>
+
+        <div>
+            <label>Tags (comma-separated):</label>
+            <input type="text" name="system.tags" value="{{tagsToString system.tags}}" />
         </div>
 
         {{#if (eq item.type "meleeWeapon")}}
@@ -107,11 +112,19 @@
         {{#if (eq item.type "armor")}}
         <div class="form-group">
             <label>Armor</label>
-            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}"/>
+            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}" style="width: 4ch; text-align: center;"/>
+        </div>
+        <div>
+            <label>Equipada:</label>
+            <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}} />
         </div>
         <div class="form-group">
             <label>Penalty</label>
-            <input type="number" name="system.penalty" value="{{system.penalty}}"/>
+            <input type="number"
+                   name="system.penalty"
+                   value="{{item.system.penalty}}"
+                   oninput="this.value = Math.abs(this.value) * -1"
+                   style="width: 4ch; text-align: center;" />
         </div>
         {{/if}}
 
