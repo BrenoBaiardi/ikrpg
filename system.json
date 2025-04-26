@@ -15,7 +15,7 @@
   "esmodules": [
     "module/ikrpg.js"
   ],
-  "styles": [],
+  "styles": ["styles/ikrpg.css"],
   "languages": [],
   "packs": [],
   "compatibility": {

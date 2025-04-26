@@ -1,0 +1,18 @@
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    max-width: 120px; /* limite de largura da célula */
+}
+
+.tag {
+    display: inline-block;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    color: #333;
+    flex: 0 0 calc(50% - 0.25rem); /* Cada tag ocupa metade da linha */
+    text-align: center;
+}

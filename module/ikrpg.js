@@ -29,6 +29,16 @@ Hooks.once("init", function () {
     Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
 });
 
+// =======================
+//  Helpers
+// =======================
+Handlebars.registerHelper('tagsToString', function(tags) {
+    if (Array.isArray(tags)) {
+        return tags.join(", ");
+    }
+    return "";
+});
+
 // ================================
 // 🎯 GANCHOS DE CRIAÇÃO DE ATORES
 // ================================
@@ -217,7 +227,7 @@ class IKRPGBaseSheet extends ActorSheet {
 // ==============
 class IKRPGItemSheet extends ItemSheet {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "item"],
             template: "systems/ikrpg/templates/sheets/item-sheet.html",
             width: 400,
@@ -225,6 +235,15 @@ class IKRPGItemSheet extends ItemSheet {
         });
     }
 
+    async _updateObject(event, formData) {
+        if (typeof formData["system.tags"] === "string") {
+            formData["system.tags"] = formData["system.tags"]
+                .split(",")
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+        }
+        return super._updateObject(event, formData);
+    }
 
     getData() {
         const data = super.getData();

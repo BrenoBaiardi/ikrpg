@@ -9,6 +9,11 @@
             <input type="text" value="{{item.type}}" disabled/>
         </div>
 
+        <div>
+            <label>Tags (comma-separated):</label>
+            <input type="text" name="system.tags" value="{{tagsToString system.tags}}" />
+        </div>
+
         {{#if (eq item.type "meleeWeapon")}}
 
         <div class="form-group">

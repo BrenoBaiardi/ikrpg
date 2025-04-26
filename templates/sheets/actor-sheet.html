@@ -67,6 +67,7 @@
                 <tr>
                     <th>Nome</th>
                     <th>Perícia</th>
+                    <th>Tags</th>
                     <th>POW</th>
                     <th>Mod.</th>
                     <th>🎲</th>
@@ -80,6 +81,13 @@
                 <tr class="item" data-item-id="{{item._id}}">
                     <td>{{item.name}}</td>
                     <td style="text-align: center;">{{item.system.skill}}</td>
+                    <td>
+                        <div class="tags-container">
+                            {{#each item.system.tags}}
+                            <span class="tag">{{this}}</span>
+                            {{/each}}
+                        </div>
+                    </td>
                     <td style="text-align: center;">{{item.system.pow}}</td>
                     <td style="text-align: center;">{{item.system.attackMod}}</td>
                     <td style="text-align: center;">
@@ -108,6 +116,7 @@
                 <tr>
                     <th>Nome</th>
                     <th>Perícia</th>
+                    <th>Tags</th>
                     <th>Alcance</th>
                     <th>POW</th>
                     <th>🎲</th>
@@ -121,6 +130,11 @@
                 <tr class="item" data-item-id="{{item._id}}">
                     <td>{{item.name}}</td>
                     <td style="text-align: center;">{{item.system.skill}}</td>
+                    <td style="text-align: center;">
+                        {{#each item.system.tags}}
+                        <span class="tag">{{this}}</span>
+                        {{/each}}
+                    </td>
                     <td style="text-align: center;">{{item.system.effectiveRange}}</td>
                     <td style="text-align: center;">{{item.system.pow}}</td>
                     <td style="text-align: center;">
