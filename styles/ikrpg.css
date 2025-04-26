@@ -95,13 +95,14 @@ button.item-create {
     padding: 0.5rem;
 }
 
-.profile-img img {
-    width: 128px;
-    height: 128px;
-    object-fit: cover;
+#img-profile{
+    width: 200px;
+    height: 200px;
+    max-width: 100%;
     border-radius: 8px;
+    object-fit: contain;
+    background: #aaaaaa;
 }
-
 
 .char-name-input {
     text-align: center;
