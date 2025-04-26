@@ -23,10 +23,48 @@ h2, h3 {
     padding-bottom: 0.25rem;
 }
 
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tabs .item {
+    padding: 0.5rem 1rem;
+    margin-right: 0.5rem;
+    border-radius: 0.5rem;
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tabbed-area {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 0.2rem;
+    margin: 0.5rem;
+}
+
+.sheet-item-tabs {
+    background-color: #f8f8f8;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+.sheet-primary-tabs {
+    background-color: #eef2f7;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
 button.item-edit, button.item-delete, button.item-roll {
-    padding: 0.2rem 0.5rem;
     font-size: 0.8rem;
     cursor: pointer;
+}
+
+button.item-create {
+    flex: 0 0 auto;
+    width: auto;
 }
 
 .item-table, .skills-table {
@@ -37,7 +75,6 @@ button.item-edit, button.item-delete, button.item-roll {
 .item-table th, .item-table td,
 .skills-table th, .skills-table td {
     border: 1px solid #ddd;
-    padding: 0.5rem;
     text-align: center;
 }
 
