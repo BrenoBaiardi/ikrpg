@@ -50,6 +50,12 @@ h2, h3 {
     transition: background-color 0.3s;
 }
 
+.skills-wrapper {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
 .tabbed-area {
     border: 2px solid #ccc;
     border-radius: 8px;
@@ -79,6 +85,8 @@ button.item-create {
 }
 
 .item-table, .skills-table {
+    flex: 1 1 45%;
+    table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
 }

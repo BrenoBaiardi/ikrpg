@@ -230,8 +230,7 @@
 
     <nav aria-label="primary-menu" class="sheet-primary-tabs tabs" data-group="primary">
         <a class="nav-item" data-tab="attributes">Atributos</a>
-        <a class="nav-item" data-tab="occupationalSkills">Perícias Ocupacionais</a>
-        <a class="nav-item" data-tab="militarySkills">Perícias Militares</a>
+        <a class="nav-item" data-tab="occupationalSkills">Perícias</a>
     </nav>
     <section class="sheet-body tabbed-area" style="flex: 1 1 auto; overflow-y: auto;">
         <div style="max-height: 400px; min-height: 400px; overflow-y: auto;">
@@ -288,98 +287,97 @@
                 </div>
             </div>
             <div class="tab" data-group="primary" data-tab="occupationalSkills">
-                <table class="skills-table">
-                    <thead>
-                    <tr>
-                        <th style="width: auto; padding: 0.5rem;">Nome</th>
-                        <th style="width: 8ch; padding: 0.5rem">Atributo</th>
-                        <th style="width: 4ch; padding: 0.5rem">Nível</th>
-                        <th style="width: 30px; padding: 0.5rem">Rolar</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each system.occupationalSkills}}
-                    <tr>
-                        <td>
-                            {{this.name}}
-                            <input type="hidden" name="system.occupationalSkills.{{@index}}.name"
-                                   value="{{this.name}}"/>
-                        </td>
+                <div class="skills-wrapper">
+                    <table class="skills-table">
+                        <thead>
+                        <tr>
+                            <th style="width: auto; padding: 0.5rem;">Nome</th>
+                            <th style="width: 8ch; padding: 0.5rem">Atributo</th>
+                            <th style="width: 4ch; padding: 0.5rem">Lvl</th>
+                            <th style="width: 30px; padding: 0.5rem">🎲</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each system.occupationalSkills}}
+                        <tr>
+                            <td>
+                                {{this.name}}
+                                <input type="hidden" name="system.occupationalSkills.{{@index}}.name"
+                                       value="{{this.name}}"/>
+                            </td>
 
-                        <td>
-                            <select name="system.occupationalSkills.{{@index}}.attr" style="width: 100%;">
-                                <option value="SOC" {{#if (eq
-                                "SOC" this.attr)}}selected{{/if}}>--</option>
+                            <td>
+                                <select name="system.occupationalSkills.{{@index}}.attr" style="width: 100%;">
+                                    <option value="SOC" {{#if (eq
+                                    "SOC" this.attr)}}selected{{/if}}>--</option>
 
-                                {{#each ../system.mainAttributes as |val attrKey|}}
-                                <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                {{/each}}
+                                    {{#each ../system.mainAttributes as |val attrKey|}}
+                                    <option value="{{attrKey}}" {{#if (eq attrKey ..
+                                    /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                    {{/each}}
 
-                                {{#each ../system.secondaryAttributes as |val attrKey|}}
-                                <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                {{/each}}
-                            </select>
-                        </td>
+                                    {{#each ../system.secondaryAttributes as |val attrKey|}}
+                                    <option value="{{attrKey}}" {{#if (eq attrKey ..
+                                    /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                    {{/each}}
+                                </select>
+                            </td>
 
-                        <td style="text-align: center;">
-                            <input type="number" name="system.occupationalSkills.{{@index}}.level"
-                                   value="{{this.level}}"
-                                   min="0"
-                                   style="width: 3ch; text-align: center;"/>
-                        </td>
+                            <td style="text-align: center;">
+                                <input type="number" name="system.occupationalSkills.{{@index}}.level"
+                                       value="{{this.level}}"
+                                       min="0"
+                                       style="width: 3ch; text-align: center;"/>
+                            </td>
 
-                        <td style="text-align: center;">
-                            <button type="button" class="roll-skill" data-idx="{{@index}}">🎲</button>
-                        </td>
-                    </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="tab" data-group="primary" data-tab="militarySkills">
-                <table class="skills-table">
-                    <thead>
-                    <tr>
-                        <th style="width: auto; padding: 0.5rem;">Nome</th>
-                        <th style="width: 8ch; padding: 0.5rem">Atributo</th>
-                        <th style="width: 4ch; padding: 0.5rem">Nível</th>
-                        <th style="width: 30px; padding: 0.5rem">Rolar</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {{#each system.militarySkills}}
-                    <tr>
-                        <td>
-                            {{this.name}}
-                            <input type="hidden" name="system.militarySkills.{{@index}}.name" value="{{this.name}}"/>
-                        </td>
-                        <td>
-                            <select name="system.militarySkills.{{@index}}.attr" style="width: 100%;">
-                                {{#each ../system.mainAttributes as |val attrKey|}}
-                                <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                {{/each}}
-                                {{#each ../system.secondaryAttributes as |val attrKey|}}
-                                <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                {{/each}}
-                            </select>
-                        </td>
-                        <td style="text-align: center;">
-                            <input type="number" name="system.militarySkills.{{@index}}.level" value="{{this.level}}"
-                                   min="0"
-                                   style="width: 3ch; text-align: center;"/>
-                        </td>
-                        <td style="text-align: center;">
-                            <button type="button" class="roll-military-skill" data-idx="{{@index}}">🎲</button>
-                        </td>
-                    </tr>
-                    {{/each}}
-                    </tbody>
-                </table>
+                            <td style="text-align: center;">
+                                <button type="button" class="roll-skill" data-idx="{{@index}}">🎲</button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <table class="skills-table">
+                        <thead>
+                        <tr>
+                            <th style="width: auto; padding: 0.5rem;">Nome</th>
+                            <th style="width: 8ch; padding: 0.5rem">Atributo</th>
+                            <th style="width: 4ch; padding: 0.5rem">Lvl</th>
+                            <th style="width: 30px; padding: 0.5rem">🎲</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each system.militarySkills}}
+                        <tr>
+                            <td>
+                                {{this.name}}
+                                <input type="hidden" name="system.militarySkills.{{@index}}.name" value="{{this.name}}" />
+                            </td>
+                            <td>
+                                <select name="system.militarySkills.{{@index}}.attr" style="width: 100%;">
+                                    {{#each ../system.mainAttributes as |val attrKey|}}
+                                    <option value="{{attrKey}}" {{#if (eq attrKey ..
+                                    /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                    {{/each}}
+                                    {{#each ../system.secondaryAttributes as |val attrKey|}}
+                                    <option value="{{attrKey}}" {{#if (eq attrKey ..
+                                    /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                    {{/each}}
+                                </select>
+                            </td>
+                            <td style="text-align: center;">
+                                <input type="number" name="system.militarySkills.{{@index}}.level" value="{{this.level}}"
+                                       min="0"
+                                       style="width: 3ch; text-align: center;"/>
+                            </td>
+                            <td style="text-align: center;">
+                                <button type="button" class="roll-military-skill" data-idx="{{@index}}">🎲</button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </section>
