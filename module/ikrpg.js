@@ -264,13 +264,13 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "actor"],
             template: "systems/ikrpg/templates/sheets/actor-sheet.html",
-            width: 800,
-            height: 900,
+            width: 1000,
+            height: 1000,
             resizable: true,
             dragDrop: [],
             scrollY: [".sheet-body"],
-            minWidth: 800,
-            minHeight: 900,
+            minWidth: 1000,
+            minHeight: 1000,
             tabs: [
                 {
                     navSelector: ".sheet-primary-tabs",

@@ -1,3 +1,8 @@
+.sheet-ikrpg {
+    min-width: 800px;
+    min-height: 500px;
+}
+
 .tags-container {
     display: flex;
     flex-wrap: wrap;
@@ -87,11 +92,6 @@ button.item-create {
 .item-table tr:hover,
 .skills-table tr:hover {
     background-color: #f0f0f0;
-}
-
-.sheet-ikrpg {
-    min-width: 600px;
-    min-height: 400px;
 }
 
 .header-flex {
