@@ -86,7 +86,7 @@ button.item-create {
 
 .item-table, .skills-table {
     flex: 1 1 45%;
-    table-layout: fixed;
+    padding: 0 1rem;
     width: 100%;
     border-collapse: collapse;
 }
