@@ -32,7 +32,7 @@ Hooks.once("init", function () {
 // =======================
 //  Helpers
 // =======================
-Handlebars.registerHelper('tagsToString', function(tags) {
+Handlebars.registerHelper('tagsToString', function (tags) {
     if (Array.isArray(tags)) {
         return tags.join(", ");
     }
@@ -162,7 +162,11 @@ class IKRPGBaseSheet extends ActorSheet {
 
         // Rolar atributos
         html.find(".roll-attr").click(async ev => {
+            // Ignores clicks from input
+            if (ev.target.tagName.toLowerCase() === "input") return;
+
             ev.preventDefault();
+
             const attr = ev.currentTarget.dataset.attr;
             const value = this.actor.system.mainAttributes?.[attr]
                 ?? this.actor.system.secondaryAttributes?.[attr]
@@ -260,13 +264,13 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "actor"],
             template: "systems/ikrpg/templates/sheets/actor-sheet.html",
-            width: 800,
-            height: 900,
+            width: 1000,
+            height: 1000,
             resizable: true,
             dragDrop: [],
             scrollY: [".sheet-body"],
-            minWidth: 800,
-            minHeight: 900,
+            minWidth: 1000,
+            minHeight: 1000,
             tabs: [
                 {
                     navSelector: ".sheet-primary-tabs",
@@ -319,53 +323,161 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         html.find(".item-roll").click(async ev => {
             ev.preventDefault();
 
-            // Identifica o item clicado
             const li = ev.currentTarget.closest(".item");
             const item = this.actor.items.get(li.dataset.itemId);
             if (!item) return;
 
-            // Nome da skill associada
-            const skillName = item.system.skill;
-            if (!skillName) {
-                ui.notifications.warn(`O item ${item.name} não tem uma perícia atribuída.`);
-                return;
-            }
+            // Identificar alvos
+            const targets = Array.from(game.user.targets);
 
-            // Converte para array se for objeto indexado
-            const militarySkills = Object.values(this.actor.system.militarySkills || {});
-            const skill = militarySkills.find(s => s.name === skillName);
+            let targetInfo = targets.length > 0
+                ? `<p>🎯 Alvos: ${targets.map(t => `<strong>${t.name}</strong>`).join(", ")}</p>`
+                : `<p>🎯 Sem alvos</p>`;
 
-            if (!skill) {
-                ui.notifications.warn(`O personagem não possui a perícia militar "${skillName}".`);
-                return;
-            }
+            const content = `
+        <div class="chat-weapon-roll">
+            <h3>${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
+        </div>
+    `;
 
-            // Atributo vinculado à perícia
-            const attrValue = this.actor.system.mainAttributes?.[skill.attr]
-                ?? this.actor.system.secondaryAttributes?.[skill.attr]
-                ?? 0;
-
-            const skillLevel = skill.level || 0;
-            const atkMod = item.system.attackMod || 0;
-
-            const roll = new Roll("2d6 + @attr + @skill + @atk", {
-                attr: attrValue,
-                skill: skillLevel,
-                atk: atkMod
-            });
-
-            await roll.evaluate({ async: true });
-
-            roll.toMessage({
-                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-                flavor: `Ataque com <strong>${item.name}</strong> usando <em>${skillName}</em>`
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                content: content
             });
         });
-
-
-
     }
 }
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+
+    // Botão de Ataque
+    html.find(".attack-roll").click(async ev => {
+        ev.preventDefault();
+        const itemId = ev.currentTarget.dataset.itemId;
+        const actor = game.actors.get(message.speaker.actor);
+        const item = actor?.items.get(itemId);
+
+        if (!item) return;
+
+        const skillName = item.system.skill;
+        const militarySkills = Object.values(actor.system.militarySkills || {});
+        const skill = militarySkills.find(s => s.name === skillName);
+
+        if (!skill) {
+            ui.notifications.warn(`O personagem não possui a perícia militar "${skillName}".`);
+            return;
+        }
+
+        // Atributo vinculado à perícia militar (normalmente PRW ou POI)
+        const attrValue = actor.system.mainAttributes?.[skill.attr]
+            ?? actor.system.secondaryAttributes?.[skill.attr]
+            ?? 0;
+
+        const skillLevel = skill.level || 0;
+        const attackMod = item.system.attackMod || 0;
+
+        const roll = new Roll("2d6 + @attr + @skill + @atk", {
+            attr: attrValue,
+            skill: skillLevel,
+            atk: attackMod
+        });
+
+        await roll.evaluate({async: true});
+
+        // Primeiro: Mostrar a rolagem no chat
+        await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({actor}),
+            flavor: `<h3>Resultado do ataque de ${item.name}</h3>`
+        });
+
+        const targets = Array.from(game.user.targets);
+
+        if (targets.length > 0) {
+            let results = targets.map(t => {
+                const targetActor = t.actor;
+                const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
+                const success = roll.total >= targetDef;
+                return `<strong ${success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`} </strong> Contra ${t.name}: DEF ${targetDef} `;
+            }).join("<br>");
+
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor}),
+                content: `
+                <h3>Resultado do Ataque (${item.name})</h3>
+                ${results}
+            `
+            });
+        }
+    });
+
+
+    // Botão de Dano
+    html.find(".damage-roll").click(async ev => {
+        ev.preventDefault();
+        const itemId = ev.currentTarget.dataset.itemId;
+        const actor = game.actors.get(message.speaker.actor);
+        const item = actor?.items.get(itemId);
+
+        if (!item) return;
+
+        // Rolar dano primeiro e mostrar a fórmula
+        const damageRoll = new Roll("2d6 + @pow", {
+            pow: item.system.pow || 0
+        });
+        await damageRoll.evaluate({async: true});
+
+        // Primeiro: Mostrar a rolagem no chat
+        await damageRoll.toMessage({
+            speaker: ChatMessage.getSpeaker({actor}),
+            flavor: `<h3>Dano de ${item.name}</h3>`
+        });
+
+        // Depois: Criar os botões para aplicar dano
+        const targets = Array.from(game.user.targets);
+
+        const buttons = targets.map(t => `
+        <button type="button" class="apply-damage" data-target-id="${t.id}" data-damage="${damageRoll.total}">
+            Aplicar ${damageRoll.total} em ${t.name}
+        </button>`).join("<br>");
+
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({actor}),
+            content: `
+            <h3>Aplicar Dano (${item.name})</h3>
+            ${buttons}
+        `
+        });
+    });
+
+
+    // Botão de Aplicar Dano
+    html.find(".apply-damage").click(async ev => {
+        ev.preventDefault();
+        const targetId = ev.currentTarget.dataset.targetId;
+        const damage = Number(ev.currentTarget.dataset.damage);
+
+        const token = canvas.tokens.get(targetId);
+        const actor = token?.actor;
+
+        if (!actor) {
+            ui.notifications.error("Target not found!");
+            return;
+        }
+
+        if (typeof actor.applyDamage === "function") {
+            actor.applyDamage(damage);
+        } else {
+            ui.notifications.warn("Target actor does not support damage application.");
+        }
+    });
+
+});
+
 
 // ================================
 // 🧟 FICHA DE NPC
