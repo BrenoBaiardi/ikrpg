@@ -60,174 +60,171 @@
             <a class="nav-item" data-tab="equipment">Equipamentos</a>
         </nav>
         <section class="sheet-items tabbed-area" style="flex: 1 1 auto; overflow-y: auto;">
-                <div class="tab" data-group="inventory" data-tab="weapons">
-                    <table class="item-table">
-                        <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Perícia</th>
-                            <th>Tags</th>
-                            <th>POW</th>
-                            <th>Mod.</th>
-                            <th>🎲</th>
-                            <th>✎</th>
-                            <th>🗑</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#each items as |item|}}
-                        {{#if (eq item.type "meleeWeapon")}}
-                        <tr class="item" data-item-id="{{item._id}}">
-                            <td>{{item.name}}</td>
-                            <td style="text-align: center;">{{item.system.skill}}</td>
-                            <td>
-                                <div class="tags-container">
-                                    {{#each item.system.tags}}
-                                    <span class="tag">{{this}}</span>
-                                    {{/each}}
-                                </div>
-                            </td>
-                            <td style="text-align: center;">{{item.system.pow}}</td>
-                            <td style="text-align: center;">{{item.system.attackMod}}</td>
-                            <td style="text-align: center;">
-                                <button class="item-roll dice-button">🎲</button>
-                            </td>
-                            <td style="text-align: center;">
-                                <button class="item-edit edit-button">✎</button>
-                            </td>
-                            <td style="text-align: center;">
-                                <button class="item-delete trash-button">🗑️</button>
-                            </td>
-                        </tr>
-                        {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                        <button class="item-create" data-type="meleeWeapon" title="Nova Arma Melee">➕🗡️
-                        </button>
-                    </div>
-
-
-                    <table class="item-table">
-                        <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Perícia</th>
-                            <th>Tags</th>
-                            <th>Alcance</th>
-                            <th>POW</th>
-                            <th>🎲</th>
-                            <th>✎</th>
-                            <th>🗑</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#each items as |item|}}
-                        {{#if (eq item.type "rangedWeapon")}}
-                        <tr class="item" data-item-id="{{item._id}}">
-                            <td>{{item.name}}</td>
-                            <td style="text-align: center;">{{item.system.skill}}</td>
-                            <td style="text-align: center;">
+            <div class="tab" data-group="inventory" data-tab="weapons">
+                <table class="item-table">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Perícia</th>
+                        <th>Tags</th>
+                        <th>POW</th>
+                        <th>Mod.</th>
+                        <th>🎲</th>
+                        <th>⚙️</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each items as |item|}}
+                    {{#if (eq item.type "meleeWeapon")}}
+                    <tr class="item" data-item-id="{{item._id}}">
+                        <td>{{item.name}}</td>
+                        <td style="text-align: center;">{{item.system.skill}}</td>
+                        <td>
+                            <div class="tags-container">
                                 {{#each item.system.tags}}
                                 <span class="tag">{{this}}</span>
                                 {{/each}}
-                            </td>
-                            <td style="text-align: center;">{{item.system.effectiveRange}}</td>
-                            <td style="text-align: center;">{{item.system.pow}}</td>
-                            <td style="text-align: center;">
-                                <button class="item-roll dice-button">🎲</button>
-                            </td>
-                            <td style="text-align: center;">
+                            </div>
+                        </td>
+                        <td style="text-align: center;">{{item.system.pow}}</td>
+                        <td style="text-align: center;">{{item.system.attackMod}}</td>
+                        <td style="text-align: center;">
+                            <button class="item-roll dice-button">🎲</button>
+                        </td>
+                        <td class="action-buttons">
+                            <div class="button-group">
                                 <button class="item-edit edit-button">✎</button>
-                            </td>
-                            <td style="text-align: center;">
                                 <button class="item-delete trash-button">🗑️</button>
-                            </td>
-                        </tr>
-                        {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                        <button class="item-create" data-type="rangedWeapon" title="Nova Arma Ranged">➕🏹
-                        </button>
-                    </div>
-
+                            </div>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                    <button class="item-create" data-type="meleeWeapon" title="Nova Arma Melee">➕🗡️
+                    </button>
                 </div>
-                <div class="tab" data-group="inventory" data-tab="equipment">
-                    <table class="item-table">
-                        <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Equipada</th>
-                            <th>Bônus ARM</th>
-                            <th>Penalidade</th>
-                            <th>✎</th>
-                            <th>🗑</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#each items as |item|}}
-                        {{#if (eq item.type "armor")}}
-                        <tr class="item" data-item-id="{{item._id}}">
-                            <td>{{item.name}}</td>
-                            <td style="text-align:center;">
-                                {{#if item.system.isEquipped}}
-                                ✅
-                                {{else}}
-                                ⚪
-                                {{/if}}
-                            </td>
-                            <td style="text-align: center;">{{item.system.armorBonus}}</td>
-                            <td style="text-align: center;">{{item.system.penalty}}</td>
-                            <td style="text-align: center;">
-                                <button class="item-edit edit-button">✎</button>
-                            </td>
-                            <td style="text-align: center;">
-                                <button class="item-delete trash-button">🗑️</button>
-                            </td>
-                        </tr>
-                        {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                        <button class="item-create" data-type="armor" title="Nova Armadura"
-                                style="flex: 0 0 auto; width: auto; padding: 0.25rem 0.5rem;">➕🛡️
-                        </button>
-                    </div>
-                    <table class="item-table">
-                        <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>✎</th>
-                            <th>🗑</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {{#each items as |item|}}
-                        {{#if (eq item.type "equipment")}}
-                        <tr class="item" data-item-id="{{item._id}}">
-                            <td>{{item.name}}</td>
-                            <td style="text-align: center;">
-                                <button class="item-edit edit-button">✎</button>
-                            </td>
-                            <td style="text-align: center;">
-                                <button class="item-delete trash-button">🗑️</button>
-                            </td>
-                        </tr>
-                        {{/if}}
-                        {{/each}}
-                        </tbody>
-                    </table>
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
-                        <button class="item-create" data-type="equipment" title="Novo Equipamento"
-                                style="flex: 0 0 auto; width: auto; padding: 0.25rem 0.5rem;">➕📦
-                        </button>
-                    </div>
 
+
+                <table class="item-table">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Perícia</th>
+                        <th>Tags</th>
+                        <th>Alcance</th>
+                        <th>POW</th>
+                        <th>🎲</th>
+                        <th>⚙️</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each items as |item|}}
+                    {{#if (eq item.type "rangedWeapon")}}
+                    <tr class="item" data-item-id="{{item._id}}">
+                        <td>{{item.name}}</td>
+                        <td style="text-align: center;">{{item.system.skill}}</td>
+                        <td style="text-align: center;">
+                            {{#each item.system.tags}}
+                            <span class="tag">{{this}}</span>
+                            {{/each}}
+                        </td>
+                        <td style="text-align: center;">{{item.system.effectiveRange}}</td>
+                        <td style="text-align: center;">{{item.system.pow}}</td>
+                        <td style="text-align: center;">
+                            <button class="item-roll dice-button">🎲</button>
+                        </td>
+                        <td class="action-buttons">
+                            <div class="button-group">
+                                <button class="item-edit edit-button">✎</button>
+                                <button class="item-delete trash-button">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                    <button class="item-create" data-type="rangedWeapon" title="Nova Arma Ranged">➕🏹
+                    </button>
                 </div>
+
+            </div>
+            <div class="tab" data-group="inventory" data-tab="equipment">
+                <table class="item-table">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Equipada</th>
+                        <th>Bônus ARM</th>
+                        <th>Penalidade</th>
+                        <th>⚙️</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each items as |item|}}
+                    {{#if (eq item.type "armor")}}
+                    <tr class="item" data-item-id="{{item._id}}">
+                        <td>{{item.name}}</td>
+                        <td style="text-align:center;">
+                            {{#if item.system.isEquipped}}
+                            ✅
+                            {{else}}
+                            ⚪
+                            {{/if}}
+                        </td>
+                        <td style="text-align: center;">{{item.system.armorBonus}}</td>
+                        <td style="text-align: center;">{{item.system.penalty}}</td>
+                        <td class="action-buttons">
+                            <div class="button-group">
+                                <button class="item-edit edit-button">✎</button>
+                                <button class="item-delete trash-button">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                    <button class="item-create" data-type="armor" title="Nova Armadura"
+                            style="flex: 0 0 auto; width: auto; padding: 0.25rem 0.5rem;">➕🛡️
+                    </button>
+                </div>
+                <table class="item-table">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>✎</th>
+                        <th>🗑</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#each items as |item|}}
+                    {{#if (eq item.type "equipment")}}
+                    <tr class="item" data-item-id="{{item._id}}">
+                        <td>{{item.name}}</td>
+                        <td style="text-align: center;">
+                            <button class="item-edit edit-button">✎</button>
+                        </td>
+                        <td style="text-align: center;">
+                            <button class="item-delete trash-button">🗑️</button>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    </tbody>
+                </table>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                    <button class="item-create" data-type="equipment" title="Novo Equipamento"
+                            style="flex: 0 0 auto; width: auto; padding: 0.25rem 0.5rem;">➕📦
+                    </button>
+                </div>
+
+            </div>
         </section>
 
         <nav aria-label="primary-menu" class="sheet-primary-tabs tabs" data-group="primary">
@@ -347,7 +344,8 @@
                                 </td>
 
                                 <td style="text-align: center;">
-                                    <button type="button" class="roll-skill dice-button" data-idx="{{@index}}">🎲</button>
+                                    <button type="button" class="roll-skill dice-button" data-idx="{{@index}}">🎲
+                                    </button>
                                 </td>
                             </tr>
                             {{/each}}
@@ -389,7 +387,9 @@
                                            style="width: 3ch; text-align: center;"/>
                                 </td>
                                 <td style="text-align: center;">
-                                    <button type="button" class="roll-military-skill dice-button" data-idx="{{@index}}">🎲</button>
+                                    <button type="button" class="roll-military-skill dice-button" data-idx="{{@index}}">
+                                        🎲
+                                    </button>
                                 </td>
                             </tr>
                             {{/each}}
