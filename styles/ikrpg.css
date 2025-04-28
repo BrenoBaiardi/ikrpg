@@ -1,9 +1,29 @@
 .sheet-ikrpg {
-    min-width: 800px;
-    min-height: 500px;
+    width: 850px !important;
+    height: auto;
+    max-height: 95vh;       /* Não ultrapassa a tela */
+    overflow-y: auto;       /* Scroll vertical se necessário */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Seção de conteúdo rolável */
+.sheet-body, .sheet-items {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 150px;
+}
+
+/* Impede redimensionamento da janela */
+.window-app.ikrpg.sheet.actor {
+    resize: none !important;
+    min-width: 850px !important;
+    max-width: 850px !important; /* Fixa a largura */
 }
 
 .tags-container {
+    max-width: 120px;
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
@@ -89,10 +109,20 @@ input.big-input {
 }
 
 .tabbed-area {
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 0.2rem;
-    margin: 0.5rem;
+    min-height: 100px; /* Altura mínima reduzida */
+    max-height: 60vh;  /* Altura máxima relativa à janela */
+    height: auto;      /* Ajusta ao conteúdo */
+    flex: 1 1 auto;    /* Cresce conforme necessário */
+}
+
+/* Barras de rolagem personalizadas */
+.tabbed-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tabbed-area::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
 }
 
 .sheet-item-tabs {
@@ -106,27 +136,62 @@ input.big-input {
     border-radius: 0.5rem;
 }
 
-button.item-edit, button.item-delete, button.item-roll {
-    font-size: 0.8rem;
-    cursor: pointer;
-}
-
 button.item-create {
     flex: 0 0 auto;
     width: auto;
 }
 
+button.dice-button, button.edit-button, button.trash-button{
+    width: 24px ;
+    height: 24px ;
+    min-width: 24px ;
+    min-height: 24px ;
+    padding: 0 ;
+    margin: 0 auto ;
+    display: flex ;
+    align-items: center ;
+    justify-content: center ;
+    border-radius: 4px ;
+    border: 1px solid #d3d3d3 ;
+    background: #f8f8f8 ;
+    cursor: pointer ;
+    font-size: 14px ;
+    line-height: 1 ;
+}
+
+/* Efeito hover para feedback visual */
+button.dice-button:hover {
+    background: #e0e0e0 !important;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+/* Efeito quando pressionado */
+button.dice-button:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+}
+
+/* Tabelas responsivas */
 .item-table, .skills-table {
-    flex: 1 1 45%;
-    padding: 0 1rem;
-    width: 100%;
-    border-collapse: collapse;
+    width: 100% !important;
+    max-width: 100%;
+    table-layout: fixed; /* Evita quebra de layout */
 }
 
 .item-table th, .item-table td,
 .skills-table th, .skills-table td {
     border: 1px solid #ddd;
     text-align: center;
+}
+
+.item-table tr, .skills-table tr {
+    height: 28px !important; /* Altura compacta */
+}
+
+.item-table td, .skills-table td {
+    padding: 2px 4px !important; /* Espaçamento reduzido */
+    line-height: 1.2;
 }
 
 .item-table tr:hover,
@@ -142,11 +207,12 @@ button.item-create {
 }
 
 #img-profile{
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
+    min-width: 150px; /* Evita compressão */
+    object-fit: cover;
     max-width: 100%;
     border-radius: 8px;
-    object-fit: contain;
     background: #aaaaaa;
 }
 
