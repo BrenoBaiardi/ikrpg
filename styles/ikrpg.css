@@ -1,13 +1,33 @@
 .sheet-ikrpg {
-    min-width: 800px;
-    min-height: 500px;
+    width: 850px !important;
+    height: auto;
+    max-height: 95vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Seção de conteúdo rolável */
+.sheet-body, .sheet-items {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 150px;
+}
+
+/* Impede redimensionamento da janela */
+.window-app.ikrpg.sheet.actor {
+    resize: none !important;
+    min-width: 850px !important;
+    max-width: 850px !important;
 }
 
 .tags-container {
+    max-width: 120px;
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-    max-width: 120px; /* limite de largura da célula */
+    max-width: 120px;
 }
 
 .tag {
@@ -18,7 +38,7 @@
     padding: 0.2rem 0.5rem;
     font-size: 0.75rem;
     color: #333;
-    flex: 0 0 calc(50% - 0.25rem); /* Cada tag ocupa metade da linha */
+    flex: 0 0 calc(50% - 0.25rem);
     text-align: center;
 }
 
@@ -88,11 +108,25 @@ input.big-input {
     justify-content: space-between;
 }
 
+.flexrow {
+    margin: 5px;
+}
+
 .tabbed-area {
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 0.2rem;
-    margin: 0.5rem;
+    min-height: 100px;
+    max-height: 60vh;
+    height: auto;
+    flex: 1 1 auto;
+}
+
+/* Barras de rolagem personalizadas */
+.tabbed-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.tabbed-area::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
 }
 
 .sheet-item-tabs {
@@ -100,15 +134,11 @@ input.big-input {
     padding: 0.5rem;
     border-radius: 0.5rem;
 }
+
 .sheet-primary-tabs {
     background-color: #eef2f7;
     padding: 0.5rem;
     border-radius: 0.5rem;
-}
-
-button.item-edit, button.item-delete, button.item-roll {
-    font-size: 0.8rem;
-    cursor: pointer;
 }
 
 button.item-create {
@@ -116,17 +146,143 @@ button.item-create {
     width: auto;
 }
 
+/* Container dos botões */
+td.action-buttons {
+    width: 80px;
+    padding: 2px;
+}
+
+/* Grupo de botões */
+.button-group {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo base dos botões */
+.button-group button {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 5px;
+    border: 1px solid #d3d3d3;
+    border-radius: 3px;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Efeitos de hover */
+.button-group button:hover {
+    background: #e0e0e0;
+}
+
+/* Estilo específico para o botão de deletar */
+.button-group button.trash-button {
+    color: #d32f2f;
+    border-color: #ffcdd2;
+}
+
+/* Estilo específico para o botão de editar */
+.button-group button.edit-button {
+    color: #1976d2;
+    border-color: #bbdefb;
+}
+
+button.dice-button {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid #d3d3d3;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+}
+
+/* Efeito hover para feedback visual */
+button.dice-button:hover {
+    background: #e0e0e0 !important;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+/* Efeito quando pressionado */
+button.dice-button:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Tabelas responsivas */
 .item-table, .skills-table {
-    flex: 1 1 45%;
-    padding: 0 1rem;
-    width: 100%;
-    border-collapse: collapse;
+    width: 100% !important;
+    max-width: 100%;
+    table-layout: fixed;
+}
+
+/* Larguras otimizadas para colunas */
+.item-table th.col-pow,
+.item-table td:nth-child(4) { /* POW */
+    width: 50px;
+    min-width: 50px;
+}
+
+.item-table th.col-mod,
+.item-table td:nth-child(5) { /* Mod. */
+    width: 50px;
+    min-width: 50px;
+}
+
+.item-table th.col-roll,
+.item-table td:nth-child(6) { /* 🎲 */
+    width: 40px;
+    min-width: 40px;
+}
+
+.item-table th.col-manage,
+.item-table td:nth-child(7) { /* ⚙️ */
+    width: 80px;
+    min-width: 80px;
+}
+
+/* Garante alinhamento consistente */
+.item-table td[class*="col-"],
+.item-table th[class*="col-"] {
+    text-align: center;
+    padding: 4px 2px;
+}
+
+/* Ajuste para conteúdo numérico */
+.item-table td:nth-child(4),
+.item-table td:nth-child(5) {
+    font-family: monospace;
+    font-size: 0.95em;
 }
 
 .item-table th, .item-table td,
 .skills-table th, .skills-table td {
     border: 1px solid #ddd;
     text-align: center;
+}
+
+.item-table tr, .skills-table tr {
+    height: 28px !important;
+}
+
+.item-table td, .skills-table td {
+    padding: 2px 4px !important;
+    line-height: 1.2;
 }
 
 .item-table tr:hover,
@@ -141,12 +297,13 @@ button.item-create {
     padding: 0.5rem;
 }
 
-#img-profile{
-    width: 200px;
-    height: 200px;
+#img-profile {
+    width: 150px;
+    height: 150px;
+    min-width: 150px;
+    object-fit: cover;
     max-width: 100%;
     border-radius: 8px;
-    object-fit: contain;
     background: #aaaaaa;
 }
 
@@ -195,7 +352,7 @@ button.item-create {
     background: #f9f9f9;
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
-    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .hp-group {
