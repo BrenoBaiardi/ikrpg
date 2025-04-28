@@ -34,6 +34,38 @@ h2, h3 {
     gap: 0.5rem;
 }
 
+.additional-fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.additional-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+}
+
+label.big-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0.5rem;
+    text-wrap: nowrap;
+}
+
+input.big-input {
+    font-size: 1.5rem;
+    width: 6ch;
+    height: 3ch;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+}
+
 .tabs {
     display: flex;
     flex-wrap: wrap;

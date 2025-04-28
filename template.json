@@ -19,6 +19,8 @@
       "faith": "",
       "level": "",
       "totalXP": 0,
+      "featPoints": 0,
+      "gold": 0,
       "items": [],
       "mainAttributes": {
         "PHY": 0,
