@@ -88,17 +88,35 @@ class IKRPGActor extends Actor {
         // ===== Armor integration =====
         // Uses first armor found for now
         const armor = this.items.find(i => i.type === "armor");
-
-
         const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
 
         const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
-        const totalArmorPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.penalty || 0), 0); //treated in html to always be converted to negative or 0
+        const totalArmorDefPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.defPenalty || 0), 0); //treated in html to always be converted to negative or 0
+        const totalArmorSpdPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.spdPenalty || 0), 0); //treated in html to always be converted to negative or 0
+        data.movement.base = spd;
+        const currentMove = Math.max(0, data.movement.base + totalArmorSpdPenalty);
 
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorPenalty;
+        data.movement = {
+            base: data.movement.base,
+            bonus: 0,
+            penalty: totalArmorSpdPenalty,
+            current: currentMove
+        };
+
+        data.derivedAttributes.MOVE = data.movement.current;
+        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorDefPenalty;
         data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
         data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
         data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
+
+        // DEBUG (remova depois de testar)
+        console.log("Prepared data:", {
+            spd,
+            movement: data.movement,
+            derived: data.derivedAttributes,
+            armors: equippedArmors.map(a => a.name)
+        });
+
     }
 
     getInitiativeRoll() {

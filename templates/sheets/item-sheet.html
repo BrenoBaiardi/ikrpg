@@ -119,12 +119,20 @@
             <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}} />
         </div>
         <div class="form-group">
-            <label>Penalty</label>
+            <label>Penalidade de Armadura:</label>
             <input type="number"
-                   name="system.penalty"
-                   value="{{item.system.penalty}}"
+                   name="system.defPenalty"
+                   value="{{item.system.defPenalty}}"
                    oninput="this.value = Math.abs(this.value) * -1"
-                   style="width: 4ch; text-align: center;" />
+                   style="width: 4ch; text-align: center;"/>
+        </div>
+        <div class="form-group">
+            <label>Penalidade de Movimento:</label>
+                <input type="number"
+                       name="system.spdPenalty"
+                       value="{{item.system.spdPenalty}}"
+                       oninput="this.value = Math.abs(this.value) * -1"
+                       style="width: 4ch; text-align: center;"/>
         </div>
         {{/if}}
 

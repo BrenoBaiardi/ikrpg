@@ -158,9 +158,11 @@
                     <tr>
                         <th>Nome</th>
                         <th>Equipada</th>
-                        <th>Bônus ARM</th>
-                        <th>Penalidade</th>
-                        <th class="col-manage">⚙️</th>                    </tr>
+                        <th>ARM</th>
+                        <th>DEF</th>
+                        <th>SPD</th>
+                        <th class="col-manage">⚙️</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {{#each items as |item|}}
@@ -175,7 +177,8 @@
                             {{/if}}
                         </td>
                         <td style="text-align: center;">{{item.system.armorBonus}}</td>
-                        <td style="text-align: center;">{{item.system.penalty}}</td>
+                        <td style="text-align: center;">{{item.system.defPenalty}}</td>
+                        <td style="text-align: center;">{{item.system.spdPenalty}}</td>
                         <td class="action-buttons">
                             <div class="button-group">
                                 <button class="item-edit edit-button">✎</button>
