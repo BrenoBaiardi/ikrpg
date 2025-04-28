@@ -147,8 +147,8 @@ button.item-create {
 
 /* Container dos botões */
 td.action-buttons {
-    width: 80px; /* Largura fixa para a célula */
-    padding: 2px !important; /* Só necessário se houver regra conflitante */
+    width: 80px;
+    padding: 2px;
 }
 
 /* Grupo de botões */
@@ -228,6 +228,45 @@ button.dice-button:active {
     width: 100% !important;
     max-width: 100%;
     table-layout: fixed; /* Evita quebra de layout */
+}
+
+/* Larguras otimizadas para colunas */
+.item-table th.col-pow,
+.item-table td:nth-child(4) { /* POW */
+    width: 50px;
+    min-width: 50px;
+}
+
+.item-table th.col-mod,
+.item-table td:nth-child(5) { /* Mod. */
+    width: 50px;
+    min-width: 50px;
+}
+
+.item-table th.col-roll,
+.item-table td:nth-child(6) { /* 🎲 */
+    width: 40px;
+    min-width: 40px;
+}
+
+.item-table th.col-manage,
+.item-table td:nth-child(7) { /* ⚙️ */
+    width: 80px;
+    min-width: 80px;
+}
+
+/* Garante alinhamento consistente */
+.item-table td[class*="col-"],
+.item-table th[class*="col-"] {
+    text-align: center;
+    padding: 4px 2px;
+}
+
+/* Ajuste para conteúdo numérico */
+.item-table td:nth-child(4),
+.item-table td:nth-child(5) {
+    font-family: monospace;
+    font-size: 0.95em;
 }
 
 .item-table th, .item-table td,

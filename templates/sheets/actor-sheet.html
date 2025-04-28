@@ -67,11 +67,10 @@
                         <th>Nome</th>
                         <th>Perícia</th>
                         <th>Tags</th>
-                        <th>POW</th>
-                        <th>Mod.</th>
-                        <th>🎲</th>
-                        <th>⚙️</th>
-                    </tr>
+                        <th class="col-pow">POW</th>
+                        <th class="col-mod">Mod.</th>
+                        <th class="col-roll">🎲</th>
+                        <th class="col-manage">⚙️</th>                    </tr>
                     </thead>
                     <tbody>
                     {{#each items as |item|}}
@@ -115,9 +114,9 @@
                         <th>Perícia</th>
                         <th>Tags</th>
                         <th>Alcance</th>
-                        <th>POW</th>
-                        <th>🎲</th>
-                        <th>⚙️</th>
+                        <th class="col-pow">POW</th>
+                        <th class="col-roll">🎲</th>
+                        <th class="col-manage">⚙️</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -161,8 +160,7 @@
                         <th>Equipada</th>
                         <th>Bônus ARM</th>
                         <th>Penalidade</th>
-                        <th>⚙️</th>
-                    </tr>
+                        <th class="col-manage">⚙️</th>                    </tr>
                     </thead>
                     <tbody>
                     {{#each items as |item|}}
@@ -198,8 +196,7 @@
                     <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>✎</th>
-                        <th>🗑</th>
+                        <th class="col-manage">⚙️</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -207,11 +204,11 @@
                     {{#if (eq item.type "equipment")}}
                     <tr class="item" data-item-id="{{item._id}}">
                         <td>{{item.name}}</td>
-                        <td style="text-align: center;">
-                            <button class="item-edit edit-button">✎</button>
-                        </td>
-                        <td style="text-align: center;">
-                            <button class="item-delete trash-button">🗑️</button>
+                        <td class="action-buttons">
+                            <div class="button-group">
+                                <button class="item-edit edit-button">✎</button>
+                                <button class="item-delete trash-button">🗑️</button>
+                            </div>
                         </td>
                     </tr>
                     {{/if}}
