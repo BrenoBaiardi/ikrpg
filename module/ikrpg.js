@@ -355,8 +355,9 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             // Identificar alvos
             const targets = Array.from(game.user.targets);
 
+            const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
             let targetInfo = targets.length > 0
-                ? `<p>🎯 Alvos: ${targets.map(t => `<strong>${t.name}</strong>`).join(", ")}</p>`
+                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
                 : `<p>🎯 Sem alvos</p>`;
 
             const content = `
@@ -427,7 +428,8 @@ Hooks.on("renderChatMessage", (message, html, data) => {
                 const targetActor = t.actor;
                 const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
                 const success = roll.total >= targetDef;
-                return `<strong ${success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`} </strong> Contra ${t.name}: DEF ${targetDef} `;
+                const hitMessage = success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`
+                return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef} `;
             }).join("<br>");
 
             ChatMessage.create({
