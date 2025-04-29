@@ -2,7 +2,7 @@
   "name": "ikrpg",
   "title": "IKRPG",
   "id": "ikrpg",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "authors": [
     {
       "name": "Breno Baiardi",
@@ -24,5 +24,8 @@
     "minimum": "12.0",
     "verified": "12.331"
   },
+  "url": "https://github.com/BrenoBaiardi/ikrpg",
+  "manifest": "https://github.com/BrenoBaiardi/ikrpg/system.json",
+  "download": "pending...",
   "license": "MIT"
 }
