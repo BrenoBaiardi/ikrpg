@@ -11,7 +11,9 @@
     }
   ],
   "description": "Iron Kingdoms RPG game system",
-  "scripts": [],
+  "scripts": [
+    "scripts/drag-ruler-integration.js"
+  ],
   "esmodules": [
     "module/ikrpg.js"
   ],

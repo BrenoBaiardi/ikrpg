@@ -27,6 +27,38 @@ Hooks.once("init", function () {
 
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
+
+    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
+        name: 'normal',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0x00FF00 // Verde
+    });
+
+    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
+        name: 'penalty',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0xFFB733 // Laranja
+    });
+
+    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
+        name: 'prohibited',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0xFF2222 // Azul
+    });
+
+});
+
+Hooks.once("ready", () => {
+    CONFIG.Grid.gridDistance = 1;
+    CONFIG.token.MovementSpeed = {
+        formula: "@attributes.movement.current" // Usa seu atributo MOV
+    };
 });
 
 // =======================
@@ -108,15 +140,6 @@ class IKRPGActor extends Actor {
         data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
         data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
         data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
-
-        // DEBUG (remova depois de testar)
-        console.log("Prepared data:", {
-            spd,
-            movement: data.movement,
-            derived: data.derivedAttributes,
-            armors: equippedArmors.map(a => a.name)
-        });
-
     }
 
     getInitiativeRoll() {
