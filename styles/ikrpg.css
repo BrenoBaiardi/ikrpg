@@ -244,8 +244,30 @@ button.dice-button:active {
     min-width: 50px;
 }
 
-.item-table th.col-roll,
+.item-table th.col-item-roll,
 .item-table td:nth-child(6) { /* 🎲 */
+    width: 40px;
+    min-width: 40px;
+}
+
+th.col-name{
+    width: auto;
+    padding: 0.5rem;
+}
+
+th.col-skill-roll {
+    width: 40px;
+    min-width: 40px;
+    padding: 0.5rem;
+}
+
+th.col-attr {
+    width: 70px;
+    min-width: 40px;
+    padding: 0.5rem;
+}
+
+th.col-lvl {
     width: 40px;
     min-width: 40px;
 }
