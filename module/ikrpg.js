@@ -14,20 +14,16 @@ Hooks.once("init", function () {
     };
 
     Actors.unregisterSheet("core", ActorSheet);
-
     Actors.registerSheet("ikrpg", IKRPGActorSheet, {
         types: ["character"],
         makeDefault: true
     });
-
     Actors.registerSheet("ikrpg", IKRPGBasicNPCSheet, {
         types: ["npc"],
         makeDefault: true
     });
-
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
-
     game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
         name: 'normal',
         scope: 'world',
@@ -35,7 +31,6 @@ Hooks.once("init", function () {
         type: Number,
         default: 0x00FF00 // Verde
     });
-
     game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
         name: 'penalty',
         scope: 'world',
@@ -43,7 +38,6 @@ Hooks.once("init", function () {
         type: Number,
         default: 0xFFB733 // Laranja
     });
-
     game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
         name: 'prohibited',
         scope: 'world',
@@ -72,7 +66,7 @@ Handlebars.registerHelper('tagsToString', function (tags) {
 });
 
 // ================================
-// 🎯 GANCHOS DE CRIAÇÃO DE ATORES
+//              ATORES
 // ================================
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
     const commonConfig = {
@@ -100,9 +94,6 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
-// ================================
-// 🧬 CLASSE BASE DE ATORES
-// ================================
 class IKRPGActor extends Actor {
     prepareData() {
         super.prepareData();
@@ -178,7 +169,7 @@ class IKRPGActor extends Actor {
 }
 
 // ================================
-// 🧱 CLASSE BASE DE FICHAS
+//             FICHAS
 // ================================
 class IKRPGBaseSheet extends ActorSheet {
     activateListeners(html) {
@@ -267,9 +258,6 @@ class IKRPGBaseSheet extends ActorSheet {
     }
 }
 
-// ==============
-// IEM SHEET
-// ==============
 class IKRPGItemSheet extends ItemSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -297,9 +285,6 @@ class IKRPGItemSheet extends ItemSheet {
     }
 }
 
-// ================================
-// 🧍🏽 FICHA DE PERSONAGEM
-// ================================
 class IKRPGActorSheet extends IKRPGBaseSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -333,7 +318,6 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         data.isNPC = this.actor.type === "npc";
         return data;
     }
-
 
     activateListeners(html) {
         super.activateListeners(html);
@@ -456,7 +440,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         }
     });
 
-
     // Botão de Dano
     html.find(".damage-roll").click(async ev => {
         ev.preventDefault();
@@ -495,7 +478,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         });
     });
 
-
     // Botão de Aplicar Dano
     html.find(".apply-damage").click(async ev => {
         ev.preventDefault();
@@ -518,7 +500,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     });
 
 });
-
 
 // ================================
 // 🧟 FICHA DE NPC
