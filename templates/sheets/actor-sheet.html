@@ -9,10 +9,8 @@
         <header class="sheet-header">
             <div class="flexrow header-flex">
 
-                <!-- Imagem do personagem -->
                 <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="character portrait"/>
 
-                <!-- Nome e HP -->
                 <div class="name-hp">
 
                     <div class="hp-bar">
@@ -75,9 +73,9 @@
                     <tbody>
                     {{#each items as |item|}}
                     {{#if (eq item.type "meleeWeapon")}}
-                    <tr class="item" data-item-id="{{item._id}}">
+                    <tr class="item text-center" data-item-id="{{item._id}}">
                         <td>{{item.name}}</td>
-                        <td style="text-align: center;">{{item.system.skill}}</td>
+                        <td>{{item.system.skill}}</td>
                         <td>
                             <div class="tags-container">
                                 {{#each item.system.tags}}
@@ -85,9 +83,9 @@
                                 {{/each}}
                             </div>
                         </td>
-                        <td style="text-align: center;">{{item.system.pow}}</td>
-                        <td style="text-align: center;">{{item.system.attackMod}}</td>
-                        <td style="text-align: center;">
+                        <td>{{item.system.pow}}</td>
+                        <td>{{item.system.attackMod}}</td>
+                        <td>
                             <button class="item-roll dice-button">🎲</button>
                         </td>
                         <td class="action-buttons">
@@ -101,7 +99,7 @@
                     {{/each}}
                     </tbody>
                 </table>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                <div class="add-item">
                     <button class="item-create" data-type="meleeWeapon" title="Nova Arma Melee">➕🗡️
                     </button>
                 </div>
@@ -122,17 +120,17 @@
                     <tbody>
                     {{#each items as |item|}}
                     {{#if (eq item.type "rangedWeapon")}}
-                    <tr class="item" data-item-id="{{item._id}}">
+                    <tr class="item text-center" data-item-id="{{item._id}}">
                         <td>{{item.name}}</td>
-                        <td style="text-align: center;">{{item.system.skill}}</td>
+                        <td>{{item.system.skill}}</td>
                         <td style="text-align: center;">
                             {{#each item.system.tags}}
                             <span class="tag">{{this}}</span>
                             {{/each}}
                         </td>
-                        <td style="text-align: center;">{{item.system.effectiveRange}}</td>
-                        <td style="text-align: center;">{{item.system.pow}}</td>
-                        <td style="text-align: center;">
+                        <td>{{item.system.effectiveRange}}</td>
+                        <td>{{item.system.pow}}</td>
+                        <td>
                             <button class="item-roll dice-button">🎲</button>
                         </td>
                         <td class="action-buttons">
@@ -146,7 +144,7 @@
                     {{/each}}
                     </tbody>
                 </table>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                <div class="add-item">
                     <button class="item-create" data-type="rangedWeapon" title="Nova Arma Ranged">➕🏹
                     </button>
                 </div>
@@ -167,18 +165,18 @@
                     <tbody>
                     {{#each items as |item|}}
                     {{#if (eq item.type "armor")}}
-                    <tr class="item" data-item-id="{{item._id}}">
+                    <tr class="item text-center" data-item-id="{{item._id}}">
                         <td>{{item.name}}</td>
-                        <td style="text-align:center;">
+                        <td>
                             {{#if item.system.isEquipped}}
                             ✅
                             {{else}}
                             ⚪
                             {{/if}}
                         </td>
-                        <td style="text-align: center;">{{item.system.armorBonus}}</td>
-                        <td style="text-align: center;">{{item.system.defPenalty}}</td>
-                        <td style="text-align: center;">{{item.system.spdPenalty}}</td>
+                        <td>{{item.system.armorBonus}}</td>
+                        <td>{{item.system.defPenalty}}</td>
+                        <td>{{item.system.spdPenalty}}</td>
                         <td class="action-buttons">
                             <div class="button-group">
                                 <button class="item-edit edit-button">✎</button>
@@ -190,7 +188,7 @@
                     {{/each}}
                     </tbody>
                 </table>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                <div class="add-item">
                     <button class="item-create" data-type="armor" title="Nova Armadura"
                             style="flex: 0 0 auto; width: auto; padding: 0.25rem 0.5rem;">➕🛡️
                     </button>
@@ -218,7 +216,7 @@
                     {{/each}}
                     </tbody>
                 </table>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                <div class="add-item">
                     <button class="item-create" data-type="equipment" title="Novo Equipamento"
                             style="flex: 0 0 auto; width: auto; padding: 0.25rem 0.5rem;">➕📦
                     </button>
@@ -237,7 +235,6 @@
                 <div class="tab" data-group="primary" data-tab="attributes">
                     <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
 
-                        <!-- Coluna da esquerda: Main Attributes -->
                         <div class="attribute-block" style="flex: 1;">
                             <h3>Principal</h3>
                             <div class="grid attributes"
@@ -253,7 +250,6 @@
                             </div>
                         </div>
 
-                        <!-- Coluna da direita: Secondary Attributes -->
                         <div class="attribute-block" style="flex: 1;">
                             <h3>Secundarios</h3>
                             <div class="grid attributes"
@@ -269,7 +265,6 @@
                             </div>
                         </div>
 
-                        <!-- Outra Coluna : derived Attributes -->
                         <div class="attribute-block" style="flex: 1;">
                             <h3>Derivados</h3>
                             <div class="grid attributes"
@@ -320,7 +315,7 @@
                                 </td>
 
                                 <td>
-                                    <select name="system.occupationalSkills.{{@index}}.attr" style="width: 100%;">
+                                    <select name="system.occupationalSkills.{{@index}}.attr" class="skill-select">
                                         <option value="SOC" {{#if (eq
                                         "SOC" this.attr)}}selected{{/if}}>--</option>
 
@@ -336,14 +331,13 @@
                                     </select>
                                 </td>
 
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <input type="number" name="system.occupationalSkills.{{@index}}.level"
                                            value="{{this.level}}"
-                                           min="0"
-                                           style="width: 3ch; text-align: center;"/>
+                                           min="0"/>
                                 </td>
 
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <button type="button" class="roll-skill dice-button" data-idx="{{@index}}">🎲
                                     </button>
                                 </td>
@@ -369,7 +363,7 @@
                                            value="{{this.name}}"/>
                                 </td>
                                 <td>
-                                    <select name="system.militarySkills.{{@index}}.attr" style="width: 100%;">
+                                    <select name="system.militarySkills.{{@index}}.attr" class="skill-select">
                                         {{#each ../system.mainAttributes as |val attrKey|}}
                                         <option value="{{attrKey}}" {{#if (eq attrKey ..
                                         /this.attr)}}selected{{/if}}>{{attrKey}}</option>
@@ -380,13 +374,12 @@
                                         {{/each}}
                                     </select>
                                 </td>
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <input type="number" name="system.militarySkills.{{@index}}.level"
                                            value="{{this.level}}"
-                                           min="0"
-                                           style="width: 3ch; text-align: center;"/>
+                                           min="0"/>
                                 </td>
-                                <td style="text-align: center;">
+                                <td class="text-center">
                                     <button type="button" class="roll-military-skill dice-button" data-idx="{{@index}}">
                                         🎲
                                     </button>
