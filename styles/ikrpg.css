@@ -27,7 +27,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-    max-width: 120px;
 }
 
 .tag {
@@ -141,11 +140,6 @@ input.big-input {
     border-radius: 0.5rem;
 }
 
-button.item-create {
-    flex: 0 0 auto;
-    width: auto;
-}
-
 /* Container dos botões */
 td.action-buttons {
     width: 80px;
@@ -244,8 +238,38 @@ button.dice-button:active {
     min-width: 50px;
 }
 
-.item-table th.col-roll,
+.item-table th.col-item-roll,
 .item-table td:nth-child(6) { /* 🎲 */
+    width: 40px;
+    min-width: 40px;
+}
+
+th.col-name{
+    width: auto;
+    padding: 0.5rem;
+}
+
+th.col-skill-roll {
+    width: 40px;
+    min-width: 40px;
+    padding: 0.5rem;
+}
+
+.text-center{
+    text-align: center;
+}
+
+select.skill-select{
+    width: 100%;
+}
+
+th.col-attr {
+    width: 70px;
+    min-width: 40px;
+    padding: 0.5rem;
+}
+
+th.col-lvl {
     width: 40px;
     min-width: 40px;
 }
@@ -288,6 +312,18 @@ button.dice-button:active {
 .item-table tr:hover,
 .skills-table tr:hover {
     background-color: #f0f0f0;
+}
+
+.add-item{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+button.item-create {
+    flex: 0 0 auto;
+    width: auto;
 }
 
 .header-flex {

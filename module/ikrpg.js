@@ -14,19 +14,45 @@ Hooks.once("init", function () {
     };
 
     Actors.unregisterSheet("core", ActorSheet);
-
     Actors.registerSheet("ikrpg", IKRPGActorSheet, {
         types: ["character"],
         makeDefault: true
     });
-
     Actors.registerSheet("ikrpg", IKRPGBasicNPCSheet, {
         types: ["npc"],
         makeDefault: true
     });
-
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
+    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
+        name: 'normal',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0x00FF00 // Verde
+    });
+    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
+        name: 'penalty',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0xFFB733 // Laranja
+    });
+    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
+        name: 'prohibited',
+        scope: 'world',
+        config: false,
+        type: Number,
+        default: 0xFF2222 // Azul
+    });
+
+});
+
+Hooks.once("ready", () => {
+    CONFIG.Grid.gridDistance = 1;
+    CONFIG.token.MovementSpeed = {
+        formula: "@attributes.movement.current" // Usa seu atributo MOV
+    };
 });
 
 // =======================
@@ -40,7 +66,7 @@ Handlebars.registerHelper('tagsToString', function (tags) {
 });
 
 // ================================
-// 🎯 GANCHOS DE CRIAÇÃO DE ATORES
+//              ATORES
 // ================================
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
     const commonConfig = {
@@ -68,9 +94,6 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
-// ================================
-// 🧬 CLASSE BASE DE ATORES
-// ================================
 class IKRPGActor extends Actor {
     prepareData() {
         super.prepareData();
@@ -88,14 +111,23 @@ class IKRPGActor extends Actor {
         // ===== Armor integration =====
         // Uses first armor found for now
         const armor = this.items.find(i => i.type === "armor");
-
-
         const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
 
         const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
-        const totalArmorPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.penalty || 0), 0); //treated in html to always be converted to negative or 0
+        const totalArmorDefPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.defPenalty || 0), 0); //treated in html to always be converted to negative or 0
+        const totalArmorSpdPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.spdPenalty || 0), 0); //treated in html to always be converted to negative or 0
+        data.movement.base = spd;
+        const currentMove = Math.max(0, data.movement.base + totalArmorSpdPenalty);
 
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorPenalty;
+        data.movement = {
+            base: data.movement.base,
+            bonus: 0,
+            penalty: totalArmorSpdPenalty,
+            current: currentMove
+        };
+
+        data.derivedAttributes.MOVE = data.movement.current;
+        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorDefPenalty;
         data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
         data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
         data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
@@ -137,7 +169,7 @@ class IKRPGActor extends Actor {
 }
 
 // ================================
-// 🧱 CLASSE BASE DE FICHAS
+//             FICHAS
 // ================================
 class IKRPGBaseSheet extends ActorSheet {
     activateListeners(html) {
@@ -226,9 +258,6 @@ class IKRPGBaseSheet extends ActorSheet {
     }
 }
 
-// ==============
-// IEM SHEET
-// ==============
 class IKRPGItemSheet extends ItemSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -256,9 +285,6 @@ class IKRPGItemSheet extends ItemSheet {
     }
 }
 
-// ================================
-// 🧍🏽 FICHA DE PERSONAGEM
-// ================================
 class IKRPGActorSheet extends IKRPGBaseSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -292,7 +318,6 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         data.isNPC = this.actor.type === "npc";
         return data;
     }
-
 
     activateListeners(html) {
         super.activateListeners(html);
@@ -330,8 +355,9 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             // Identificar alvos
             const targets = Array.from(game.user.targets);
 
+            const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
             let targetInfo = targets.length > 0
-                ? `<p>🎯 Alvos: ${targets.map(t => `<strong>${t.name}</strong>`).join(", ")}</p>`
+                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
                 : `<p>🎯 Sem alvos</p>`;
 
             const content = `
@@ -402,7 +428,8 @@ Hooks.on("renderChatMessage", (message, html, data) => {
                 const targetActor = t.actor;
                 const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
                 const success = roll.total >= targetDef;
-                return `<strong ${success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`} </strong> Contra ${t.name}: DEF ${targetDef} `;
+                const hitMessage = success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`
+                return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef} `;
             }).join("<br>");
 
             ChatMessage.create({
@@ -414,7 +441,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
             });
         }
     });
-
 
     // Botão de Dano
     html.find(".damage-roll").click(async ev => {
@@ -454,7 +480,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         });
     });
 
-
     // Botão de Aplicar Dano
     html.find(".apply-damage").click(async ev => {
         ev.preventDefault();
@@ -477,7 +502,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
     });
 
 });
-
 
 // ================================
 // 🧟 FICHA DE NPC

@@ -22,6 +22,12 @@
       "featPoints": 0,
       "gold": 0,
       "items": [],
+      "movement": {
+        "base": 0,
+        "bonus": 0,
+        "penalty": 0,
+        "current": 0
+      },
       "mainAttributes": {
         "PHY": 0,
         "AGI": 0,
@@ -36,6 +42,7 @@
         "PER": 0
       },
       "derivedAttributes": {
+        "MOVE": 0,
         "INIT": 0,
         "WILL": 0,
         "DEF": 0,
@@ -398,7 +405,8 @@
       "armor": {
         "system": {
           "armorBonus": 0,
-          "penalty": 0,
+          "defPenalty": 0,
+          "spdPenalty": 0,
           "isEquipped": false,
           "description": ""
         }
