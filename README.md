@@ -24,33 +24,32 @@ This system aims to provide a structured and automated character sheet for use i
 - **Rollable Attributes**: Click on any attribute name to roll 2d6 + that attribute
 - **Occupational & Military Skills**:
   - Predefined skill names
-  - Editable attribute and level
   - Automatic skill rolls: 2d6 + attribute + level
-  - Social skills use `--` to allow neutral (0) attribute association
+  - Social skills allow neutral attribute association (using `--`)
 - **Dynamic Inventory System**:
   - Separate item types: melee weapons, ranged weapons, armor, and equipment
   - Dedicated inventory tabs for weapons and general equipment
-  - Weapons can include any customizable tags (e.g., "fire", "magical", "cutting") without needing predefined types
+  - Weapon entries allow customizable tags (e.g., "fire", "magical", "cutting") without restriction to predefined types (in hope for further development on resistances/immunities)
   - Roll attacks directly from weapon entries using associated skill rolls
 - **Armor Integration**:
-  - Armor equipped automatically adds its bonuses and penalties
-  - Equipped/un-equipped state managed directly inside item sheets
+  - Armor equipment automatically modifies derived stats
+  - Equipped/un-equipped states reflecting on DEF/ARM/MOVE
 - **HP Management**:
   - Integrated buttons to easily increase or decrease HP
-- **Initiative**:
-  - Integrated in foundry VTT combat tracker 
-  - Uses the derived INIT attribute with 2d6 + INIT formula
-- **Layout**: (Doing my best... I m not a design person)
-  - Top section with HP controls and general info
-  - Tabbed interface for attributes, skills, and inventory management
+- **Combat**:
+  - Initiative integrated into Foundry VTT's combat tracker
+  - Combat rolls sent to chat and automated hit/miss and damage buttons
+- **Sheet**:
+  - Editable general information section with character name, HP controls.
+  - Tabbed interface separating attributes, skills, and inventory
 
 ---
 
 ## 🛠 Planned Features
 
-- Ability and Spell management integration
-- Status and condition tracking (maybe...)
-- Localization (planned: pt-BR and en-US, expandable to more languages)
+- Ability and Spell management (planned architecture ready)
+- Status and condition tracking (tentative, depending on complexity)
+- Localization (pt-BR and en-US initially, system prepared for further languages)
 - No official compendium creation (due to legal and maintenance concerns)
 
 ---
@@ -66,3 +65,9 @@ This project is not affiliated with or endorsed by _Privateer Press_ or _Steamfo
 ## 💡 Contributions & Feedback
 
 This project is a work in progress. If you'd like to contribute code, help test, or provide feedback, feel free to fork or contact the author.
+
+---
+## 📝 TODO - Improve this readme
+
+- [ ] Add prints of the character sheet
+- [ ] Add prints of chat and example automation
