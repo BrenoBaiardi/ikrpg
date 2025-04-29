@@ -57,6 +57,15 @@ Hooks.once("ready", () => {
     };
 });
 
+Hooks.on("updateToken", (document, changes, options, userId) => {
+    const token = canvas.tokens.get(document.id);
+    if (token) {
+        token.once("refresh", () => {
+            addDirectionIndicator(token);
+        });
+    }
+});
+
 // =======================
 //  Helpers
 // =======================
@@ -66,6 +75,61 @@ Handlebars.registerHelper('tagsToString', function (tags) {
     }
     return "";
 });
+
+function getSnappedRotation(token) {
+    const gridType = canvas.scene.grid.type;
+    const rawRotation = token.document.rotation || 0;
+    let step = 45;
+    let offset = 0;
+
+    if (gridType == 3 || gridType == 5) {
+        step = 60;
+        offset = 0;
+    } else if (gridType == 2 || gridType == 4) {
+        // Hex Rows (horizontal) – geralmente rotacionados 30 graus
+        step = 60;
+        offset = 30;
+    }
+
+    const adjusted = (rawRotation - offset + 360) % 360;
+    const snapped = Math.round(adjusted / step) * step;
+    return (snapped + offset) % 360;
+}
+
+Hooks.on("refreshToken", (token) => {
+    addDirectionIndicator(token);
+});
+
+function addDirectionIndicator(token) {
+    console.log("drawing arrow")
+    if (!token) return;
+
+    if (token.directionIndicator) {
+        token.directionIndicator.destroy();
+        token.directionIndicator = null;
+    }
+
+    const size = Math.min(token.w, token.h);
+    const length = size * 0.6;
+    const width = size * 0.25;
+
+    const arrow = new PIXI.Graphics();
+    arrow.beginFill(0xFF0000, 0.6);
+    arrow.moveTo(-4, -length);
+    arrow.lineTo(width, 0);
+    arrow.lineTo(-width, 0);
+    arrow.lineTo(-4, -length);
+    arrow.endFill();
+
+    const snappedRotation = getSnappedRotation(token);
+    arrow.rotation = snappedRotation * (Math.PI / 180);
+    arrow.position.set(token.w / 2, token.h / 2);
+
+    token.addChildAt(arrow, 0); // seta atrás do token
+    token.directionIndicator = arrow;
+}
+
+
 
 // ================================
 //              ATORES
