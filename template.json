@@ -349,20 +349,6 @@
         "DEF": 0,
         "ARM": 0
       },
-      "modifiers": {
-        "WILL": [
-          0
-        ],
-        "INIT": [
-          0
-        ],
-        "DEF": [
-          0
-        ],
-        "ARM": [
-          0
-        ]
-      },
       "prototypeToken": {
         "actorLink": true,
         "bar1": {

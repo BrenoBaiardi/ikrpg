@@ -230,10 +230,10 @@ class IKRPGActor extends Actor {
         };
 
         data.derivedAttributes.MOVE = data.movement.current;
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorDefPenalty;
-        data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
-        data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
-        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
+        data.derivedAttributes.DEF = agi + per + spd + totalArmorDefPenalty;
+        data.derivedAttributes.WILL = phy + int;
+        data.derivedAttributes.INIT = prw + spd + per;
+        data.derivedAttributes.ARM = phy + totalArmorBonus;
     }
 
     getInitiativeRoll() {
