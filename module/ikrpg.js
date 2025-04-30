@@ -76,6 +76,13 @@ Handlebars.registerHelper('tagsToString', function (tags) {
     return "";
 });
 
+function calculateDamage(hp, arm, damageAmount) {
+    const damageTaken = Math.max(0, damageAmount - arm);
+    const newHP = Math.max(0, hp.value - damageTaken);
+    return { damageTaken, newHP };
+}
+
+
 function getSnappedRotation(token) {
     const gridType = canvas.scene.grid.type;
     const rawRotation = token.document.rotation || 0;
@@ -243,10 +250,7 @@ class IKRPGActor extends Actor {
     applyDamage(amount) {
         const hp = foundry.utils.duplicate(this.system.hp);
         const arm = this.system.derivedAttributes?.ARM || 0;
-
-        const damageTaken = Math.max(0, amount - arm);
-        const newHP = Math.max(0, hp.value - damageTaken);
-
+        const { damageTaken, newHP } = calculateDamage(hp, arm, amount);
         this.update({"system.hp.value": newHP});
 
         ChatMessage.create({

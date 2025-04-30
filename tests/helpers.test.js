@@ -1,4 +1,3 @@
-
 test('Sistema configura iniciativa corretamente', () => {
     expect(CONFIG.Combat.initiative.formula).toBe("2d6 + @init");
 });
