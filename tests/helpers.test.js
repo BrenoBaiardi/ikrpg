@@ -1,11 +1,29 @@
-describe('Exemplo de teste simples', () => {
-    it('soma dois números corretamente', () => {
-        const resultado = 2 + 3;
-        expect(resultado).toBe(5);
+
+test('Sistema configura iniciativa corretamente', () => {
+    expect(CONFIG.Combat.initiative.formula).toBe("2d6 + @init");
+});
+
+test('prepareData calcula atributos derivados corretamente', () => {
+    const actor = new IKRPGActor({
+        type: "character",
+        system: {
+            mainAttributes: { AGI: 2, PHY: 3, INT: 4 },
+            secondaryAttributes: { PRW: 1, SPD: 2, PER: 1 },
+            modifiers: {
+                DEF: [],
+                WILL: [],
+                INIT: [],
+                ARM: []
+            },
+            movement: {},
+            derivedAttributes: {},
+            hp: {}
+        },
+        items: []
     });
 
-    it('verifica se uma string contém outra', () => {
-        const texto = 'Foundry VTT é incrível';
-        expect(texto).toMatch(/incrível/);
-    });
+    actor.prepareData();
+
+    expect(actor.system.hp.max).toBe(9); // PHY + INT + AGI
+    expect(actor.system.movement.current).toBe(2); // SPD + no armor penalty
 });
