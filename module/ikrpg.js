@@ -90,10 +90,10 @@ function calculateDerivedAttributes(data, armorBonuses) {
     console.log("armorBonuses", armorBonuses)
     return {
         MOVE: data.movement.current,
-        DEF: [AGI, PER, SPD, armorBonuses.defPenalty].reduce((sum, val) => sum + val, 0),
-        WILL: [PHY, INT].reduce((sum, val) => sum + val, 0),
         INIT: [PRW, SPD, PER].reduce((sum, val) => sum + val, 0),
-        ARM: [PHY, armorBonuses.armorBonus].reduce((sum, val) => sum + val, 0)
+        DEF: [AGI, PER, SPD, armorBonuses.defPenalty].reduce((sum, val) => sum + val, 0),
+        ARM: [PHY, armorBonuses.armorBonus].reduce((sum, val) => sum + val, 0),
+        WILL: [PHY, INT].reduce((sum, val) => sum + val, 0)
     };
 }
 
