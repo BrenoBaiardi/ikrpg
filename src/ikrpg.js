@@ -1,3 +1,5 @@
+import { calculateDamage, calculateDerivedAttributes } from "./logic.js";
+
 // ================================
 // 📦 CONFIGURAÇÃO DO SISTEMA
 // ================================
@@ -75,27 +77,6 @@ Handlebars.registerHelper('tagsToString', function (tags) {
     }
     return "";
 });
-
-function calculateDamage(hp, arm, damageAmount) {
-    const damageTaken = Math.max(0, damageAmount - arm);
-    const newHP = Math.max(0, hp.value - damageTaken);
-    return { damageTaken, newHP };
-}
-
-function calculateDerivedAttributes(data, armorBonuses) {
-    const { AGI, PHY, INT } = data.mainAttributes;
-    const { PRW, SPD, PER } = data.secondaryAttributes;
-    console.log("data antes")
-    console.log(data)
-    console.log("armorBonuses", armorBonuses)
-    return {
-        MOVE: data.movement.current,
-        INIT: [PRW, SPD, PER].reduce((sum, val) => sum + val, 0),
-        DEF: [AGI, PER, SPD, armorBonuses.defPenalty].reduce((sum, val) => sum + val, 0),
-        ARM: [PHY, armorBonuses.armorBonus].reduce((sum, val) => sum + val, 0),
-        WILL: [PHY, INT].reduce((sum, val) => sum + val, 0)
-    };
-}
 
 
 function getSnappedRotation(token) {
@@ -221,9 +202,6 @@ class IKRPGActor extends Actor {
         const agi = data.mainAttributes.AGI;
         const phy = data.mainAttributes.PHY;
         const int = data.mainAttributes.INT;
-        const prw = data.secondaryAttributes.PRW;
-        const spd = data.secondaryAttributes.SPD;
-        const per = data.secondaryAttributes.PER;
 
         data.hp.max = phy + int + agi;
 
@@ -234,20 +212,19 @@ class IKRPGActor extends Actor {
         const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
         const totalArmorDefPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.defPenalty || 0), 0); //treated in html to always be converted to negative or 0
         const totalArmorSpdPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.spdPenalty || 0), 0); //treated in html to always be converted to negative or 0
-        data.movement.base = spd;
-        const currentMove = Math.max(0, data.movement.base + totalArmorSpdPenalty);
+
+        data.derivedAttributes = calculateDerivedAttributes(data, {
+            speedPenalty: totalArmorSpdPenalty,
+            armorBonus: totalArmorBonus,
+            defPenalty: totalArmorDefPenalty
+        });
 
         data.movement = {
             base: data.movement.base,
             bonus: 0,
             penalty: totalArmorSpdPenalty,
-            current: currentMove
+            current: data.derivedAttributes.MOVE
         };
-
-        data.derivedAttributes = calculateDerivedAttributes(data, {
-            armorBonus: totalArmorBonus,
-            defPenalty: totalArmorDefPenalty
-        });
     }
 
     getInitiativeRoll() {
@@ -264,7 +241,7 @@ class IKRPGActor extends Actor {
     applyDamage(amount) {
         const hp = foundry.utils.duplicate(this.system.hp);
         const arm = this.system.derivedAttributes?.ARM || 0;
-        const { damageTaken, newHP } = calculateDamage(hp, arm, amount);
+        const { damageTaken, newHP } = calculateDamage(hp.value, arm, amount);
         this.update({"system.hp.value": newHP});
 
         ChatMessage.create({

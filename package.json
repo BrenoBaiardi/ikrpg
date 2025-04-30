@@ -1,19 +1,13 @@
 {
   "name": "ikrpg",
   "version": "1.0.0",
-  "description": "**IKRPG** (Iron Kingdoms Roleplaying Game) is a custom system for Foundry Virtual Tabletop, built to support the mechanics and flavor of the Iron Kingdoms universe.  \r This project was designed from the ground up to faithfully implement character sheets, dice rolls, inventory, and derived stats according to the IKRPG rules.",
-  "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "jest"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
+    "@babel/preset-env": "^7.27.1",
+    "@babel/core": "^7.27.1",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0"
   }
 }
