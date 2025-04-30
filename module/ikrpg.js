@@ -82,6 +82,21 @@ function calculateDamage(hp, arm, damageAmount) {
     return { damageTaken, newHP };
 }
 
+function calculateDerivedAttributes(data, armorBonuses) {
+    const { AGI, PHY, INT } = data.mainAttributes;
+    const { PRW, SPD, PER } = data.secondaryAttributes;
+    console.log("data antes")
+    console.log(data)
+    console.log("armorBonuses", armorBonuses)
+    return {
+        MOVE: data.movement.current,
+        DEF: [AGI, PER, SPD, armorBonuses.defPenalty].reduce((sum, val) => sum + val, 0),
+        WILL: [PHY, INT].reduce((sum, val) => sum + val, 0),
+        INIT: [PRW, SPD, PER].reduce((sum, val) => sum + val, 0),
+        ARM: [PHY, armorBonuses.armorBonus].reduce((sum, val) => sum + val, 0)
+    };
+}
+
 
 function getSnappedRotation(token) {
     const gridType = canvas.scene.grid.type;
@@ -229,11 +244,10 @@ class IKRPGActor extends Actor {
             current: currentMove
         };
 
-        data.derivedAttributes.MOVE = data.movement.current;
-        data.derivedAttributes.DEF = agi + per + spd + totalArmorDefPenalty;
-        data.derivedAttributes.WILL = phy + int;
-        data.derivedAttributes.INIT = prw + spd + per;
-        data.derivedAttributes.ARM = phy + totalArmorBonus;
+        data.derivedAttributes = calculateDerivedAttributes(data, {
+            armorBonus: totalArmorBonus,
+            defPenalty: totalArmorDefPenalty
+        });
     }
 
     getInitiativeRoll() {
