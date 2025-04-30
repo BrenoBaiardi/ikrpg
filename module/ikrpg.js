@@ -207,7 +207,6 @@ class IKRPGActor extends Actor {
 
         // ===== Armor integration =====
         // Uses first armor found for now
-        const armor = this.items.find(i => i.type === "armor");
         const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
 
         const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
