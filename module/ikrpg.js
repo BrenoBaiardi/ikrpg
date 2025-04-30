@@ -24,35 +24,46 @@ Hooks.once("init", function () {
     });
     Items.unregisterSheet("core", ItemSheet);
     Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
-    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
-        name: 'normal',
-        scope: 'world',
-        config: false,
-        type: Number,
-        default: 0x00FF00 // Verde
-    });
-    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
-        name: 'penalty',
-        scope: 'world',
-        config: false,
-        type: Number,
-        default: 0xFFB733 // Laranja
-    });
-    game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
-        name: 'prohibited',
-        scope: 'world',
-        config: false,
-        type: Number,
-        default: 0xFF2222 // Azul
-    });
+    if (game.modules.get("drag-ruler")?.active) {
+        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
+            name: 'normal',
+            scope: 'world',
+            config: false,
+            type: Number,
+            default: 0x00FF00 // Verde
+        });
+        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
+            name: 'penalty',
+            scope: 'world',
+            config: false,
+            type: Number,
+            default: 0xFFB733 // Laranja
+        });
+        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
+            name: 'prohibited',
+            scope: 'world',
+            config: false,
+            type: Number,
+            default: 0xFF2222 // Vermelho
+        });
+    }
 
 });
 
 Hooks.once("ready", () => {
     CONFIG.Grid.gridDistance = 1;
     CONFIG.token.MovementSpeed = {
-        formula: "@attributes.movement.current" // Usa seu atributo MOV
+        formula: "@attributes.movement.current"
     };
+});
+
+Hooks.on("updateToken", (document, changes, options, userId) => {
+    const token = canvas.tokens.get(document.id);
+    if (token) {
+        token.once("refresh", () => {
+            addDirectionIndicator(token);
+        });
+    }
 });
 
 // =======================
@@ -64,6 +75,92 @@ Handlebars.registerHelper('tagsToString', function (tags) {
     }
     return "";
 });
+
+function getSnappedRotation(token) {
+    const gridType = canvas.scene.grid.type;
+    const rawRotation = token.document.rotation || 0;
+    let step = 45;
+    let offset = 0;
+
+    if (gridType == 3 || gridType == 5) {
+        step = 60;
+        offset = 0;
+    } else if (gridType == 2 || gridType == 4) {
+        // Hex Rows (horizontal) – geralmente rotacionados 30 graus
+        step = 60;
+        offset = 30;
+    }
+
+    const adjusted = (rawRotation - offset + 360) % 360;
+    const snapped = Math.round(adjusted / step) * step;
+    return (snapped + offset) % 360;
+}
+
+Hooks.on("refreshToken", (token) => {
+    addDirectionIndicator(token);
+});
+
+function addDirectionIndicator(token) {
+    if (!token) return;
+
+    // Remove anteriores, se existirem
+    if (token.directionIndicator) {
+        token.removeChild(token.directionIndicator);
+        token.directionIndicator.destroy();
+    }
+    if (token.rearIndicator) {
+        token.removeChild(token.rearIndicator);
+        token.rearIndicator.destroy();
+    }
+
+    let arrowWidth = 30
+    let arrowHeight = 65
+    let arrowBaseHeight = 50
+    const mainArrow = new PIXI.Graphics();
+    mainArrow.beginFill(0xFF0000, 0.8);
+    mainArrow.moveTo(-arrowWidth, -arrowBaseHeight);
+    mainArrow.lineTo(arrowWidth, -arrowBaseHeight);
+    mainArrow.lineTo(0, -arrowHeight);
+    mainArrow.lineTo(-arrowWidth, -arrowBaseHeight);
+    mainArrow.endFill();
+
+    let backUpperWidth = 65
+    let backLowerWidth = 30
+    let backHeight = 55
+    const backArrow = new PIXI.Graphics();
+    backArrow.beginFill(0x0000FF, 0.3);
+    backArrow.moveTo(-backUpperWidth, 0);
+    backArrow.lineTo(-backLowerWidth, backHeight);
+    backArrow.lineTo(backLowerWidth, backHeight);
+    backArrow.lineTo(backUpperWidth, 0);
+    backArrow.lineTo(-backUpperWidth, 0);
+    backArrow.endFill();
+
+    // Calculando a rotação correta para o token
+    const snappedRotation = getSnappedRotation(token);
+    const radians = snappedRotation * (Math.PI / 180);
+
+    // Ajuste da rotação para frente e para trás
+    mainArrow.rotation = radians;
+    backArrow.rotation = radians; // 180° oposto
+
+    // Posicionando as setas no centro do token
+    const centerX = token.w / 2;
+    const centerY = token.h / 2;
+    mainArrow.position.set(centerX, centerY);
+    backArrow.position.set(centerX, centerY);
+
+    // Adiciona a seta traseira atrás do token e a seta principal na frente
+    token.addChildAt(backArrow, 0);  // Coloca a seta traseira atrás
+    token.addChild(mainArrow);        // Coloca a seta principal em cima
+
+    token.directionIndicator = mainArrow;
+    token.rearIndicator = backArrow;
+}
+
+
+
+
 
 // ================================
 //              ATORES
