@@ -124,12 +124,16 @@ function addDirectionIndicator(token) {
     mainArrow.lineTo(-arrowWidth, -arrowBaseHeight);
     mainArrow.endFill();
 
+    let backUpperWidth = 65
+    let backLowerWidth = 30
+    let backHeight = 55
     const backArrow = new PIXI.Graphics();
-    backArrow.beginFill(0x0000FF, 0.3); // azul claro e translúcido
-    backArrow.moveTo(0, 0);
-    backArrow.lineTo(15, -40); // Aumentei o tamanho
-    backArrow.lineTo(-15, -40); // Aumentei o tamanho
-    backArrow.lineTo(0, 0);
+    backArrow.beginFill(0x0000FF, 0.3);
+    backArrow.moveTo(-backUpperWidth, 0);
+    backArrow.lineTo(-backLowerWidth, backHeight);
+    backArrow.lineTo(backLowerWidth, backHeight);
+    backArrow.lineTo(backUpperWidth, 0);
+    backArrow.lineTo(-backUpperWidth, 0);
     backArrow.endFill();
 
     // Calculando a rotação correta para o token
@@ -138,7 +142,7 @@ function addDirectionIndicator(token) {
 
     // Ajuste da rotação para frente e para trás
     mainArrow.rotation = radians;
-    backArrow.rotation = radians + Math.PI; // 180° oposto
+    backArrow.rotation = radians; // 180° oposto
 
     // Posicionando as setas no centro do token
     const centerX = token.w / 2;
