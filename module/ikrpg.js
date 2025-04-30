@@ -101,33 +101,60 @@ Hooks.on("refreshToken", (token) => {
 });
 
 function addDirectionIndicator(token) {
-    console.log("drawing arrow")
     if (!token) return;
 
+    // Remove anteriores, se existirem
     if (token.directionIndicator) {
+        token.removeChild(token.directionIndicator);
         token.directionIndicator.destroy();
-        token.directionIndicator = null;
+    }
+    if (token.rearIndicator) {
+        token.removeChild(token.rearIndicator);
+        token.rearIndicator.destroy();
     }
 
-    const size = Math.min(token.w, token.h);
-    const length = size * 0.6;
-    const width = size * 0.25;
+    let arrowWidth = 30
+    let arrowHeight = 65
+    let arrowBaseHeight = 50
+    const mainArrow = new PIXI.Graphics();
+    mainArrow.beginFill(0xFF0000, 0.8);
+    mainArrow.moveTo(-arrowWidth, -arrowBaseHeight);
+    mainArrow.lineTo(arrowWidth, -arrowBaseHeight);
+    mainArrow.lineTo(0, -arrowHeight);
+    mainArrow.lineTo(-arrowWidth, -arrowBaseHeight);
+    mainArrow.endFill();
 
-    const arrow = new PIXI.Graphics();
-    arrow.beginFill(0xFF0000, 0.6);
-    arrow.moveTo(-4, -length);
-    arrow.lineTo(width, 0);
-    arrow.lineTo(-width, 0);
-    arrow.lineTo(-4, -length);
-    arrow.endFill();
+    const backArrow = new PIXI.Graphics();
+    backArrow.beginFill(0x0000FF, 0.3); // azul claro e translúcido
+    backArrow.moveTo(0, 0);
+    backArrow.lineTo(15, -40); // Aumentei o tamanho
+    backArrow.lineTo(-15, -40); // Aumentei o tamanho
+    backArrow.lineTo(0, 0);
+    backArrow.endFill();
 
+    // Calculando a rotação correta para o token
     const snappedRotation = getSnappedRotation(token);
-    arrow.rotation = snappedRotation * (Math.PI / 180);
-    arrow.position.set(token.w / 2, token.h / 2);
+    const radians = snappedRotation * (Math.PI / 180);
 
-    token.addChildAt(arrow, 0); // seta atrás do token
-    token.directionIndicator = arrow;
+    // Ajuste da rotação para frente e para trás
+    mainArrow.rotation = radians;
+    backArrow.rotation = radians + Math.PI; // 180° oposto
+
+    // Posicionando as setas no centro do token
+    const centerX = token.w / 2;
+    const centerY = token.h / 2;
+    mainArrow.position.set(centerX, centerY);
+    backArrow.position.set(centerX, centerY);
+
+    // Adiciona a seta traseira atrás do token e a seta principal na frente
+    token.addChildAt(backArrow, 0);  // Coloca a seta traseira atrás
+    token.addChild(mainArrow);        // Coloca a seta principal em cima
+
+    token.directionIndicator = mainArrow;
+    token.rearIndicator = backArrow;
 }
+
+
 
 
 
