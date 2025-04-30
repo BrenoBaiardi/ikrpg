@@ -1,4 +1,5 @@
-import { calculateDamage, calculateDerivedAttributes } from "./logic.js";
+import { calculateDamage, calculateDerivedAttributes, getSnappedRotation } from "./logic.js";
+
 
 // ================================
 // 📦 CONFIGURAÇÃO DO SISTEMA
@@ -78,27 +79,6 @@ Handlebars.registerHelper('tagsToString', function (tags) {
     return "";
 });
 
-
-function getSnappedRotation(token) {
-    const gridType = canvas.scene.grid.type;
-    const rawRotation = token.document.rotation || 0;
-    let step = 45;
-    let offset = 0;
-
-    if (gridType == 3 || gridType == 5) {
-        step = 60;
-        offset = 0;
-    } else if (gridType == 2 || gridType == 4) {
-        // Hex Rows (horizontal) – geralmente rotacionados 30 graus
-        step = 60;
-        offset = 30;
-    }
-
-    const adjusted = (rawRotation - offset + 360) % 360;
-    const snapped = Math.round(adjusted / step) * step;
-    return (snapped + offset) % 360;
-}
-
 Hooks.on("refreshToken", (token) => {
     addDirectionIndicator(token);
 });
@@ -140,7 +120,7 @@ function addDirectionIndicator(token) {
     backArrow.endFill();
 
     // Calculando a rotação correta para o token
-    const snappedRotation = getSnappedRotation(token);
+    const snappedRotation = getSnappedRotation(token.document.rotation, canvas.scene.grid.type);
     const radians = snappedRotation * (Math.PI / 180);
 
     // Ajuste da rotação para frente e para trás
