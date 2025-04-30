@@ -72,28 +72,48 @@ describe("getSnappedRotation", () => {
         expect(getSnappedRotation(134, 1)).toBe(135);
     });
 
-    test("snaps correctly on vertical hex grid (type 3)", () => {
-        expect(getSnappedRotation(10, 3)).toBe(0);
-        expect(getSnappedRotation(31, 3)).toBe(60);
-        expect(getSnappedRotation(89, 3)).toBe(90); // rounded to 90 (snaps every 60°)
-        expect(getSnappedRotation(179, 3)).toBe(180);
+    test("snaps correctly on hexagonal odd row (type 2) with 30° offset", () => {
+        expect(getSnappedRotation(10, 2)).toBe(30);
+        expect(getSnappedRotation(31, 2)).toBe(30);
+        expect(getSnappedRotation(45, 2)).toBe(30);
+        expect(getSnappedRotation(89, 2)).toBe(90);
+        expect(getSnappedRotation(70, 2)).toBe(90);
+        expect(getSnappedRotation(179, 2)).toBe(150);
     });
 
-    test("snaps correctly on horizontal hex grid (type 2) with 30° offset", () => {
-        expect(getSnappedRotation(30, 2)).toBe(30);
-        expect(getSnappedRotation(59, 2)).toBe(60);
-        expect(getSnappedRotation(74, 2)).toBe(90);
-        expect(getSnappedRotation(119, 2)).toBe(120);
-        expect(getSnappedRotation(359, 2)).toBe(0); // wraps around
+    test("snaps correctly on hexagonal even row (type 3)", () => {
+        expect(getSnappedRotation(10, 3)).toBe(30);
+        expect(getSnappedRotation(31, 3)).toBe(30);
+        expect(getSnappedRotation(45, 3)).toBe(30);
+        expect(getSnappedRotation(89, 3)).toBe(90);
+        expect(getSnappedRotation(70, 3)).toBe(90);
+        expect(getSnappedRotation(179, 3)).toBe(150);
+    });
+
+    test("snaps correctly on hexagonal odd column (type 4)", () => {
+        expect(getSnappedRotation(10, 4)).toBe(0);
+        expect(getSnappedRotation(31, 4)).toBe(60);
+        expect(getSnappedRotation(45, 4)).toBe(60);
+        expect(getSnappedRotation(89, 4)).toBe(60);
+        expect(getSnappedRotation(70, 4)).toBe(60);
+        expect(getSnappedRotation(179, 4)).toBe(180);
+    });
+
+    test("snaps correctly on hexagonal even column (type 5)", () => {
+        expect(getSnappedRotation(10, 5)).toBe(0);
+        expect(getSnappedRotation(31, 5)).toBe(60);
+        expect(getSnappedRotation(45, 5)).toBe(60);
+        expect(getSnappedRotation(89, 5)).toBe(60);
+        expect(getSnappedRotation(70, 5)).toBe(60);
+        expect(getSnappedRotation(179, 5)).toBe(180);
     });
 
     test("handles negative rotation", () => {
         expect(getSnappedRotation(-45, 1)).toBe(315);
-        expect(getSnappedRotation(-90, 2)).toBe(90); // offset considered
+        expect(getSnappedRotation(-90, 2)).toBe(270); // offset considered
     });
 
     test("handles rotation > 360", () => {
-        expect(getSnappedRotation(370, 1)).toBe(0);
-        expect(getSnappedRotation(765, 3)).toBe(60);
+        expect(getSnappedRotation(370, 4)).toBe(0);
     });
 });

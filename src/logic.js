@@ -42,13 +42,14 @@ export function getSnappedRotation(rotation, gridType) {
     let step = 45;
     let offset = 0;
 
-    if (gridType === 3 || gridType === 5) {
+    if (gridType === 4 || gridType === 5) {
         step = 60;
         offset = 0;
-    } else if (gridType === 2 || gridType === 4) {
+    } else if (gridType === 2 || gridType === 3) {
         step = 60;
         offset = 30;
     }
+
 
     const adjusted = (rotation - offset + 360) % 360;
     const snapped = Math.round(adjusted / step) * step;
