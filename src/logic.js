@@ -81,26 +81,29 @@ export async function handleDamageRoll(event, message) {
     }
 
 
-    await damageRoll.evaluate({ async: true });
+    await damageRoll.evaluate({async: true});
 
     await damageRoll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor }),
-        flavor: `<h3>Dano de ${item.name}</h3>`
+        speaker: ChatMessage.getSpeaker({actor}),
+        flavor: `<h3>💥 Dano de ${item.name}</h3>`
     });
 
     const targets = Array.from(game.user.targets);
-    const buttons = targets.map(t => `
+
+    if (targets.length > 0) {
+        const buttons = targets.map(t => `
         <button type="button" class="apply-damage" data-target-id="${t.id}" data-damage="${damageRoll.total}">
             Aplicar ${damageRoll.total} em ${t.name}
         </button>`).join("<br>");
 
-    ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor }),
-        content: `
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({actor}),
+            content: `
             <h3>Aplicar Dano (${item.name})</h3>
             ${buttons}
         `
-    });
+        });
+    }
 }
 
 function findMilitarySkill(item, actor) {
@@ -113,6 +116,33 @@ function findMilitarySkill(item, actor) {
         ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
     }
     return skill;
+}
+
+async function sendAttackToChat(attrValue, skillLevel, attackMod, actor, item) {
+    const roll = new Roll("2d6 + @attr + @skill + @atk", {
+        attr: attrValue,
+        skill: skillLevel,
+        atk: attackMod
+    });
+
+    await roll.evaluate({async: true});
+    await roll.toMessage({
+        speaker: ChatMessage.getSpeaker({actor}),
+        flavor: `<h3>🎯 Resultado do ataque de ${item.name}</h3>`
+    });
+    return roll;
+}
+
+function buildHitResult(targets, roll) {
+    return targets.map(t => {
+        const targetActor = t.actor;
+        const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
+        const success = roll.total >= targetDef;
+        const hitMessage = success
+            ? `style="color: green;"> ✅ Hit!`
+            : `style="color: red;">❌ Miss!`;
+        return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef}`;
+    }).join("<br>");
 }
 
 export async function handleAttackRoll(event, message) {
@@ -134,6 +164,7 @@ export async function handleAttackRoll(event, message) {
     }
 
     const isSteamjack = actor.type === "steamjack";
+    const isCharacter = actor.type === "character";
     let attrValue = 0;
     let skillLevel = 0;
 
@@ -150,7 +181,7 @@ export async function handleAttackRoll(event, message) {
             return;
         }
 
-    } else if (item.type === "character") {
+    } else if (isCharacter) {
         const skill = findMilitarySkill(item, actor);
 
         attrValue = actor.system.mainAttributes?.[skill.attr]
@@ -158,38 +189,21 @@ export async function handleAttackRoll(event, message) {
             ?? 0;
 
         skillLevel = skill.level || 0;
+    } else {
+        console.warn("No character type configured for -> ", actor.type)
+        return
     }
 
     const attackMod = item.system.attackMod || 0;
-
-    const roll = new Roll("2d6 + @attr + @skill + @atk", {
-        attr: attrValue,
-        skill: skillLevel,
-        atk: attackMod
-    });
-
-    await roll.evaluate({ async: true });
-
-    await roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor }),
-        flavor: `<h3>Resultado do ataque de ${item.name}</h3>`
-    });
+    const roll = await sendAttackToChat(attrValue, skillLevel, attackMod, actor, item);
 
     const targets = Array.from(game.user.targets);
 
     if (targets.length > 0) {
-        let results = targets.map(t => {
-            const targetActor = t.actor;
-            const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
-            const success = roll.total >= targetDef;
-            const hitMessage = success
-                ? `style="color: green;"> ✅ Hit!`
-                : `style="color: red;">❌ Miss!`;
-            return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef}`;
-        }).join("<br>");
+        let results = buildHitResult(targets, roll);
 
         ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
+            speaker: ChatMessage.getSpeaker({actor}),
             content: `
                 <h3>Resultado do Ataque (${item.name})</h3>
                 ${results}
