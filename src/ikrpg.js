@@ -502,7 +502,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
     }
 }
 
-class IKRPGSteamjackSheet extends IKRPGBaseSheet {
+class IKRPGSteamjackSheet extends IKRPGActorSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "steamjack"],

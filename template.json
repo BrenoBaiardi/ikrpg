@@ -367,6 +367,7 @@
       "height": "",
       "weight": "",
       "chassisSize": "light",
+      "items": [],
       "fuel": {
         "max": 0,
         "consumption": 0
