@@ -14,6 +14,7 @@ This system aims to provide a structured and automated character sheet for use i
 - Attribute-driven derived values (like HP, DEF, ARM)
 - Fully customizable skill system with fixed skill names and editable attributes/levels
 - Categorized inventory management with dynamic weapon rolls
+- Support for actor types: Character, NPC, Steamjack
 
 ---
 
