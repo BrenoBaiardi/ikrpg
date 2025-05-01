@@ -22,7 +22,6 @@
       "totalXP": 0,
       "featPoints": 0,
       "gold": 0,
-      "items": [],
       "movement": {
         "base": 0,
         "bonus": 0,
@@ -367,7 +366,6 @@
       "height": "",
       "weight": "",
       "chassisSize": "light",
-      "items": [],
       "fuel": {
         "max": 0,
         "consumption": 0
@@ -392,7 +390,9 @@
         "MOVE": 0,
         "INIT": 0,
         "DEF": 0,
-        "ARM": 0
+        "ARM": 0,
+        "MAT": 0,
+        "RAT": 0
       },
       "damageGrid": {
         "1": false,

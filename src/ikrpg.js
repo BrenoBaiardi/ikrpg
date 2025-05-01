@@ -198,7 +198,7 @@ Hooks.on("updateActor", async (actor, updateData, options, userId) => {
     if (actor.type !== "steamjack") return;
 
     // Checa se chassisSize foi alterado
-    const newSize = getProperty(updateData, "system.chassisSize");
+    const newSize = foundry.utils.getProperty(updateData, "system.chassisSize");
     if (!newSize) return;
 
     const size = newSize === "heavy" ? 3 : 2;
@@ -535,23 +535,44 @@ Hooks.on("renderChatMessage", (message, html, data) => {
         const actor = game.actors.get(message.speaker.actor);
         const item = actor?.items.get(itemId);
 
+        console.log("itemid", itemId)
+        console.log("actor", actor)
+        console.log("item", item)
         if (!item) return;
 
-        const skillName = item.system.skill;
-        const militarySkills = Object.values(actor.system.militarySkills || {});
-        const skill = militarySkills.find(s => s.name === skillName);
+        const isSteamjack = actor.type === "steamjack";
+        let attrValue = 0;
+        let skillLevel = 0;
 
-        if (!skill) {
-            ui.notifications.warn(`O personagem não possui a perícia militar "${skillName}".`);
-            return;
+        if (isSteamjack) {
+            const itemType = item.type;
+            const derived = actor.system.derivedAttributes || {};
+
+            if (itemType === "meleeWeapon") {
+                attrValue = derived.MAT ?? 0;
+            } else if (itemType === "rangedWeapon") {
+                attrValue = derived.RAT ?? 0;
+            } else {
+                ui.notifications.warn("Erro, atributo para rolagem não encontrado. Esperado MAT ou RAT).");
+                return;
+            }
+
+        } else {
+            const skillName = item.system.skill;
+            const militarySkills = Object.values(actor.system.militarySkills || {});
+            const skill = militarySkills.find(s => s.name === skillName);
+
+            if (!skill) {
+                ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
+                return;
+            }
+
+            attrValue = actor.system.mainAttributes?.[skill.attr]
+                ?? actor.system.secondaryAttributes?.[skill.attr]
+                ?? 0;
+            skillLevel = skill.level || 0;
         }
 
-        // Atributo vinculado à perícia militar (normalmente PRW ou POI)
-        const attrValue = actor.system.mainAttributes?.[skill.attr]
-            ?? actor.system.secondaryAttributes?.[skill.attr]
-            ?? 0;
-
-        const skillLevel = skill.level || 0;
         const attackMod = item.system.attackMod || 0;
 
         const roll = new Roll("2d6 + @attr + @skill + @atk", {
@@ -562,7 +583,6 @@ Hooks.on("renderChatMessage", (message, html, data) => {
 
         await roll.evaluate({async: true});
 
-        // Primeiro: Mostrar a rolagem no chat
         await roll.toMessage({
             speaker: ChatMessage.getSpeaker({actor}),
             flavor: `<h3>Resultado do ataque de ${item.name}</h3>`
@@ -582,12 +602,13 @@ Hooks.on("renderChatMessage", (message, html, data) => {
             ChatMessage.create({
                 speaker: ChatMessage.getSpeaker({actor}),
                 content: `
-                <h3>Resultado do Ataque (${item.name})</h3>
-                ${results}
-            `
+            <h3>Resultado do Ataque (${item.name})</h3>
+            ${results}
+        `
             });
         }
     });
+
 
     // Botão de Dano
     html.find(".damage-roll").click(async ev => {
