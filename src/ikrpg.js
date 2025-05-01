@@ -438,7 +438,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
     getData() {
         const data = super.getData();
         data.system = this.actor.system;
-        data.isNPC = this.actor.type === "npc";
+        data.isCharacter = this.actor.type === "character";
         return data;
     }
 
@@ -517,6 +517,7 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
     getData() {
         const data = super.getData();
         data.system = this.actor.system;
+        data.isSteamjack = this.actor.type === "steamjack";
         data.items = this.actor.items;  // ← ESSENCIAL
         return data;
     }
@@ -635,6 +636,7 @@ class IKRPGBasicNPCSheet extends IKRPGBaseSheet {
     getData() {
         const data = super.getData();
         data.system = this.actor.system;
+        data.isNPC = this.actor.type === "npc";
         return data;
     }
 

@@ -103,6 +103,18 @@ export async function handleDamageRoll(event, message) {
     });
 }
 
+function findMilitarySkill(item, actor) {
+    const skillName = item.system.skill;
+    const militarySkills = Object.values(actor.system.militarySkills || {});
+    let skill = militarySkills.find(s => s.name === skillName);
+
+    if (!skill) {
+        skill = {name: "undefined", attr: 0, level: 0}
+        ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
+    }
+    return skill;
+}
+
 export async function handleAttackRoll(event, message) {
     event.preventDefault();
 
@@ -138,15 +150,8 @@ export async function handleAttackRoll(event, message) {
             return;
         }
 
-    } else {
-        const skillName = item.system.skill;
-        const militarySkills = Object.values(actor.system.militarySkills || {});
-        const skill = militarySkills.find(s => s.name === skillName);
-
-        if (!skill) {
-            ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
-            return;
-        }
+    } else if (item.type === "character") {
+        const skill = findMilitarySkill(item, actor);
 
         attrValue = actor.system.mainAttributes?.[skill.attr]
             ?? actor.system.secondaryAttributes?.[skill.attr]
