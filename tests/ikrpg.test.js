@@ -31,7 +31,7 @@ describe("calculateDerivedAttributes", () => {
     test("should calculate derived attributes correctly", () => {
         const data = {
             mainAttributes: {
-                AGI: 4,
+                AGL: 4,
                 PHY: 5,
                 INT: 3
             },

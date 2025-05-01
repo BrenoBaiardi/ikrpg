@@ -2,7 +2,8 @@
   "Actor": {
     "types": [
       "character",
-      "npc"
+      "npc",
+      "steamjack"
     ],
     "character": {
       "hp": {
@@ -30,7 +31,7 @@
       },
       "mainAttributes": {
         "PHY": 0,
-        "AGI": 0,
+        "AGL": 0,
         "INT": 0
       },
       "secondaryAttributes": {
@@ -80,7 +81,7 @@
         },
         {
           "name": "Climbing",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
@@ -115,12 +116,12 @@
         },
         {
           "name": "Driving",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
           "name": "Escape Artist",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
@@ -170,7 +171,7 @@
         },
         {
           "name": "Lock Picking",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
@@ -205,7 +206,7 @@
         },
         {
           "name": "Pickpocket",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
@@ -215,12 +216,12 @@
         },
         {
           "name": "Riding",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
           "name": "Rope Use",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
@@ -235,7 +236,7 @@
         },
         {
           "name": "Sneak",
-          "attr": "AGI",
+          "attr": "AGL",
           "level": 0
         },
         {
@@ -332,7 +333,7 @@
       },
       "mainAttributes": {
         "PHY": 0,
-        "AGI": 0,
+        "AGL": 0,
         "INT": 0
       },
       "secondaryAttributes": {
@@ -354,6 +355,60 @@
         "bar1": {
           "attribute": "system.hp"
         }
+      }
+    },
+    "steamjack": {
+      "hp": {
+        "value": 0,
+        "max": 0
+      },
+      "name": "",
+      "chassis": "",
+      "height": "",
+      "weight": "",
+      "chassisSize": "light",
+      "fuel": {
+        "max": 0,
+        "consumption": 0
+      },
+      "cortex": {
+        "imprint": "",
+        "language": ""
+      },
+      "mainAttributes": {
+        "PHY": 0,
+        "AGL": 0,
+        "INT": 0
+      },
+      "secondaryAttributes": {
+        "SPD": 0,
+        "STR": 0,
+        "PRW": 0,
+        "POI": 0,
+        "PER": 0
+      },
+      "derivedAttributes": {
+        "MOVE": 0,
+        "INIT": 0,
+        "DEF": 0,
+        "ARM": 0
+      },
+      "damageGrid": {
+        "1": false,
+        "2": false,
+        "3": false,
+        "4": false,
+        "5": false,
+        "6": false
+      },
+      "notes": "",
+      "prototypeToken": {
+        "actorLink": true,
+        "bar1": {
+          "attribute": "system.hp"
+        },
+        "displayName": 20,
+        "displayBars": 40
       }
     }
   },

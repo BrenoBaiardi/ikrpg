@@ -3,7 +3,7 @@ export class IKRPGActorModel extends foundry.abstract.DataModel {
     return {
       mainAttributes: new foundry.data.fields.SchemaField({
         PHY: new foundry.data.fields.NumberField({ initial: 0 }),
-        AGI: new foundry.data.fields.NumberField({ initial: 0 }),
+        AGL: new foundry.data.fields.NumberField({ initial: 0 }),
         INT: new foundry.data.fields.NumberField({ initial: 0 })
       }),
       secondaryAttributes: new foundry.data.fields.SchemaField({
