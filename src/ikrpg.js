@@ -1,4 +1,4 @@
-import { calculateDamage, calculateDerivedAttributes, getSnappedRotation } from "./logic.js";
+import { calculateDamage, calculateDerivedAttributes, getSnappedRotation, handleDamageRoll } from "./logic.js";
 
 
 // ================================
@@ -502,7 +502,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
     }
 }
 
-class IKRPGSteamjackSheet extends IKRPGActorSheet {
+class IKRPGSteamjackSheet extends IKRPGBaseSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "steamjack"],
@@ -517,12 +517,69 @@ class IKRPGSteamjackSheet extends IKRPGActorSheet {
     getData() {
         const data = super.getData();
         data.system = this.actor.system;
+        data.items = this.actor.items;  // ← ESSENCIAL
         return data;
     }
 
     activateListeners(html) {
         super.activateListeners(html);
-        // Interações específicas da ficha steamjack podem ir aqui
+
+        // Editar item
+        html.find(".item-edit").click(ev => {
+            const li = ev.currentTarget.closest(".item");
+            const item = this.actor.items.get(li.dataset.itemId);
+            item.sheet.render(true);
+        });
+
+        // Excluir item
+        html.find(".item-delete").click(ev => {
+            const li = ev.currentTarget.closest(".item");
+            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
+        });
+
+        html.find(".item-create").click(ev => {
+            const type = ev.currentTarget.dataset.type || "equipment";
+            const itemData = {
+                name: `Novo ${type}`,
+                type: type,
+                system: {}
+            };
+            console.log("Actor -:>", this.actor);
+            console.log("ItemData -:>", itemData);
+            this.actor.createEmbeddedDocuments("Item", [itemData]);
+        });
+
+        html.find(".item-roll").click(async ev => {
+            ev.preventDefault();
+
+            const li = ev.currentTarget.closest(".item");
+            const item = this.actor.items.get(li.dataset.itemId);
+            if (!item) return;
+
+            // Identificar alvos
+            const targets = Array.from(game.user.targets);
+
+            const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+            let targetInfo = targets.length > 0
+                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+                : `<p>🎯 Sem alvos</p>`;
+
+            const content = `
+        <div class="chat-weapon-roll">
+            <h3>${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
+        </div>
+    `;
+
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                content: content
+            });
+        });
     }
 }
 
@@ -611,42 +668,7 @@ Hooks.on("renderChatMessage", (message, html, data) => {
 
 
     // Botão de Dano
-    html.find(".damage-roll").click(async ev => {
-        ev.preventDefault();
-        const itemId = ev.currentTarget.dataset.itemId;
-        const actor = game.actors.get(message.speaker.actor);
-        const item = actor?.items.get(itemId);
-
-        if (!item) return;
-
-        // Rolar dano primeiro e mostrar a fórmula
-        const damageRoll = new Roll("2d6 + @pow", {
-            pow: item.system.pow || 0
-        });
-        await damageRoll.evaluate({async: true});
-
-        // Primeiro: Mostrar a rolagem no chat
-        await damageRoll.toMessage({
-            speaker: ChatMessage.getSpeaker({actor}),
-            flavor: `<h3>Dano de ${item.name}</h3>`
-        });
-
-        // Depois: Criar os botões para aplicar dano
-        const targets = Array.from(game.user.targets);
-
-        const buttons = targets.map(t => `
-        <button type="button" class="apply-damage" data-target-id="${t.id}" data-damage="${damageRoll.total}">
-            Aplicar ${damageRoll.total} em ${t.name}
-        </button>`).join("<br>");
-
-        ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({actor}),
-            content: `
-            <h3>Aplicar Dano (${item.name})</h3>
-            ${buttons}
-        `
-        });
-    });
+    html.find(".damage-roll").click(ev => handleDamageRoll(ev, message));
 
     // Botão de Aplicar Dano
     html.find(".apply-damage").click(async ev => {

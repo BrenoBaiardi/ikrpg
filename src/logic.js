@@ -50,3 +50,57 @@ export function getSnappedRotation(rotation, gridType) {
     const snapped = Math.round(adjusted / step) * step;
     return (snapped + offset) % 360;
 }
+
+// chat-helpers.js
+
+export async function handleDamageRoll(ev, message) {
+    ev.preventDefault();
+
+    const itemId = ev.currentTarget.dataset.itemId;
+    const actor = ChatMessage.getSpeakerActor(message.speaker);
+
+    if (!actor) {
+        ui.notifications.warn("Ator não encontrado.");
+        return;
+    }
+
+    const item = actor.items.get(itemId);
+    if (!item) {
+        ui.notifications.warn("Item não encontrado.");
+        return;
+    }
+
+    let damageRoll = new Roll("2d6")
+    if (item.type === "meleeWeapon") {
+        damageRoll = new Roll("2d6 + @pow + @str", {
+            pow: item.system.pow || 0,
+            str: actor.system.secondaryAttributes?.STR || 0
+        });
+    } else {
+        damageRoll = new Roll("2d6 + @pow", {
+            pow: item.system.pow || 0,
+        });
+    }
+
+
+    await damageRoll.evaluate({ async: true });
+
+    await damageRoll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: `<h3>Dano de ${item.name}</h3>`
+    });
+
+    const targets = Array.from(game.user.targets);
+    const buttons = targets.map(t => `
+        <button type="button" class="apply-damage" data-target-id="${t.id}" data-damage="${damageRoll.total}">
+            Aplicar ${damageRoll.total} em ${t.name}
+        </button>`).join("<br>");
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `
+            <h3>Aplicar Dano (${item.name})</h3>
+            ${buttons}
+        `
+    });
+}
