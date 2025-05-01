@@ -21,6 +21,10 @@ Hooks.once("init", function () {
         types: ["character"],
         makeDefault: true
     });
+    Actors.registerSheet("ikrpg", IKRPGSteamjackSheet, {
+        types: ["steamjack"],
+        makeDefault: true
+    });
     Actors.registerSheet("ikrpg", IKRPGBasicNPCSheet, {
         types: ["npc"],
         makeDefault: true
@@ -179,11 +183,11 @@ class IKRPGActor extends Actor {
         super.prepareData();
         const data = this.system;
 
-        const agi = data.mainAttributes.AGI;
+        const agl = data.mainAttributes.AGL;
         const phy = data.mainAttributes.PHY;
         const int = data.mainAttributes.INT;
 
-        data.hp.max = phy + int + agi;
+        data.hp.max = phy + int + agl;
 
         // ===== Armor integration =====
         // Uses first armor found for now
@@ -447,6 +451,30 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                 content: content
             });
         });
+    }
+}
+
+class IKRPGSteamjackSheet extends IKRPGBaseSheet {
+    static get defaultOptions() {
+        return foundry.utils.mergeObject(super.defaultOptions, {
+            classes: ["ikrpg", "sheet", "steamjack"],
+            template: "systems/ikrpg/templates/sheets/steamjack-sheet.html",
+            width: 800,
+            height: 800,
+            resizable: true,
+            scrollY: [".sheet-body"],
+        });
+    }
+
+    getData() {
+        const data = super.getData();
+        data.system = this.actor.system;
+        return data;
+    }
+
+    activateListeners(html) {
+        super.activateListeners(html);
+        // Interações específicas da ficha steamjack podem ir aqui
     }
 }
 

@@ -5,7 +5,7 @@ export class IKRPGActorDataModel extends foundry.abstract.DataModel {
         STR: new foundry.data.fields.NumberField({ initial: 0 }),
         SPD: new foundry.data.fields.NumberField({ initial: 0 }),
         PHY: new foundry.data.fields.NumberField({ initial: 0 }),
-        AGI: new foundry.data.fields.NumberField({ initial: 0 }),
+        AGL: new foundry.data.fields.NumberField({ initial: 0 }),
         PRW: new foundry.data.fields.NumberField({ initial: 0 }),
         POI: new foundry.data.fields.NumberField({ initial: 0 }),
         INT: new foundry.data.fields.NumberField({ initial: 0 }),

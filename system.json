@@ -17,6 +17,7 @@
   "esmodules": [
     "src/ikrpg.js"
   ],
+  "actorTypes": ["character", "npc", "steamjack"],
   "styles": ["styles/ikrpg.css"],
   "languages": [],
   "packs": [],

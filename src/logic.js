@@ -20,12 +20,12 @@ export function calculateDerivedAttributes(data, armorBonuses) {
     };
     console.log("current data movement", data.movement);
 
-    const {AGI, PHY, INT} = data.mainAttributes;
+    const {AGL, PHY, INT} = data.mainAttributes;
     const {PRW, SPD, PER} = data.secondaryAttributes;
     return {
         MOVE: data.movement.current,
         INIT: [PRW, SPD, PER].reduce((sum, val) => sum + val, 0),
-        DEF: [AGI, PER, SPD, armorBonuses.defPenalty].reduce((sum, val) => sum + val, 0),
+        DEF: [AGL, PER, SPD, armorBonuses.defPenalty].reduce((sum, val) => sum + val, 0),
         ARM: [PHY, armorBonuses.armorBonus].reduce((sum, val) => sum + val, 0),
         WILL: [PHY, INT].reduce((sum, val) => sum + val, 0)
     };

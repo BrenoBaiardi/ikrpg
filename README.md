@@ -19,7 +19,7 @@ This system aims to provide a structured and automated character sheet for use i
 
 ## 🧰 Features
 
-- **Main and Secondary Attributes**: STR, AGI, PHY, INT, PER, ARC, PRW, POI, SPD
+- **Main and Secondary Attributes**: STR, AGL, PHY, INT, PER, ARC, PRW, POI, SPD
 - **Derived Attributes**: INIT, WILL, DEF, ARM, HP
 - **Rollable Attributes**: Click on any attribute name to roll 2d6 + that attribute
 - **Occupational & Military Skills**:
