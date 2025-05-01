@@ -150,7 +150,7 @@ function addDirectionIndicator(token) {
 
 
 // ================================
-//              ATORES
+//             Actors
 // ================================
 Hooks.on("preCreateActor", (actor, data, options, userId) => {
     const commonConfig = {
@@ -168,6 +168,22 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
         });
     }
 
+    if (actor.type === "steamjack") {
+        const chassisSize = data.system?.chassisSize ?? "light";
+        const size = chassisSize === "heavy" ? 3 : 2;
+
+        actor.updateSource({
+            prototypeToken: {
+                width: size,
+                height: size,
+                actorLink: true,
+                displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
+                displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER,
+                bar1: {attribute: "hp"}
+            }
+        });
+    }
+
     if (actor.type === "npc") {
         actor.updateSource({
             prototypeToken: {
@@ -178,17 +194,50 @@ Hooks.on("preCreateActor", (actor, data, options, userId) => {
     }
 });
 
+Hooks.on("updateActor", async (actor, updateData, options, userId) => {
+    if (actor.type !== "steamjack") return;
+
+    // Checa se chassisSize foi alterado
+    const newSize = getProperty(updateData, "system.chassisSize");
+    if (!newSize) return;
+
+    const size = newSize === "heavy" ? 3 : 2;
+
+    actor.update({
+        "prototypeToken.width": size,
+        "prototypeToken.height": size,
+    });
+    // Atualiza tokens ativos no canvas
+    const tokensToUpdate = canvas.tokens.placeables.filter(t => t.actor?.id === actor.id);
+
+    for (const token of tokensToUpdate) {
+        await token.document.update({
+            width: size,
+            height: size
+        });
+    }
+});
+
 class IKRPGActor extends Actor {
     prepareData() {
         super.prepareData();
         const data = this.system;
 
+        if (this.type === "character") {
+            this.updateCharacterHp(data);
+            this.updateArmorData(data);
+        }
+    }
+
+    updateCharacterHp(data) {
         const agl = data.mainAttributes.AGL;
         const phy = data.mainAttributes.PHY;
         const int = data.mainAttributes.INT;
 
         data.hp.max = phy + int + agl;
+    }
 
+    updateArmorData(data) {
         // ===== Armor integration =====
         // Uses first armor found for now
         const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
@@ -244,7 +293,7 @@ class IKRPGActor extends Actor {
 }
 
 // ================================
-//             FICHAS
+//             Sheets
 // ================================
 class IKRPGBaseSheet extends ActorSheet {
     activateListeners(html) {
@@ -329,7 +378,6 @@ class IKRPGBaseSheet extends ActorSheet {
                 flavor: `Perícia Militar: ${skill.name}`
             });
         });
-
     }
 }
 

@@ -366,6 +366,7 @@
       "chassis": "",
       "height": "",
       "weight": "",
+      "chassisSize": "light",
       "fuel": {
         "max": 0,
         "consumption": 0
@@ -374,17 +375,20 @@
         "imprint": "",
         "language": ""
       },
-      "attributes": {
+      "mainAttributes": {
         "PHY": 0,
-        "STR": 0,
-        "SPD": 0,
         "AGL": 0,
+        "INT": 0
+      },
+      "secondaryAttributes": {
+        "SPD": 0,
+        "STR": 0,
         "PRW": 0,
         "POI": 0,
-        "INT": 0,
-        "PER": 0,
-        "MAT": 0,
-        "RAT": 0,
+        "PER": 0
+      },
+      "derivedAttributes": {
+        "MOVE": 0,
         "INIT": 0,
         "DEF": 0,
         "ARM": 0
