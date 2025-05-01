@@ -21,7 +21,7 @@ This system aims to provide a structured and automated character sheet for use i
 ## 🧰 Features
 
 - **Main and Secondary Attributes**: STR, AGL, PHY, INT, PER, ARC, PRW, POI, SPD
-- **Derived Attributes**: INIT, WILL, DEF, ARM, HP
+- **Derived Attributes**: INIT, WILL, DEF, ARM, HP (auto-calculated for characters)
 - **Rollable Attributes**: Click on any attribute name to roll 2d6 + that attribute
 - **Occupational & Military Skills**:
   - Predefined skill names
@@ -30,19 +30,28 @@ This system aims to provide a structured and automated character sheet for use i
 - **Dynamic Inventory System**:
   - Separate item types: melee weapons, ranged weapons, armor, and equipment
   - Dedicated inventory tabs for weapons and general equipment
-  - Weapon entries allow customizable tags (e.g., "fire", "magical", "cutting") without restriction to predefined types (in hope for further development on resistances/immunities)
+  - Weapon entries allow customizable tags (e.g., "fire", "magical", "cutting")
   - Roll attacks directly from weapon entries using associated skill rolls
 - **Armor Integration**:
-  - Armor equipment automatically modifies derived stats
-  - Equipped/un-equipped states reflecting on DEF/ARM/MOVE
+  - Equipped armor modifies DEF, ARM, and MOVE
+  - Auto-calculated penalties and bonuses
 - **HP Management**:
   - Integrated buttons to easily increase or decrease HP
 - **Combat**:
   - Initiative integrated into Foundry VTT's combat tracker
-  - Combat rolls sent to chat and automated hit/miss and damage buttons
-- **Sheet**:
-  - Editable general information section with character name, HP controls.
-  - Tabbed interface separating attributes, skills, and inventory
+  - Combat rolls sent to chat with hit/miss and damage resolution
+- **Steamjack Support**:
+  - Dedicated actor type and sheet
+  - Includes fields like chassis, fuel, cortex (text for now)
+  - Steamjacks do not recalculate derived stats automatically, some jacks have stats not relying on atributes
+  - Chassis selector (Light/Heavy) changes token size in real-time
+- **Token Direction Indicators**:
+  - Tokens display red (front) and blue (rear) directional arrows
+  - Works with square and hex grids
+  - Updates on rotation with automatic angle snapping
+- **Architecture & Testing**:
+  - Fully testable with Jest
+  - GitHub Actions CI to run tests automatically on pull requests
 
 ---
 
@@ -68,6 +77,7 @@ This project is not affiliated with or endorsed by _Privateer Press_ or _Steamfo
 This project is a work in progress. If you'd like to contribute code, help test, or provide feedback, feel free to fork or contact the author.
 
 ---
+
 ## 📝 TODO - Improve this readme
 
 - [ ] Add prints of the character sheet
