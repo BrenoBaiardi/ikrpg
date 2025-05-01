@@ -106,26 +106,19 @@ export async function handleDamageRoll(event, message) {
     }
 }
 
-function findMilitarySkill(item, actor) {
+export function findMilitarySkill(item, actor) {
     const skillName = item.system.skill;
     const militarySkills = Object.values(actor.system.militarySkills || {});
     let skill = militarySkills.find(s => s.name === skillName);
 
     if (!skill) {
-        skill = {name: "undefined", attr: 0, level: 0}
+        skill = {name: "undefined", attr: "--", level: 0}
         ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
     }
     return skill;
 }
 
-async function sendAttackToChat(attrValue, skillLevel, attackMod, actor, item) {
-    const roll = new Roll("2d6 + @attr + @skill + @atk", {
-        attr: attrValue,
-        skill: skillLevel,
-        atk: attackMod
-    });
-
-    await roll.evaluate({async: true});
+async function sendAttackToChat(roll, actor, item) {
     await roll.toMessage({
         speaker: ChatMessage.getSpeaker({actor}),
         flavor: `<h3>🎯 Resultado do ataque de ${item.name}</h3>`
@@ -133,7 +126,7 @@ async function sendAttackToChat(attrValue, skillLevel, attackMod, actor, item) {
     return roll;
 }
 
-function buildHitResult(targets, roll) {
+export function buildHitResult(targets, roll) {
     return targets.map(t => {
         const targetActor = t.actor;
         const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
@@ -143,6 +136,36 @@ function buildHitResult(targets, roll) {
             : `style="color: red;">❌ Miss!`;
         return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef}`;
     }).join("<br>");
+}
+
+/**
+ * @param {Object} actor
+ * @param {Object} item
+ * @returns {Number|Number} Associated attribute level and Skill level
+ */
+export function getAttackValues(actor, item) {
+    const isSteamjack = actor.type === "steamjack";
+    const isCharacter = actor.type === "character";
+
+    if (isSteamjack) {
+        const derived = actor.system.derivedAttributes || {};
+        if (item.type === "meleeWeapon") return { attr: derived.MAT ?? 0, skill: 0 };
+        if (item.type === "rangedWeapon") return { attr: derived.RAT ?? 0, skill: 0 };
+
+        ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
+        return null;
+    }
+
+    if (isCharacter) {
+        const skill = findMilitarySkill(item, actor);
+        const attrValue = actor.system.mainAttributes?.[skill.attr]
+            ?? actor.system.secondaryAttributes?.[skill.attr]
+            ?? "";
+        return { attr: attrValue, skill: skill.level || 0 };
+    }
+
+    console.warn("No character type configured for -> " + actor.type);
+    return null;
 }
 
 export async function handleAttackRoll(event, message) {
@@ -163,39 +186,20 @@ export async function handleAttackRoll(event, message) {
         return;
     }
 
-    const isSteamjack = actor.type === "steamjack";
-    const isCharacter = actor.type === "character";
-    let attrValue = 0;
-    let skillLevel = 0;
-
-    if (isSteamjack) {
-        const itemType = item.type;
-        const derived = actor.system.derivedAttributes || {};
-
-        if (itemType === "meleeWeapon") {
-            attrValue = derived.MAT ?? 0;
-        } else if (itemType === "rangedWeapon") {
-            attrValue = derived.RAT ?? 0;
-        } else {
-            ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
-            return;
-        }
-
-    } else if (isCharacter) {
-        const skill = findMilitarySkill(item, actor);
-
-        attrValue = actor.system.mainAttributes?.[skill.attr]
-            ?? actor.system.secondaryAttributes?.[skill.attr]
-            ?? 0;
-
-        skillLevel = skill.level || 0;
-    } else {
-        console.warn("No character type configured for -> ", actor.type)
-        return
-    }
+    const attackValues = getAttackValues(actor, item);
+    let attrValue = attackValues.attr;
+    let skillLevel = attackValues.skill;
 
     const attackMod = item.system.attackMod || 0;
-    const roll = await sendAttackToChat(attrValue, skillLevel, attackMod, actor, item);
+
+    const roll = new Roll("2d6 + @attr + @skill + @atk", {
+        attr: attrValue,
+        skill: skillLevel,
+        atk: attackMod
+    });
+
+    await roll.evaluate({async: true});
+    await sendAttackToChat(roll, actor, item);
 
     const targets = Array.from(game.user.targets);
 
