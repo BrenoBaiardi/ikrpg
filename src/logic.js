@@ -51,12 +51,10 @@ export function getSnappedRotation(rotation, gridType) {
     return (snapped + offset) % 360;
 }
 
-// chat-helpers.js
+export async function handleDamageRoll(event, message) {
+    event.preventDefault();
 
-export async function handleDamageRoll(ev, message) {
-    ev.preventDefault();
-
-    const itemId = ev.currentTarget.dataset.itemId;
+    const itemId = event.currentTarget.dataset.itemId;
     const actor = ChatMessage.getSpeakerActor(message.speaker);
 
     if (!actor) {
@@ -103,4 +101,94 @@ export async function handleDamageRoll(ev, message) {
             ${buttons}
         `
     });
+}
+
+export async function handleAttackRoll(event, message) {
+    event.preventDefault();
+
+    const itemId = event.currentTarget.dataset.itemId;
+    const actor = ChatMessage.getSpeakerActor(message.speaker);
+
+    if (!actor) {
+        ui.notifications.warn("Ator não encontrado.");
+        return;
+    }
+
+    const item = actor.items.get(itemId);
+
+    if (!item) {
+        ui.notifications.warn("Item não encontrado.");
+        return;
+    }
+
+    const isSteamjack = actor.type === "steamjack";
+    let attrValue = 0;
+    let skillLevel = 0;
+
+    if (isSteamjack) {
+        const itemType = item.type;
+        const derived = actor.system.derivedAttributes || {};
+
+        if (itemType === "meleeWeapon") {
+            attrValue = derived.MAT ?? 0;
+        } else if (itemType === "rangedWeapon") {
+            attrValue = derived.RAT ?? 0;
+        } else {
+            ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
+            return;
+        }
+
+    } else {
+        const skillName = item.system.skill;
+        const militarySkills = Object.values(actor.system.militarySkills || {});
+        const skill = militarySkills.find(s => s.name === skillName);
+
+        if (!skill) {
+            ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
+            return;
+        }
+
+        attrValue = actor.system.mainAttributes?.[skill.attr]
+            ?? actor.system.secondaryAttributes?.[skill.attr]
+            ?? 0;
+
+        skillLevel = skill.level || 0;
+    }
+
+    const attackMod = item.system.attackMod || 0;
+
+    const roll = new Roll("2d6 + @attr + @skill + @atk", {
+        attr: attrValue,
+        skill: skillLevel,
+        atk: attackMod
+    });
+
+    await roll.evaluate({ async: true });
+
+    await roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        flavor: `<h3>Resultado do ataque de ${item.name}</h3>`
+    });
+
+    const targets = Array.from(game.user.targets);
+
+    if (targets.length > 0) {
+        let results = targets.map(t => {
+            const targetActor = t.actor;
+            const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
+            const success = roll.total >= targetDef;
+            const hitMessage = success
+                ? `style="color: green;"> ✅ Hit!`
+                : `style="color: red;">❌ Miss!`;
+            return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef}`;
+        }).join("<br>");
+
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `
+                <h3>Resultado do Ataque (${item.name})</h3>
+                ${results}
+            `
+        });
+    }
 }

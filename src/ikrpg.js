@@ -1,4 +1,4 @@
-import { calculateDamage, calculateDerivedAttributes, getSnappedRotation, handleDamageRoll } from "./logic.js";
+import {calculateDamage, calculateDerivedAttributes, getSnappedRotation, handleDamageRoll, handleAttackRoll} from "./logic.js";
 
 
 // ================================
@@ -586,89 +586,11 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
 Hooks.on("renderChatMessage", (message, html, data) => {
 
     // Botão de Ataque
-    html.find(".attack-roll").click(async ev => {
-        ev.preventDefault();
-        const itemId = ev.currentTarget.dataset.itemId;
-        const actor = game.actors.get(message.speaker.actor);
-        const item = actor?.items.get(itemId);
-
-        console.log("itemid", itemId)
-        console.log("actor", actor)
-        console.log("item", item)
-        if (!item) return;
-
-        const isSteamjack = actor.type === "steamjack";
-        let attrValue = 0;
-        let skillLevel = 0;
-
-        if (isSteamjack) {
-            const itemType = item.type;
-            const derived = actor.system.derivedAttributes || {};
-
-            if (itemType === "meleeWeapon") {
-                attrValue = derived.MAT ?? 0;
-            } else if (itemType === "rangedWeapon") {
-                attrValue = derived.RAT ?? 0;
-            } else {
-                ui.notifications.warn("Erro, atributo para rolagem não encontrado. Esperado MAT ou RAT).");
-                return;
-            }
-
-        } else {
-            const skillName = item.system.skill;
-            const militarySkills = Object.values(actor.system.militarySkills || {});
-            const skill = militarySkills.find(s => s.name === skillName);
-
-            if (!skill) {
-                ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
-                return;
-            }
-
-            attrValue = actor.system.mainAttributes?.[skill.attr]
-                ?? actor.system.secondaryAttributes?.[skill.attr]
-                ?? 0;
-            skillLevel = skill.level || 0;
-        }
-
-        const attackMod = item.system.attackMod || 0;
-
-        const roll = new Roll("2d6 + @attr + @skill + @atk", {
-            attr: attrValue,
-            skill: skillLevel,
-            atk: attackMod
-        });
-
-        await roll.evaluate({async: true});
-
-        await roll.toMessage({
-            speaker: ChatMessage.getSpeaker({actor}),
-            flavor: `<h3>Resultado do ataque de ${item.name}</h3>`
-        });
-
-        const targets = Array.from(game.user.targets);
-
-        if (targets.length > 0) {
-            let results = targets.map(t => {
-                const targetActor = t.actor;
-                const targetDef = targetActor?.system?.derivedAttributes?.DEF ?? 0;
-                const success = roll.total >= targetDef;
-                const hitMessage = success ? `style="color: green;"> ✅ Hit!` : `style="color: red;">❌ Miss!`
-                return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef} `;
-            }).join("<br>");
-
-            ChatMessage.create({
-                speaker: ChatMessage.getSpeaker({actor}),
-                content: `
-            <h3>Resultado do Ataque (${item.name})</h3>
-            ${results}
-        `
-            });
-        }
-    });
+    html.find(".attack-roll").click(event => handleAttackRoll(event, message));
 
 
     // Botão de Dano
-    html.find(".damage-roll").click(ev => handleDamageRoll(ev, message));
+    html.find(".damage-roll").click(event => handleDamageRoll(event, message));
 
     // Botão de Aplicar Dano
     html.find(".apply-damage").click(async ev => {
