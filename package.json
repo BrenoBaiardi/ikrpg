@@ -1,0 +1,13 @@
+{
+  "name": "ikrpg",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.27.1",
+    "@babel/core": "^7.27.1",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  }
+}

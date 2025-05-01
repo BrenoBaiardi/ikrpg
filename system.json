@@ -15,7 +15,7 @@
     "scripts/drag-ruler-integration.js"
   ],
   "esmodules": [
-    "module/ikrpg.js"
+    "src/ikrpg.js"
   ],
   "styles": ["styles/ikrpg.css"],
   "languages": [],

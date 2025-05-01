@@ -1,3 +1,6 @@
+import { calculateDamage, calculateDerivedAttributes, getSnappedRotation } from "./logic.js";
+
+
 // ================================
 // 📦 CONFIGURAÇÃO DO SISTEMA
 // ================================
@@ -76,26 +79,6 @@ Handlebars.registerHelper('tagsToString', function (tags) {
     return "";
 });
 
-function getSnappedRotation(token) {
-    const gridType = canvas.scene.grid.type;
-    const rawRotation = token.document.rotation || 0;
-    let step = 45;
-    let offset = 0;
-
-    if (gridType == 3 || gridType == 5) {
-        step = 60;
-        offset = 0;
-    } else if (gridType == 2 || gridType == 4) {
-        // Hex Rows (horizontal) – geralmente rotacionados 30 graus
-        step = 60;
-        offset = 30;
-    }
-
-    const adjusted = (rawRotation - offset + 360) % 360;
-    const snapped = Math.round(adjusted / step) * step;
-    return (snapped + offset) % 360;
-}
-
 Hooks.on("refreshToken", (token) => {
     addDirectionIndicator(token);
 });
@@ -137,7 +120,7 @@ function addDirectionIndicator(token) {
     backArrow.endFill();
 
     // Calculando a rotação correta para o token
-    const snappedRotation = getSnappedRotation(token);
+    const snappedRotation = getSnappedRotation(token.document.rotation, canvas.scene.grid.type);
     const radians = snappedRotation * (Math.PI / 180);
 
     // Ajuste da rotação para frente e para trás
@@ -199,35 +182,29 @@ class IKRPGActor extends Actor {
         const agi = data.mainAttributes.AGI;
         const phy = data.mainAttributes.PHY;
         const int = data.mainAttributes.INT;
-        const prw = data.secondaryAttributes.PRW;
-        const spd = data.secondaryAttributes.SPD;
-        const per = data.secondaryAttributes.PER;
 
         data.hp.max = phy + int + agi;
 
         // ===== Armor integration =====
         // Uses first armor found for now
-        const armor = this.items.find(i => i.type === "armor");
         const equippedArmors = this.items.filter(i => i.type === "armor" && i.system.isEquipped);
 
         const totalArmorBonus = equippedArmors.reduce((sum, armor) => sum + (armor.system.armorBonus || 0), 0);
         const totalArmorDefPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.defPenalty || 0), 0); //treated in html to always be converted to negative or 0
         const totalArmorSpdPenalty = equippedArmors.reduce((sum, armor) => sum + (armor.system.spdPenalty || 0), 0); //treated in html to always be converted to negative or 0
-        data.movement.base = spd;
-        const currentMove = Math.max(0, data.movement.base + totalArmorSpdPenalty);
+
+        data.derivedAttributes = calculateDerivedAttributes(data, {
+            speedPenalty: totalArmorSpdPenalty,
+            armorBonus: totalArmorBonus,
+            defPenalty: totalArmorDefPenalty
+        });
 
         data.movement = {
             base: data.movement.base,
             bonus: 0,
             penalty: totalArmorSpdPenalty,
-            current: currentMove
+            current: data.derivedAttributes.MOVE
         };
-
-        data.derivedAttributes.MOVE = data.movement.current;
-        data.derivedAttributes.DEF = data.modifiers.DEF.reduce((sum, val) => sum + val, 0) + agi + per + spd + totalArmorDefPenalty;
-        data.derivedAttributes.WILL = data.modifiers.WILL.reduce((sum, val) => sum + val, 0) + phy + int;
-        data.derivedAttributes.INIT = data.modifiers.INIT.reduce((sum, val) => sum + val, 0) + prw + spd + per;
-        data.derivedAttributes.ARM = data.modifiers.ARM.reduce((sum, val) => sum + val, 0) + phy + totalArmorBonus;
     }
 
     getInitiativeRoll() {
@@ -244,10 +221,7 @@ class IKRPGActor extends Actor {
     applyDamage(amount) {
         const hp = foundry.utils.duplicate(this.system.hp);
         const arm = this.system.derivedAttributes?.ARM || 0;
-
-        const damageTaken = Math.max(0, amount - arm);
-        const newHP = Math.max(0, hp.value - damageTaken);
-
+        const { damageTaken, newHP } = calculateDamage(hp.value, arm, amount);
         this.update({"system.hp.value": newHP});
 
         ChatMessage.create({
