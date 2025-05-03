@@ -47,6 +47,17 @@ h2, h3 {
     padding-bottom: 0.25rem;
 }
 
+.info-block {
+    padding: 0.5rem;
+}
+
+.info-attribute {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .attribute {
     display: flex;
     align-items: center;
@@ -109,6 +120,11 @@ input.big-input {
 
 .flexrow {
     margin: 5px;
+}
+
+.v-align {
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .tabbed-area {
@@ -381,6 +397,7 @@ button.item-create {
 
 
 .hp-bar {
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -431,6 +448,3 @@ button.item-create {
 }
 
 
-.info-block {
-    padding: 0.5rem;
-}
