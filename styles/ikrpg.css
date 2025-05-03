@@ -137,6 +137,11 @@ input.big-input {
     gap: 0.5rem;
 }
 
+.v-align {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 .tabbed-area {
     min-height: 100px;
     max-height: 60vh;

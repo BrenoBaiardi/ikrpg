@@ -30,18 +30,19 @@
                     <div class="hp-bar">
                     <label class="hp-group">
                         <button type="button" class="hp-minus hp-button">-</button>
-                        <label class="hp-label">
+                        <label class="hp-label v-align">
                             HP
                             <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
                         </label>
                         <button type="button" class="hp-plus hp-button">+</button>
                     </label>
-                    <label class="hp-label">
+                    <label class="hp-label v-align">
                         Max
                         <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
                     </label>
                 </div>
-                <label>
+                <div class="chassis-radial">
+                    <label>
                         <strong>Tipo de Chassi:</strong><br/>
                         <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq system.chassisSize
                             "light")}}checked{{/if}}> Leve</label>
