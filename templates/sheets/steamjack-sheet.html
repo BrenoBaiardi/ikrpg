@@ -11,64 +11,50 @@
         <div class="flexrow header-flex card">
             <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="steamjack portrait"/>
 
-            <div class="v-align">
-                <div class="hp-bar">
-                    <label class="hp-group">
-                        <button type="button" class="hp-minus hp-button">-</button>
-                        <label class="hp-label v-align">
-                            HP
-                            <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
-                        </label>
-                        <button type="button" class="hp-plus hp-button">+</button>
-                    </label>
-                    <label class="hp-label v-align">
-                        Max
-                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
-                    </label>
-                </div>
                 <div class="chassis-radial">
                     <div class="hp-bar">
-                    <label class="hp-group">
-                        <button type="button" class="hp-minus hp-button">-</button>
-                        <label class="hp-label v-align">
-                            HP
-                            <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
+                        <label class="hp-group">
+                            <button type="button" class="hp-minus hp-button">-</button>
+                            <label class="hp-label v-align">
+                                HP
+                                <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
+                            </label>
+                            <button type="button" class="hp-plus hp-button">+</button>
                         </label>
-                        <button type="button" class="hp-plus hp-button">+</button>
-                    </label>
-                    <label class="hp-label v-align">
-                        Max
-                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
-                    </label>
-                </div>
-                <div class="chassis-radial">
-                    <label>
-                        <strong>Tipo de Chassi:</strong><br/>
-                        <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq system.chassisSize
-                            "light")}}checked{{/if}}> Leve</label>
-                        <label><input type="radio" name="system.chassisSize" value="heavy" {{#if (eq system.chassisSize
-                            "heavy")}}checked{{/if}}> Pesado</label>
-                    </label>
-                </div>
-            </div>
-
-            <div class="info-block">
-                <h2>Informações</h2>
-                <div>
-                    <div class="info-attribute"><label>Chassi:<input type="text" name="system.chassis"
-                                                                value="{{system.chassis}}"/></label></div>
-                    <div class="info-attribute"><label>Cortex:<input type="text" name="system.cortex"
-                                                                value="{{system.cortex}}"/></label></div>
-                    <div class="info-attribute"><label>Imprint:<input type="text" name="system.imprint"
-                                                                value="{{system.imprint}}"/></label></div>
-                    <div class="info-attribute">
-                        <label>Altura:<input type="text" name="system.height" value="{{system.height}}"/></label>
-                        <label>Peso:<input type="text" name="system.weight" value="{{system.weight}}"/></label>
+                        <label class="hp-label v-align">
+                            Max
+                            <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
+                        </label>
+                    </div>
+                    <div class="chassis-radial">
+                        <label>
+                            <strong>Tipo de Chassi:</strong><br/>
+                            <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq
+                                          system.chassisSize
+                                "light")}}checked{{/if}}> Leve</label>
+                            <label><input type="radio" name="system.chassisSize" value="heavy" {{#if (eq
+                                          system.chassisSize
+                                "heavy")}}checked{{/if}}> Pesado</label>
+                        </label>
                     </div>
                 </div>
-            </div>
-        </div>
 
+                <div class="info-block">
+                    <h2>Informações</h2>
+                    <div>
+                        <div class="info-attribute"><label>Chassi:<input type="text" name="system.chassis"
+                                                                         value="{{system.chassis}}"/></label></div>
+                        <div class="info-attribute"><label>Cortex:<input type="text" name="system.cortex"
+                                                                         value="{{system.cortex}}"/></label></div>
+                        <div class="info-attribute"><label>Imprint:<input type="text" name="system.imprint"
+                                                                          value="{{system.imprint}}"/></label></div>
+                        <div class="info-attribute">
+                            <label>Altura:<input type="text" name="system.height" value="{{system.height}}"/></label>
+                            <label>Peso:<input type="text" name="system.weight" value="{{system.weight}}"/></label>
+                        </div>
+                    </div>
+                </div>
+        </div>
         <div class="tab card">
             <table class="item-table">
                 <thead>
