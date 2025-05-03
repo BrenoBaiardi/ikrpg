@@ -1,4 +1,10 @@
-import {calculateDamage, calculateDerivedAttributes, getSnappedRotation, handleDamageRoll, handleAttackRoll} from "./logic.js";
+import {
+    calculateDamage,
+    calculateDerivedAttributes,
+    getSnappedRotation,
+    handleDamageRoll,
+    handleAttackRoll
+} from "./logic.js";
 
 
 // ================================
@@ -154,9 +160,6 @@ function addDirectionIndicator(token) {
 }
 
 
-
-
-
 // ================================
 //             Actors
 // ================================
@@ -282,7 +285,7 @@ class IKRPGActor extends Actor {
     applyDamage(amount) {
         const hp = foundry.utils.duplicate(this.system.hp);
         const arm = this.system.derivedAttributes?.ARM || 0;
-        const { damageTaken, newHP } = calculateDamage(hp.value, arm, amount);
+        const {damageTaken, newHP} = calculateDamage(hp.value, arm, amount);
         this.update({"system.hp.value": newHP});
 
         ChatMessage.create({
@@ -389,24 +392,24 @@ class IKRPGBaseSheet extends ActorSheet {
 
         html.find(".spell-roll").click(async ev => {
             ev.preventDefault();
-            const li   = ev.currentTarget.closest("tr.item");
+            const li = ev.currentTarget.closest("tr.item");
             const item = this.actor.items.get(li.dataset.itemId);
-            const pow  = item.system.POW || 0;
+            const pow = item.system.POW || 0;
 
             // Rolagem básica: 2d6 + POW
-            const roll = new Roll("2d6 + @pow", { pow });
-            await roll.evaluate({ async: true });
+            const roll = new Roll("2d6 + @pow", {pow});
+            await roll.evaluate({async: true});
             roll.toMessage({
-                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                speaker: ChatMessage.getSpeaker({actor: this.actor}),
                 flavor: `Feitiço: ${item.name}`
             });
         });
 
         html.find(".item-delete").click(ev => {
             ev.preventDefault();
-            const li     = ev.currentTarget.closest(".item");
+            const li = ev.currentTarget.closest(".item");
             const itemId = li.dataset.itemId;
-            const item   = this.actor.items.get(itemId);
+            const item = this.actor.items.get(itemId);
 
             // Cria o diálogo de confirmação
             new Dialog({
@@ -543,6 +546,42 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
                 content: content
             });
+        });
+
+        html.find(".spell-roll").click(async ev => {
+            ev.preventDefault();
+
+            const li = ev.currentTarget.closest(".item");
+            const item = this.actor.items.get(li.dataset.itemId);
+            if (!item) return;
+
+            // Identificar alvos
+            const targets = Array.from(game.user.targets);
+
+            if (item.system.OFFENSIVE) {
+
+
+                const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+                let targetInfo = targets.length > 0
+                    ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+                    : `<p>🎯 Sem alvos</p>`;
+
+                const content = `
+        <div class="chat-spell-roll">
+            <h3>${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
+        </div>
+    `;
+
+                ChatMessage.create({
+                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                    content: content
+                });
+            }
         });
     }
 }

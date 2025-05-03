@@ -141,27 +141,32 @@ export function buildHitResult(targets, roll) {
 /**
  * @param {Object} actor
  * @param {Object} item
- * @returns {Number|Number} Associated attribute level and Skill level
+ * @returns {{attr: (number), skill: number}} Associated attribute level and Skill level
  */
 export function getAttackValues(actor, item) {
     const isSteamjack = actor.type === "steamjack";
     const isCharacter = actor.type === "character";
+    const isMeleeWeapon = item.type === "meleeWeapon";
+    const isRangedWeapon = item.type === "rangedWeapon";
+    const isSpell = item.type === "spell";
+    const isWeapon = isMeleeWeapon || isRangedWeapon;
+
 
     if (isSteamjack) {
         const derived = actor.system.derivedAttributes || {};
-        if (item.type === "meleeWeapon") return { attr: derived.MAT ?? 0, skill: 0 };
-        if (item.type === "rangedWeapon") return { attr: derived.RAT ?? 0, skill: 0 };
+        if (isMeleeWeapon) return { attr: derived.MAT ?? 0, skill: 0 };
+        if (isRangedWeapon) return { attr: derived.RAT ?? 0, skill: 0 };
 
         ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
         return null;
-    }
-
-    if (isCharacter) {
+    } else if (isCharacter && isWeapon) {
         const skill = findMilitarySkill(item, actor);
         const attrValue = actor.system.mainAttributes?.[skill.attr]
             ?? actor.system.secondaryAttributes?.[skill.attr]
             ?? "";
         return { attr: attrValue, skill: skill.level || 0 };
+    } else if (isSpell){
+        return { attr: actor.system.secondaryAttributes.ARC, skill: 0 };
     }
 
     console.warn("No character type configured for -> " + actor.type);
