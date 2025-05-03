@@ -54,6 +54,8 @@
         <nav aria-label="inventory-menu" class="sheet-item-tabs tabs" data-group="inventory">
             <a class="nav-item" data-tab="weapons">Armas</a>
             <a class="nav-item" data-tab="equipment">Equipamentos</a>
+            <a class="nav-item" data-tab="spells">Feitiços</a>
+
         </nav>
         <section class="sheet-items tabbed-area card">
             <div class="tab" data-group="inventory" data-tab="weapons">
@@ -218,6 +220,52 @@
                     </button>
                 </div>
 
+            </div>
+            <div class="tab" data-group="inventory" data-tab="spells">
+                <section data-tab="spells">
+                    <table class="item-table">
+                        <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Custo</th>
+                            <th>RNG</th>
+                            <th>POW</th>
+                            <th>Upkeep?</th>
+                            <th>Ofensivo?</th>
+                            <th>AoE</th>
+                            <th>🎲</th>
+                            <th>⚙️</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each items as |item|}}
+                        {{#if (eq item.type "spell")}}
+                        <tr class="item text-center" data-item-id="{{item._id}}">
+                            <td>{{item.name}}</td>
+                            <td>{{item.system.COST}}</td>
+                            <td>{{item.system.RNG}}</td>
+                            <td>{{item.system.POW}}</td>
+                            <td>{{#if item.system.UPKEEP}}✔️{{/if}}</td>
+                            <td>{{#if item.system.OFFENSIVE}}✔️{{/if}}</td>
+                            <td>{{item.system.AOE}}</td>
+                            <td>
+                                <button class="item-roll spell-roll">🎲</button>
+                            </td>
+                            <td class="action-buttons">
+                                <div class="button-group">
+                                    <button class="item-edit edit-button">✎</button>
+                                    <button class="item-delete trash-button">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                    <div class="add-item">
+                        <button class="item-create" data-type="spell" title="Novo Feitiço">➕✨</button>
+                    </div>
+                </section>
             </div>
         </section>
 

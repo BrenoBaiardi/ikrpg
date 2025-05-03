@@ -363,8 +363,8 @@
       },
       "name": "",
       "chassis": "",
-      "cortex":"",
-      "imprint":"",
+      "cortex": "",
+      "imprint": "",
       "height": "",
       "weight": "",
       "chassisSize": "light",
@@ -458,8 +458,12 @@
       },
       "spell": {
         "system": {
-          "effect": "",
-          "cooldown": "",
+          "COST": 0,
+          "RNG": "",
+          "POW": 0,
+          "UPKEEP": false,
+          "OFFENSIVE": false,
+          "AOE": "",
           "description": ""
         }
       }

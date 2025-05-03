@@ -30,7 +30,14 @@ Hooks.once("init", function () {
         makeDefault: true
     });
     Items.unregisterSheet("core", ItemSheet);
-    Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
+    Items.registerSheet("ikrpg", IKRPGItemSheet, {
+        makeDefault: true
+    });
+    Items.registerSheet("ikrpg", IKRPGSpellSheet, {
+        types: ["spell"],
+        makeDefault: true,
+        label: "IKRPG Feitiço"
+    });
     if (game.modules.get("drag-ruler")?.active) {
         game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
             name: 'normal',
@@ -54,6 +61,7 @@ Hooks.once("init", function () {
             default: 0xFF2222 // Vermelho
         });
     }
+
 
 });
 
@@ -378,13 +386,56 @@ class IKRPGBaseSheet extends ActorSheet {
                 flavor: `Perícia Militar: ${skill.name}`
             });
         });
+
+        html.find(".spell-roll").click(async ev => {
+            ev.preventDefault();
+            const li   = ev.currentTarget.closest("tr.item");
+            const item = this.actor.items.get(li.dataset.itemId);
+            const pow  = item.system.POW || 0;
+
+            // Rolagem básica: 2d6 + POW
+            const roll = new Roll("2d6 + @pow", { pow });
+            await roll.evaluate({ async: true });
+            roll.toMessage({
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                flavor: `Feitiço: ${item.name}`
+            });
+        });
+
+        html.find(".item-delete").click(ev => {
+            ev.preventDefault();
+            const li     = ev.currentTarget.closest(".item");
+            const itemId = li.dataset.itemId;
+            const item   = this.actor.items.get(itemId);
+
+            // Cria o diálogo de confirmação
+            new Dialog({
+                title: "Confirmar Exclusão",
+                content: `<p>Deseja realmente excluir <strong>${item.name}</strong>?</p>`,
+                buttons: {
+                    yes: {
+                        icon: "<i class='fas fa-trash'></i>",
+                        label: "Excluir",
+                        callback: () => {
+                            this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+                        }
+                    },
+                    no: {
+                        icon: "<i class='fas fa-times'></i>",
+                        label: "Cancelar"
+                    }
+                },
+                default: "no"
+            }).render(true);
+        });
+
     }
 }
 
 class IKRPGItemSheet extends ItemSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["ikrpg", "sheet", "item"],
+            classes: ["ikrpg", "sheet", "item", "spell"],
             template: "systems/ikrpg/templates/sheets/item-sheet.html",
             width: 400,
             height: 300
@@ -450,12 +501,6 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             const li = ev.currentTarget.closest(".item");
             const item = this.actor.items.get(li.dataset.itemId);
             item.sheet.render(true);
-        });
-
-        // Excluir item
-        html.find(".item-delete").click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
         });
 
         html.find(".item-create").click(ev => {
@@ -532,11 +577,6 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
             item.sheet.render(true);
         });
 
-        // Excluir item
-        html.find(".item-delete").click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-        });
 
         html.find(".item-create").click(ev => {
             const type = ev.currentTarget.dataset.type || "equipment";
