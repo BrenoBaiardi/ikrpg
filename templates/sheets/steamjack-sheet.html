@@ -1,4 +1,4 @@
-<form class="sheet-ikrpg actor steamjack-sheet" autocomplete="off">
+<form class="ikrpg sheet actor steamjack-sheet" autocomplete="off">
     <div class="sheet-container">
 
         <!-- Nome e Imagem -->
@@ -11,6 +11,20 @@
             <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="steamjack portrait"/>
 
             <div class="flexrow">
+                <div class="hp-bar">
+                    <label class="hp-group">
+                        <button type="button" class="hp-minus hp-button">-</button>
+                        <label class="hp-label">
+                            HP
+                            <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
+                        </label>
+                        <button type="button" class="hp-plus hp-button">+</button>
+                    </label>
+                    <label class="hp-label">
+                        Max
+                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
+                    </label>
+                </div>
                 <label>
                     <strong>Tipo de Chassi:</strong><br/>
                     <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq system.chassisSize
