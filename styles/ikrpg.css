@@ -130,6 +130,8 @@ input.big-input {
     margin: 5px;
     align-items: flex-start;
     gap: 2rem;
+    align-items: flex-start;
+    gap: 2rem;
 }
 
 .v-align {
