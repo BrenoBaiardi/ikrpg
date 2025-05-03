@@ -11,7 +11,7 @@
 
         <div>
             <label>Tags (comma-separated):</label>
-            <input type="text" name="system.tags" value="{{tagsToString system.tags}}" />
+            <input type="text" name="system.tags" value="{{tagsToString system.tags}}"/>
         </div>
 
         {{#if (eq item.type "meleeWeapon")}}
@@ -112,11 +112,12 @@
         {{#if (eq item.type "armor")}}
         <div class="form-group">
             <label>Armor</label>
-            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}" style="width: 4ch; text-align: center;"/>
+            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}"
+                   style="width: 4ch; text-align: center;"/>
         </div>
         <div>
             <label>Equipada:</label>
-            <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}} />
+            <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}}/>
         </div>
         <div class="form-group">
             <label>Penalidade de Armadura:</label>
@@ -128,11 +129,38 @@
         </div>
         <div class="form-group">
             <label>Penalidade de Movimento:</label>
-                <input type="number"
-                       name="system.spdPenalty"
-                       value="{{item.system.spdPenalty}}"
-                       oninput="this.value = Math.abs(this.value) * -1"
-                       style="width: 4ch; text-align: center;"/>
+            <input type="number"
+                   name="system.spdPenalty"
+                   value="{{item.system.spdPenalty}}"
+                   oninput="this.value = Math.abs(this.value) * -1"
+                   style="width: 4ch; text-align: center;"/>
+        </div>
+        {{/if}}
+
+        {{#if (eq item.type "spell")}}
+        <div class="form-group">
+            <label for="system.COST">Custo (COST)</label>
+            <input id="system.COST" name="system.COST" type="number" value="{{system.COST}}"/>
+        </div>
+        <div class="form-group">
+            <label for="system.RNG">Alcance (RNG)</label>
+            <input id="system.RNG" name="system.RNG" type="text" value="{{system.RNG}}"/>
+        </div>
+        <div class="form-group">
+            <label for="system.POW">Poder (POW)</label>
+            <input id="system.POW" name="system.POW" type="number" value="{{system.POW}}"/>
+        </div>
+        <div class="form-group inline-group">
+            <input id="system.UPKEEP" name="system.UPKEEP" type="checkbox" {{checked system.UPKEEP}}/>
+            <label for="system.UPKEEP">Mantém Ativo (UPKEEP)</label>
+        </div>
+        <div class="form-group inline-group">
+            <input id="system.OFFENSIVE" name="system.OFFENSIVE" type="checkbox" {{checked system.OFFENSIVE}}/>
+            <label for="system.OFFENSIVE">Ofensivo (OFFENSIVE)</label>
+        </div>
+        <div class="form-group">
+            <label for="system.AOE">Área de Efeito (AoE)</label>
+            <input id="system.AOE" name="system.AOE" type="text" value="{{system.AOE}}"/>
         </div>
         {{/if}}
 
