@@ -120,6 +120,8 @@ input.big-input {
 
 .flexrow {
     margin: 5px;
+    align-items: flex-start;
+    gap: 2rem;
 }
 
 .v-align {
@@ -142,6 +144,12 @@ input.big-input {
 .tabbed-area::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 4px;
+}
+
+.grid-2cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .sheet-item-tabs {
@@ -260,6 +268,12 @@ button.dice-button:active {
     min-width: 40px;
 }
 
+.fixed-height-400 {
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: auto;
+}
+
 th.col-name{
     width: auto;
     padding: 0.5rem;
@@ -277,6 +291,10 @@ th.col-skill-roll {
 
 select.skill-select{
     width: 100%;
+}
+
+.roll-attr {
+    cursor: pointer;
 }
 
 th.col-attr {

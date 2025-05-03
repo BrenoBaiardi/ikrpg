@@ -55,7 +55,7 @@
             <a class="nav-item" data-tab="weapons">Armas</a>
             <a class="nav-item" data-tab="equipment">Equipamentos</a>
         </nav>
-        <section class="sheet-items tabbed-area" style="flex: 1 1 auto; overflow-y: auto;">
+        <section class="sheet-items tabbed-area">
             <div class="tab" data-group="inventory" data-tab="weapons">
                 <table class="item-table">
                     <thead>
@@ -121,7 +121,7 @@
                     <tr class="item text-center" data-item-id="{{item._id}}">
                         <td>{{item.name}}</td>
                         <td>{{item.system.skill}}</td>
-                        <td style="text-align: center;">
+                        <td class="text-center">
                             {{#each item.system.tags}}
                             <span class="tag">{{this}}</span>
                             {{/each}}
@@ -225,19 +225,18 @@
             <a class="nav-item" data-tab="attributes">Atributos</a>
             <a class="nav-item" data-tab="occupationalSkills">Perícias</a>
         </nav>
-        <section class="sheet-body tabbed-area" style="flex: 1 1 auto; overflow-y: auto;">
-            <div style="max-height: 400px; min-height: 400px; ">
+        <section class="sheet-body tabbed-area">
+            <div class="fixed-height-400">
 
                 <div class="tab" data-group="primary" data-tab="attributes">
-                    <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
+                    <div class="flexrow">
 
-                        <div class="attribute-block" style="flex: 1;">
+                        <div class="attribute-block">
                             <h3>Principal</h3>
-                            <div class="grid attributes"
-                                 style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <div class="grid-2cols">
                                 {{#each system.mainAttributes as |value key|}}
                                 <div class="attribute">
-                                    <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
+                                    <label class="roll-attr" data-attr="{{key}}">{{key}}
                                         <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
                                                value="{{value}}"/>
                                     </label>
@@ -246,13 +245,12 @@
                             </div>
                         </div>
 
-                        <div class="attribute-block" style="flex: 1;">
+                        <div class="attribute-block">
                             <h3>Secundarios</h3>
-                            <div class="grid attributes"
-                                 style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <div class="grid-2cols">
                                 {{#each system.secondaryAttributes as |value key|}}
                                 <div class="attribute">
-                                    <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
+                                    <label class="roll-attr" data-attr="{{key}}">{{key}}
                                         <input type="number" name="system.secondaryAttributes.{{key}}"
                                                value="{{value}}"/>
                                     </label>
@@ -261,13 +259,12 @@
                             </div>
                         </div>
 
-                        <div class="attribute-block" style="flex: 1;">
+                        <div class="attribute-block">
                             <h3>Derivados</h3>
-                            <div class="grid attributes"
-                                 style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                            <div class="grid-2cols">
                                 {{#each system.derivedAttributes as |value key|}}
                                 <div class="attribute">
-                                    <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
+                                    <label class="roll-attr" data-attr="{{key}}">{{key}}
                                         <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}"
                                                disabled/>
                                     </label>
