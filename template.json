@@ -363,16 +363,14 @@
       },
       "name": "",
       "chassis": "",
+      "cortex":"",
+      "imprint":"",
       "height": "",
       "weight": "",
       "chassisSize": "light",
       "fuel": {
         "max": 0,
         "consumption": 0
-      },
-      "cortex": {
-        "imprint": "",
-        "language": ""
       },
       "mainAttributes": {
         "PHY": 0,

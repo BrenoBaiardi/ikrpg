@@ -1,39 +1,60 @@
-<form class="sheet-ikrpg actor steamjack-sheet" autocomplete="off">
+<form class="ikrpg sheet actor steamjack-sheet" autocomplete="off">
     <div class="sheet-container">
 
         <!-- Nome e Imagem -->
         <div class="character-name-container">
-            <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
-                   class="character-name"/>
+            <label>STEAMJACK
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Steamjack" class="character-name"/>
+            </label>
         </div>
 
-        <div class="flexrow header-flex">
+        <div class="flexrow header-flex card">
             <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="steamjack portrait"/>
 
-            <div class="flexrow">
-                <label>
-                    <strong>Tipo de Chassi:</strong><br/>
-                    <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq system.chassisSize
-                        "light")}}checked{{/if}}> Leve</label>
-                    <label><input type="radio" name="system.chassisSize" value="heavy" {{#if (eq system.chassisSize
-                        "heavy")}}checked{{/if}}> Pesado</label>
-                </label>
+            <div class="v-align">
+                <div class="hp-bar">
+                    <label class="hp-group">
+                        <button type="button" class="hp-minus hp-button">-</button>
+                        <label class="hp-label v-align">
+                            HP
+                            <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
+                        </label>
+                        <button type="button" class="hp-plus hp-button">+</button>
+                    </label>
+                    <label class="hp-label v-align">
+                        Max
+                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
+                    </label>
+                </div>
+                <div class="chassis-radial">
+                    <label>
+                        <strong>Tipo de Chassi:</strong><br/>
+                        <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq system.chassisSize
+                            "light")}}checked{{/if}}> Leve</label>
+                        <label><input type="radio" name="system.chassisSize" value="heavy" {{#if (eq system.chassisSize
+                            "heavy")}}checked{{/if}}> Pesado</label>
+                    </label>
+                </div>
             </div>
 
             <div class="info-block">
                 <h2>Informações</h2>
-                <div class="flexrow">
-                    <div class="attribute"><label>Chassi:<input type="text" name="system.chassis"
+                <div>
+                    <div class="info-attribute"><label>Chassi:<input type="text" name="system.chassis"
                                                                 value="{{system.chassis}}"/></label></div>
-                    <div class="attribute"><label>Altura:<input type="text" name="system.height"
-                                                                value="{{system.height}}"/></label></div>
-                    <div class="attribute"><label>Peso:<input type="text" name="system.weight"
-                                                              value="{{system.weight}}"/></label></div>
+                    <div class="info-attribute"><label>Cortex:<input type="text" name="system.cortex"
+                                                                value="{{system.cortex}}"/></label></div>
+                    <div class="info-attribute"><label>Imprint:<input type="text" name="system.imprint"
+                                                                value="{{system.imprint}}"/></label></div>
+                    <div class="info-attribute">
+                        <label>Altura:<input type="text" name="system.height" value="{{system.height}}"/></label>
+                        <label>Peso:<input type="text" name="system.weight" value="{{system.weight}}"/></label>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="tab">
+        <div class="tab card">
             <table class="item-table">
                 <thead>
                 <tr>
@@ -99,7 +120,7 @@
                 <tr class="item text-center" data-item-id="{{item._id}}">
                     <td>{{item.name}}</td>
                     <td>{{item.system.skill}}</td>
-                    <td style="text-align: center;">
+                    <td class="text-center">
                         {{#each item.system.tags}}
                         <span class="tag">{{this}}</span>
                         {{/each}}
@@ -129,18 +150,17 @@
 
         <!-- Atributos -->
 
-        <section class="sheet-body tabbed-area" style="flex: 1 1 auto; overflow-y: auto;">
-            <div style="max-height: 400px; min-height: 400px; ">
+        <section class="sheet-body tabbed-area card">
+            <div class="fixed-height-400">
 
-                <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
+                <div class="flexrow">
 
-                    <div class="attribute-block" style="flex: 1;">
+                    <div class="attribute-block">
                         <h3>Principal</h3>
-                        <div class="grid attributes"
-                             style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div class="grid-2cols">
                             {{#each system.mainAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}
                                     <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
                                            value="{{value}}"/>
                                 </label>
@@ -149,13 +169,12 @@
                         </div>
                     </div>
 
-                    <div class="attribute-block" style="flex: 1;">
+                    <div class="attribute-block">
                         <h3>Secundarios</h3>
-                        <div class="grid attributes"
-                             style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div class="grid-2cols">
                             {{#each system.secondaryAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}
                                     <input type="number" name="system.secondaryAttributes.{{key}}"
                                            value="{{value}}"/>
                                 </label>
@@ -164,13 +183,12 @@
                         </div>
                     </div>
 
-                    <div class="attribute-block" style="flex: 1;">
+                    <div class="attribute-block">
                         <h3>Derivados</h3>
-                        <div class="grid attributes"
-                             style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div class="grid-2cols">
                             {{#each system.derivedAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}
                                     <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}"/>
                                 </label>
                             </div>

@@ -7,6 +7,14 @@
     flex-direction: column;
 }
 
+.card {
+    background: #fffef6;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 /* Seção de conteúdo rolável */
 .sheet-body, .sheet-items {
     flex: 1;
@@ -45,6 +53,17 @@ h2, h3 {
     font-weight: bold;
     border-bottom: 1px solid #aaa;
     padding-bottom: 0.25rem;
+}
+
+.info-block {
+    padding: 0.5rem;
+}
+
+.info-attribute {
+    width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .attribute {
@@ -109,6 +128,13 @@ input.big-input {
 
 .flexrow {
     margin: 5px;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.v-align {
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .tabbed-area {
@@ -126,6 +152,12 @@ input.big-input {
 .tabbed-area::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 4px;
+}
+
+.grid-2cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .sheet-item-tabs {
@@ -244,6 +276,12 @@ button.dice-button:active {
     min-width: 40px;
 }
 
+.fixed-height-400 {
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: auto;
+}
+
 th.col-name{
     width: auto;
     padding: 0.5rem;
@@ -261,6 +299,10 @@ th.col-skill-roll {
 
 select.skill-select{
     width: 100%;
+}
+
+.roll-attr {
+    cursor: pointer;
 }
 
 th.col-attr {
@@ -381,6 +423,7 @@ button.item-create {
 
 
 .hp-bar {
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -431,6 +474,3 @@ button.item-create {
 }
 
 
-.info-block {
-    padding: 0.5rem;
-}
