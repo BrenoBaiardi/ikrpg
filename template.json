@@ -21,6 +21,16 @@
       "level": "",
       "totalXP": 0,
       "featPoints": 0,
+      "fatigue": {
+        "enabled": false,
+        "value": 0,
+        "max": 0
+      },
+      "focus": {
+        "enabled": false,
+        "value": 0,
+        "max": 0
+      },
       "gold": 0,
       "movement": {
         "base": 0,
@@ -363,8 +373,8 @@
       },
       "name": "",
       "chassis": "",
-      "cortex":"",
-      "imprint":"",
+      "cortex": "",
+      "imprint": "",
       "height": "",
       "weight": "",
       "chassisSize": "light",
@@ -438,7 +448,7 @@
           "ammo": "",
           "effectiveRange": "",
           "extremeRange": "",
-          "aoe": "",
+          "AOE": "",
           "description": ""
         }
       },
@@ -458,8 +468,12 @@
       },
       "spell": {
         "system": {
-          "effect": "",
-          "cooldown": "",
+          "cost": 0,
+          "rng": "",
+          "pow": 0,
+          "upkeep": false,
+          "offensive": false,
+          "AOE": "",
           "description": ""
         }
       }

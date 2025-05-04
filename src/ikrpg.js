@@ -1,4 +1,11 @@
-import {calculateDamage, calculateDerivedAttributes, getSnappedRotation, handleDamageRoll, handleAttackRoll} from "./logic.js";
+import {
+    calculateDamage,
+    calculateDerivedAttributes,
+    getSnappedRotation,
+    handleDamageRoll,
+    handleAttackRoll,
+    regenerateFatigue
+} from "./logic.js";
 
 
 // ================================
@@ -30,7 +37,14 @@ Hooks.once("init", function () {
         makeDefault: true
     });
     Items.unregisterSheet("core", ItemSheet);
-    Items.registerSheet("ikrpg", IKRPGItemSheet, {makeDefault: true});
+    Items.registerSheet("ikrpg", IKRPGItemSheet, {
+        makeDefault: true
+    });
+    Items.registerSheet("ikrpg", IKRPGSpellSheet, {
+        types: ["spell"],
+        makeDefault: true,
+        label: "IKRPG Feitiço"
+    });
     if (game.modules.get("drag-ruler")?.active) {
         game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
             name: 'normal',
@@ -54,6 +68,7 @@ Hooks.once("init", function () {
             default: 0xFF2222 // Vermelho
         });
     }
+
 
 });
 
@@ -146,9 +161,6 @@ function addDirectionIndicator(token) {
 }
 
 
-
-
-
 // ================================
 //             Actors
 // ================================
@@ -218,6 +230,53 @@ Hooks.on("updateActor", async (actor, updateData, options, userId) => {
     }
 });
 
+Hooks.on("updateCombat", (combat, changed) => {
+    if (!("turn" in changed)) return;
+
+    const turnIndex = combat.turn;
+    const combatant = combat.turns[turnIndex];
+    if (!combatant) return;
+
+    const actor = combatant.actor;
+    if (actor.type === "character" && actor.system.fatigue.enabled) {
+        actor.fatigue = regenerateFatigue(actor);
+    }
+
+});
+
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+
+    // Botão de Ataque
+    html.find(".attack-roll").click(event => handleAttackRoll(event, message));
+
+
+    // Botão de Dano
+    html.find(".damage-roll").click(event => handleDamageRoll(event, message));
+
+    // Botão de Aplicar Dano
+    html.find(".apply-damage").click(async ev => {
+        ev.preventDefault();
+        const targetId = ev.currentTarget.dataset.targetId;
+        const damage = Number(ev.currentTarget.dataset.damage);
+
+        const token = canvas.tokens.get(targetId);
+        const actor = token?.actor;
+
+        if (!actor) {
+            ui.notifications.error("Target not found!");
+            return;
+        }
+
+        if (typeof actor.applyDamage === "function") {
+            actor.applyDamage(damage);
+        } else {
+            ui.notifications.warn("Target actor does not support damage application.");
+        }
+    });
+
+});
+
 class IKRPGActor extends Actor {
     prepareData() {
         super.prepareData();
@@ -226,7 +285,13 @@ class IKRPGActor extends Actor {
         if (this.type === "character") {
             this.updateCharacterHp(data);
             this.updateArmorData(data);
+            this.prepareFatigue(data);
         }
+    }
+
+    prepareFatigue(data) {
+        if (!data.fatigue.enabled) return;
+        data.fatigue.max = data.secondaryAttributes.ARC * 2;
     }
 
     updateCharacterHp(data) {
@@ -274,7 +339,7 @@ class IKRPGActor extends Actor {
     applyDamage(amount) {
         const hp = foundry.utils.duplicate(this.system.hp);
         const arm = this.system.derivedAttributes?.ARM || 0;
-        const { damageTaken, newHP } = calculateDamage(hp.value, arm, amount);
+        const {damageTaken, newHP} = calculateDamage(hp.value, arm, amount);
         this.update({"system.hp.value": newHP});
 
         ChatMessage.create({
@@ -378,13 +443,41 @@ class IKRPGBaseSheet extends ActorSheet {
                 flavor: `Perícia Militar: ${skill.name}`
             });
         });
+
+        html.find(".item-delete").click(ev => {
+            ev.preventDefault();
+            const li = ev.currentTarget.closest(".item");
+            const itemId = li.dataset.itemId;
+            const item = this.actor.items.get(itemId);
+
+            // Cria o diálogo de confirmação
+            new Dialog({
+                title: "Confirmar Exclusão",
+                content: `<p>Deseja realmente excluir <strong>${item.name}</strong>?</p>`,
+                buttons: {
+                    yes: {
+                        icon: "<i class='fas fa-trash'></i>",
+                        label: "Excluir",
+                        callback: () => {
+                            this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+                        }
+                    },
+                    no: {
+                        icon: "<i class='fas fa-times'></i>",
+                        label: "Cancelar"
+                    }
+                },
+                default: "no"
+            }).render(true);
+        });
+
     }
 }
 
 class IKRPGItemSheet extends ItemSheet {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["ikrpg", "sheet", "item"],
+            classes: ["ikrpg", "sheet", "item", "spell"],
             template: "systems/ikrpg/templates/sheets/item-sheet.html",
             width: 400,
             height: 300
@@ -452,12 +545,6 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             item.sheet.render(true);
         });
 
-        // Excluir item
-        html.find(".item-delete").click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-        });
-
         html.find(".item-create").click(ev => {
             const type = ev.currentTarget.dataset.type || "equipment";
             const itemData = {
@@ -498,6 +585,41 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
                 content: content
             });
+        });
+
+        html.find(".spell-roll").click(async ev => {
+            ev.preventDefault();
+
+            const li = ev.currentTarget.closest(".item");
+            const item = this.actor.items.get(li.dataset.itemId);
+            if (!item) return;
+
+            // Identificar alvos
+            const targets = Array.from(game.user.targets);
+
+            if (item.system.OFFENSIVE) {
+                const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+                let targetInfo = targets.length > 0
+                    ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+                    : `<p>🎯 Sem alvos</p>`;
+
+                const content = `
+        <div class="chat-spell-roll">
+            <h3>Casting -> ${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
+        </div>
+    `;
+
+                ChatMessage.create({
+                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                    content: content
+                });
+            }
+            // todo implement some way to control spell points
         });
     }
 }
@@ -532,11 +654,6 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
             item.sheet.render(true);
         });
 
-        // Excluir item
-        html.find(".item-delete").click(ev => {
-            const li = ev.currentTarget.closest(".item");
-            this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
-        });
 
         html.find(".item-create").click(ev => {
             const type = ev.currentTarget.dataset.type || "equipment";
@@ -567,7 +684,7 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
 
             const content = `
         <div class="chat-weapon-roll">
-            <h3>${item.name}</h3>
+            <h3>Attacking with ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                 <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
@@ -583,38 +700,6 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
         });
     }
 }
-
-Hooks.on("renderChatMessage", (message, html, data) => {
-
-    // Botão de Ataque
-    html.find(".attack-roll").click(event => handleAttackRoll(event, message));
-
-
-    // Botão de Dano
-    html.find(".damage-roll").click(event => handleDamageRoll(event, message));
-
-    // Botão de Aplicar Dano
-    html.find(".apply-damage").click(async ev => {
-        ev.preventDefault();
-        const targetId = ev.currentTarget.dataset.targetId;
-        const damage = Number(ev.currentTarget.dataset.damage);
-
-        const token = canvas.tokens.get(targetId);
-        const actor = token?.actor;
-
-        if (!actor) {
-            ui.notifications.error("Target not found!");
-            return;
-        }
-
-        if (typeof actor.applyDamage === "function") {
-            actor.applyDamage(damage);
-        } else {
-            ui.notifications.warn("Target actor does not support damage application.");
-        }
-    });
-
-});
 
 // ================================
 // 🧟 FICHA DE NPC

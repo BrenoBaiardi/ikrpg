@@ -74,7 +74,12 @@ export async function handleDamageRoll(event, message) {
             pow: item.system.pow || 0,
             str: actor.system.secondaryAttributes?.STR || 0
         });
-    } else {
+    } else if (item.type === "rangedWeapon"){
+        damageRoll = new Roll("2d6 + @pow", {
+            pow: item.system.pow || 0,
+        });
+    } else if  (item.type === "spell") {
+        console.log("ITAEM",item);
         damageRoll = new Roll("2d6 + @pow", {
             pow: item.system.pow || 0,
         });
@@ -106,14 +111,43 @@ export async function handleDamageRoll(event, message) {
     }
 }
 
+export async function regenerateFatigue(actor) {
+    if (!actor.system.fatigue.enabled) return;
+    const current = actor.system.fatigue.value;
+    const newValue = Math.max(0, current - actor.system.secondaryAttributes.ARC);
+    await actor.update({"system.fatigue.value": newValue});
+
+    const content = `
+    <div class="ikrpg-chat-fatigue">
+      <h4>✨ Will Weavers recover their ARC in fatigue each maintenance ✨</h4>
+      <p>
+        <strong>${actor.name}</strong> recovered
+        <strong>${actor.system.secondaryAttributes.ARC}</strong> fatigue.
+      </p>
+      <p>
+        Fatigue: <s>${current}</s> → <strong>${newValue}</strong>
+      </p>
+    </div>
+  `;
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor}),
+        content
+    });
+}
+
+export async function clearFocus(actor) {
+    //TODO focuser logic. remove all focus points in maintenance phase, then regain ARC in control phase
+}
+
 export function findMilitarySkill(item, actor) {
     const skillName = item.system.skill;
     const militarySkills = Object.values(actor.system.militarySkills || {});
     let skill = militarySkills.find(s => s.name === skillName);
 
     if (!skill) {
-        skill = {name: "undefined", attr: "--", level: 0}
-        ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
+        skill = {name: "undefined", attr: 0, level: 0}
+        ui.notifications.warn(`Perícia militar não encontrada -> [${skillName}].`);
     }
     return skill;
 }
@@ -141,31 +175,36 @@ export function buildHitResult(targets, roll) {
 /**
  * @param {Object} actor
  * @param {Object} item
- * @returns {Number|Number} Associated attribute level and Skill level
+ * @returns {{attr: number, skill: number}} Associated attribute level and Skill level
  */
 export function getAttackValues(actor, item) {
     const isSteamjack = actor.type === "steamjack";
     const isCharacter = actor.type === "character";
+    const isMeleeWeapon = item.type === "meleeWeapon";
+    const isRangedWeapon = item.type === "rangedWeapon";
+    const isSpell = item.type === "spell";
+    const isWeapon = isMeleeWeapon || isRangedWeapon;
+
 
     if (isSteamjack) {
         const derived = actor.system.derivedAttributes || {};
-        if (item.type === "meleeWeapon") return { attr: derived.MAT ?? 0, skill: 0 };
-        if (item.type === "rangedWeapon") return { attr: derived.RAT ?? 0, skill: 0 };
+        if (isMeleeWeapon) return { attr: derived.MAT ?? 0, skill: 0 };
+        if (isRangedWeapon) return { attr: derived.RAT ?? 0, skill: 0 };
 
         ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
-        return null;
-    }
-
-    if (isCharacter) {
+        return {"attr": 0, "skill": 0};
+    } else if (isCharacter && isWeapon) {
         const skill = findMilitarySkill(item, actor);
         const attrValue = actor.system.mainAttributes?.[skill.attr]
             ?? actor.system.secondaryAttributes?.[skill.attr]
-            ?? "";
+            ?? 0;
         return { attr: attrValue, skill: skill.level || 0 };
+    } else if (isSpell){
+        return { attr: actor.system.secondaryAttributes.ARC ?? 0, skill: 0 };
     }
 
     console.warn("No character type configured for -> " + actor.type);
-    return null;
+    return {"attr": 0, "skill": 0};
 }
 
 export async function handleAttackRoll(event, message) {
