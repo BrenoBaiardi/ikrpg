@@ -111,6 +111,32 @@ export async function handleDamageRoll(event, message) {
     }
 }
 
+export async function regenerateFatigue(actor) {
+    if (!actor.system.fatigue.enabled) return;
+    const current = actor.system.fatigue.value;
+    const newValue = Math.max(0, current - actor.system.secondaryAttributes.ARC);
+    await actor.update({"system.fatigue.value": newValue});
+
+    const content = `
+    <div class="ikrpg-chat-fatigue">
+      <h4>✨ Will Weavers recover their ARC in fatigue each maintenance ✨</h4>
+      <p>
+        <strong>${actor.name}</strong> recovered
+        <strong>${actor.system.secondaryAttributes.ARC}</strong> fatigue.
+      </p>
+      <p>
+        Fatigue: <s>${current}</s> → <strong>${newValue}</strong>
+      </p>
+    </div>
+  `;
+
+    // Cria a mensagem no chat
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor}),
+        content
+    });
+}
+
 export function findMilitarySkill(item, actor) {
     const skillName = item.system.skill;
     const militarySkills = Object.values(actor.system.militarySkills || {});

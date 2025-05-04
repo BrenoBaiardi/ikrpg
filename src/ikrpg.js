@@ -3,7 +3,8 @@ import {
     calculateDerivedAttributes,
     getSnappedRotation,
     handleDamageRoll,
-    handleAttackRoll
+    handleAttackRoll,
+    regenerateFatigue
 } from "./logic.js";
 
 
@@ -229,6 +230,53 @@ Hooks.on("updateActor", async (actor, updateData, options, userId) => {
     }
 });
 
+Hooks.on("updateCombat", (combat, changed) => {
+    if (!("turn" in changed)) return;
+
+    const turnIndex = combat.turn;
+    const combatant = combat.turns[turnIndex];
+    if (!combatant) return;
+
+    const actor = combatant.actor;
+    if (actor.type === "character" && actor.system.fatigue.enabled) {
+        actor.fatigue = regenerateFatigue(actor);
+    }
+
+});
+
+
+Hooks.on("renderChatMessage", (message, html, data) => {
+
+    // Botão de Ataque
+    html.find(".attack-roll").click(event => handleAttackRoll(event, message));
+
+
+    // Botão de Dano
+    html.find(".damage-roll").click(event => handleDamageRoll(event, message));
+
+    // Botão de Aplicar Dano
+    html.find(".apply-damage").click(async ev => {
+        ev.preventDefault();
+        const targetId = ev.currentTarget.dataset.targetId;
+        const damage = Number(ev.currentTarget.dataset.damage);
+
+        const token = canvas.tokens.get(targetId);
+        const actor = token?.actor;
+
+        if (!actor) {
+            ui.notifications.error("Target not found!");
+            return;
+        }
+
+        if (typeof actor.applyDamage === "function") {
+            actor.applyDamage(damage);
+        } else {
+            ui.notifications.warn("Target actor does not support damage application.");
+        }
+    });
+
+});
+
 class IKRPGActor extends Actor {
     prepareData() {
         super.prepareData();
@@ -239,15 +287,6 @@ class IKRPGActor extends Actor {
             this.updateArmorData(data);
             this.prepareFatigue(data);
         }
-    }
-
-
-    regenerateFatigue(data) {
-        if (!data.fatigue.enabled) return;
-        const current = data.fatigue.value;
-        const newCurrent = Math.max(0, current - data.secondaryAttributes.ARC)
-        // TODO add message of recovery in chat
-        data.fatigue.value = newCurrent;
     }
 
     prepareFatigue(data) {
@@ -661,38 +700,6 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
         });
     }
 }
-
-Hooks.on("renderChatMessage", (message, html, data) => {
-
-    // Botão de Ataque
-    html.find(".attack-roll").click(event => handleAttackRoll(event, message));
-
-
-    // Botão de Dano
-    html.find(".damage-roll").click(event => handleDamageRoll(event, message));
-
-    // Botão de Aplicar Dano
-    html.find(".apply-damage").click(async ev => {
-        ev.preventDefault();
-        const targetId = ev.currentTarget.dataset.targetId;
-        const damage = Number(ev.currentTarget.dataset.damage);
-
-        const token = canvas.tokens.get(targetId);
-        const actor = token?.actor;
-
-        if (!actor) {
-            ui.notifications.error("Target not found!");
-            return;
-        }
-
-        if (typeof actor.applyDamage === "function") {
-            actor.applyDamage(damage);
-        } else {
-            ui.notifications.warn("Target actor does not support damage application.");
-        }
-    });
-
-});
 
 // ================================
 // 🧟 FICHA DE NPC
