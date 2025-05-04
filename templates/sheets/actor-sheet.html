@@ -381,7 +381,7 @@
                     <div class="flexrow">
 
                         <div class="attribute-block">
-                            <h3>{{t "Sheet.Attributes.Main"}}</h3>
+                            <h3>{{t "IKRPG.Sheet.Attributes.Main"}}</h3>
                             <div class="grid-2cols">
                                 {{#each system.mainAttributes as |value key|}}
                                 <div class="attribute">
@@ -395,7 +395,7 @@
                         </div>
 
                         <div class="attribute-block">
-                            <h3>{{t "Sheet.Attributes.Secondary"}}</h3>
+                            <h3>{{t "IKRPG.Sheet.Attributes.Secondary"}}</h3>
                             <div class="grid-2cols">
                                 {{#each system.secondaryAttributes as |value key|}}
                                 <div class="attribute">
@@ -409,7 +409,7 @@
                         </div>
 
                         <div class="attribute-block">
-                            <h3>{{t "Sheet.Attributes.Derived"}}</h3>
+                            <h3>{{t "IKRPG.Sheet.Attributes.Derived"}}</h3>
                             <div class="grid-2cols">
                                 {{#each system.derivedAttributes as |value key|}}
                                 <div class="attribute">
@@ -423,12 +423,12 @@
                         </div>
                         <div class="additional-fields">
                             <div class="additional-field">
-                                <label for="system.featPoints" class="big-label">{{t "Sheet.Label.FeatPoints"}}:</label>
+                                <label for="system.featPoints" class="big-label">{{t "IKRPG.Sheet.Label.FeatPoints"}}:</label>
                                 <input type="number" name="system.featPoints" value="{{system.featPoints}}" min="0"
                                        class="big-input"/>
                             </div>
                             <div class="additional-field">
-                                <label for="system.gold" class="big-label">{{t "Sheet.Label.Gold"}}:</label>
+                                <label for="system.gold" class="big-label">{{t "IKRPG.Sheet.Label.Gold"}}:</label>
                                 <input type="number" name="system.gold" value="{{system.gold}}" min="0"
                                        class="big-input"/>
                             </div>
@@ -535,4 +535,5 @@
             </div>
         </section>
     </div>
+    <label>{{t "IKRPG.Flag.Icon"}}</label>
 </form>

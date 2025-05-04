@@ -1,4 +1,5 @@
 {
+  "IKRPG.Flag.Icon": "\uD83C\uDDE7\uD83C\uDDF7",
   "IKRPG.Sheet.Placeholder.Name": "Nome do personagem",
   "IKRPG.Sheet.Labels.HP": "HP",
   "IKRPG.Sheet.Labels.PHY": "PHY",
@@ -20,7 +21,7 @@
   "IKRPG.Sheet.Labels.Max": "Máx.",
   "IKRPG.Sheet.Labels.Focuser": "Focalizador",
   "IKRPG.Sheet.Labels.Focus": "Foco",
-  "IKRPG.Sheet.Header.Information": "Information",
+  "IKRPG.Sheet.Header.Information": "Informações",
   "IKRPG.Sheet.Labels.Player": "Jogador",
   "IKRPG.Sheet.Labels.Archetype": "Arquétipo",
   "IKRPG.Sheet.Labels.Race": "Raça",
@@ -64,8 +65,8 @@
   "IKRPG.Button.Add.Armor": "Nova Armadura",
   "IKRPG.Button.Add.Equipment": "Novo Equipamento",
   "IKRPG.Button.Add.Spell": "Novo Feitiço",
-  "IKRPG.Sheet.Label.FeatPoints": "Feat Points",
-  "IKRPG.Sheet.Label.Gold": "Gold",
+  "IKRPG.Sheet.Label.FeatPoints": "Ponto de Façanha",
+  "IKRPG.Sheet.Label.Gold": "Ouro",
   "IKRPG.Sheet.Attributes.Main": "Principal",
   "IKRPG.Sheet.Attributes.Secondary": "Secundários",
   "IKRPG.Sheet.Attributes.Derived": "Derivados"
