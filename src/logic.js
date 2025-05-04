@@ -146,8 +146,8 @@ export function findMilitarySkill(item, actor) {
     let skill = militarySkills.find(s => s.name === skillName);
 
     if (!skill) {
-        skill = {name: "undefined", attr: "--", level: 0}
-        ui.notifications.warn(`Perícia militar não encontrada -> "${skillName}".`);
+        skill = {name: "undefined", attr: 0, level: 0}
+        ui.notifications.warn(`Perícia militar não encontrada -> [${skillName}].`);
     }
     return skill;
 }
@@ -192,19 +192,19 @@ export function getAttackValues(actor, item) {
         if (isRangedWeapon) return { attr: derived.RAT ?? 0, skill: 0 };
 
         ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
-        return null;
+        return {"attr": 0, "skill": 0};
     } else if (isCharacter && isWeapon) {
         const skill = findMilitarySkill(item, actor);
         const attrValue = actor.system.mainAttributes?.[skill.attr]
             ?? actor.system.secondaryAttributes?.[skill.attr]
-            ?? "";
+            ?? 0;
         return { attr: attrValue, skill: skill.level || 0 };
     } else if (isSpell){
         return { attr: actor.system.secondaryAttributes.ARC, skill: 0 };
     }
 
     console.warn("No character type configured for -> " + actor.type);
-    return null;
+    return {"attr": 0, "skill": 0};
 }
 
 export async function handleAttackRoll(event, message) {

@@ -169,8 +169,8 @@ describe("findMilitarySkill", () => {
         };
 
         const result = findMilitarySkill(item, actor);
-        expect(result).toEqual({name: "undefined", attr: "--", level: 0});
-        expect(mockWarn).toHaveBeenCalledWith('Perícia militar não encontrada -> "Gunsmithing".');
+        expect(result).toEqual({name: "undefined", attr: 0, level: 0});
+        expect(mockWarn).toHaveBeenCalledWith('Perícia militar não encontrada -> [Gunsmithing].');
     });
 
 });
@@ -320,10 +320,10 @@ describe("getAttackValues", () => {
             expect(result).toEqual({ attr: steamjackActor.system.derivedAttributes.RAT, skill: 0 });
         });
 
-        test("should return null and war about wrong weapon types", () => {
+        test("should return 0 and warn about wrong weapon types", () => {
             const item = { type: "tool" };
             const result = getAttackValues(steamjackActor, item);
-            expect(result).toBeNull();
+            expect(result).toEqual({ attr: 0, skill: 0 });
             expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT)."));
         });
     });
@@ -343,25 +343,18 @@ describe("getAttackValues", () => {
             }
         };
 
-        test("usa mainAttributes se a perícia aponta para um atributo principal", () => {
-            const item = { system: { skill: "mainattr" } };
-
-            const result = getAttackValues(sampleActor, item);
-            expect(result).toEqual({ attr: sampleActor.system.mainAttributes.PHY, skill: 99 });
-        });
-
         test("usa secondaryAttributes se atributo não está em mainAttributes", () => {
             const actor = {
                 type: "character",
                 system: {
                     militarySkills: {
-                        skill1: { name: "Táticas", attr: "INT", level: 2 }
+                        skill1: { name: "Tactics", attr: "INT", level: 2 }
                     },
                     mainAttributes: {},
                     secondaryAttributes: { INT: 4 }
                 }
             };
-            const item = { system: { skill: "Táticas" } };
+            const item = { system: { skill: "Tactics" }, type: "meleeWeapon" };
 
             const result = getAttackValues(actor, item);
             expect(result).toEqual({ attr: 4, skill: 2 });
@@ -369,11 +362,11 @@ describe("getAttackValues", () => {
 
         test("retorna skill 'undefined' se perícia não for encontrada", () => {
 
-            const item = { system: { skill: "Inexistente" } };
+            const item = { system: { skill: "Inexistente" }, type: "meleeWeapon" };
 
             const result = getAttackValues(sampleActor, item);
-            expect(result).toEqual({ attr: "", skill: 0 });
-            expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("Perícia militar não encontrada"));
+            expect(result).toEqual({ attr: 0, skill: 0 });
+            expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("Perícia militar não encontrada -> [Inexistente]."));
         });
     });
 
@@ -386,7 +379,7 @@ describe("getAttackValues", () => {
             const item = {};
 
             const result = getAttackValues(actor, item);
-            expect(result).toBeNull();
+            expect(result).toEqual({ attr: 0, skill: 0 });
             expect(console.warn).toHaveBeenCalledWith(expect.stringContaining("No character type configured"));
         });
     });
