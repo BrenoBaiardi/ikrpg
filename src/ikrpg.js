@@ -237,7 +237,22 @@ class IKRPGActor extends Actor {
         if (this.type === "character") {
             this.updateCharacterHp(data);
             this.updateArmorData(data);
+            this.prepareFatigue(data);
         }
+    }
+
+
+    regenerateFatigue(data) {
+        if (!data.fatigue.enabled) return;
+        const current = data.fatigue.value;
+        const newCurrent = Math.max(0, current - data.secondaryAttributes.ARC)
+        // TODO add message of recovery in chat
+        data.fatigue.value = newCurrent;
+    }
+
+    prepareFatigue(data) {
+        if (!data.fatigue.enabled) return;
+        data.fatigue.max = data.secondaryAttributes.ARC * 2;
     }
 
     updateCharacterHp(data) {

@@ -15,6 +15,20 @@
     margin-bottom: 0.5rem;
 }
 
+
+/* Inline toggle + label */
+.inline-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+/* Padroniza inputs */
+.sheet-body .form-group input[type="number"] {
+    width: 4ch;
+    padding: 0.25rem;
+}
+
 /* Seção de conteúdo rolável */
 .sheet-body, .sheet-items {
     flex: 1;
@@ -57,6 +71,44 @@ h2, h3 {
 
 .info-block {
     padding: 0.5rem;
+}
+
+/* Agrupa linhas de status em coluna */
+.stats-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Cada linha com campos lado a lado */
+.hp-row,
+.fatigue-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* HP controls: mantém botões + label alinhados */
+.hp-group {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Cada field (HP-max, fatiga, max-fatiga) */
+.hp-max,
+.fatigue-value,
+.fatigue-max {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Inputs curtos para valores até 2 dígitos */
+.small-field {
+    width: 2ch;
+    text-align: center;
+    padding: 0.15rem;
 }
 
 .info-attribute {
@@ -438,12 +490,6 @@ button.item-create {
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-}
-
-.hp-group {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
 }
 
 .hp-group input[type="number"] {

@@ -8,23 +8,95 @@
 
         <header class="sheet-header card">
             <div class="flexrow header-flex">
+                <img
+                        class="img-profile"
+                        id="img-profile"
+                        src="{{actor.img}}"
+                        data-edit="img"
+                        alt="character portrait"
+                />
 
-                <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="character portrait"/>
-                    <div class="hp-bar">
-                        <label class="hp-group">
-                            <button type="button" class="hp-minus hp-button">-</button>
-                            <label class="hp-label">
+                <div class="stats-group">
+                    <!-- Row 1: HP e Max HP -->
+                    <div class="hp-row">
+                        <!-- HP controls -->
+                        <div class="hp-group">
+                            <button type="button" class="hp-minus hp-button">–</button>
+                            <label>
                                 HP
-                                <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
+                                <input
+                                        type="number"
+                                        name="system.hp.value"
+                                        value="{{system.hp.value}}"
+                                        class="small-field"
+                                />
                             </label>
                             <button type="button" class="hp-plus hp-button">+</button>
-                        </label>
-                        <label class="hp-label">
-                            Max
-                            <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
-                        </label>
+                        </div>
+                        <!-- Max HP -->
+                        <div class="hp-max">
+                            <label>
+                                Max
+                                <input
+                                        type="number"
+                                        name="system.hp.max"
+                                        value="{{system.hp.max}}"
+                                        disabled
+                                        class="small-field"
+                                />
+                            </label>
+                        </div>
                     </div>
 
+                    <!-- Row 2: Fadiga & Max Fadiga -->
+                    {{#if system.fatigue.enabled}}
+                    <div class="fatigue-row">
+                        <!-- Valor de Fadiga -->
+                        <div class="fatigue-value">
+                            <label>
+                                Fadiga
+                                <input
+                                        id="system.fatigue.value"
+                                        name="system.fatigue.value"
+                                        type="number"
+                                        value="{{system.fatigue.value}}"
+                                        min="0"
+                                        class="small-field"
+                                />
+                            </label>
+                        </div>
+                        <!-- Max Fadiga -->
+                        <div class="fatigue-max">
+                            <label>
+                                Max
+                                <input
+                                        id="system.fatigue.max"
+                                        name="system.fatigue.max"
+                                        type="number"
+                                        value="{{system.fatigue.max}}"
+                                        min="0"
+                                        disabled
+                                        class="small-field"
+                                />
+                            </label>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+                <label for="system.fatigue.enabled">
+                    <input
+                            id="system.fatigue.enabled"
+                            type="checkbox"
+                            name="system.fatigue.enabled"
+                            {{checked system.fatigue.enabled}}
+                    />Weaver</label>
+                <label for="system.focus.enabled">
+                    <input
+                            id="system.focus.enabled"
+                            type="checkbox"
+                            name="system.focus.enabled"
+                            {{checked system.fatigue.enabled}}
+                    />Focuser</label>
             </div>
 
 
@@ -66,7 +138,8 @@
                         <th class="col-pow">POW</th>
                         <th class="col-mod">Mod.</th>
                         <th class="col-item-roll">🎲</th>
-                        <th class="col-manage">⚙️</th>                    </tr>
+                        <th class="col-manage">⚙️</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {{#each items as |item|}}

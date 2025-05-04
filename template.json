@@ -21,6 +21,11 @@
       "level": "",
       "totalXP": 0,
       "featPoints": 0,
+      "fatigue": {
+        "enabled": false,
+        "value": 0,
+        "max": 0
+      },
       "gold": 0,
       "movement": {
         "base": 0,
