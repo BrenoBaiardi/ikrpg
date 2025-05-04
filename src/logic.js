@@ -130,11 +130,14 @@ export async function regenerateFatigue(actor) {
     </div>
   `;
 
-    // Cria a mensagem no chat
     ChatMessage.create({
         speaker: ChatMessage.getSpeaker({actor}),
         content
     });
+}
+
+export async function clearFocus(actor) {
+    //TODO focuser logic. remove all focus points in maintenance phase, then regain ARC in control phase
 }
 
 export function findMilitarySkill(item, actor) {

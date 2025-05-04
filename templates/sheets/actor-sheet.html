@@ -48,10 +48,8 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: Fadiga & Max Fadiga -->
                     {{#if system.fatigue.enabled}}
                     <div class="fatigue-row">
-                        <!-- Valor de Fadiga -->
                         <div class="fatigue-value">
                             <label>
                                 Fadiga
@@ -65,7 +63,6 @@
                                 />
                             </label>
                         </div>
-                        <!-- Max Fadiga -->
                         <div class="fatigue-max">
                             <label>
                                 Max
@@ -74,6 +71,37 @@
                                         name="system.fatigue.max"
                                         type="number"
                                         value="{{system.fatigue.max}}"
+                                        min="0"
+                                        disabled
+                                        class="small-field"
+                                />
+                            </label>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{#if system.focus.enabled}}
+                    <div class="fatigue-row">
+                        <div class="fatigue-value">
+                            <label>
+                                Foco
+                                <input
+                                        id="system.focus.value"
+                                        name="system.focus.value"
+                                        type="number"
+                                        value="{{system.focus.value}}"
+                                        min="0"
+                                        class="small-field"
+                                />
+                            </label>
+                        </div>
+                        <div class="focus-max">
+                            <label>
+                                Max
+                                <input
+                                        id="system.focus.max"
+                                        name="system.focus.max"
+                                        type="number"
+                                        value="{{system.focus.max}}"
                                         min="0"
                                         disabled
                                         class="small-field"
@@ -95,7 +123,7 @@
                             id="system.focus.enabled"
                             type="checkbox"
                             name="system.focus.enabled"
-                            {{checked system.fatigue.enabled}}
+                            {{checked system.focus.enabled}}
                     />Focuser</label>
             </div>
 
