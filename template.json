@@ -438,7 +438,7 @@
           "ammo": "",
           "effectiveRange": "",
           "extremeRange": "",
-          "aoe": "",
+          "AOE": "",
           "description": ""
         }
       },
@@ -458,11 +458,11 @@
       },
       "spell": {
         "system": {
-          "COST": 0,
-          "RNG": "",
-          "POW": 0,
-          "UPKEEP": false,
-          "OFFENSIVE": false,
+          "cost": 0,
+          "rng": "",
+          "pow": 0,
+          "upkeep": false,
+          "offensive": false,
           "AOE": "",
           "description": ""
         }

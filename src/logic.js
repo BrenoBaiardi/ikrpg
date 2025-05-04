@@ -74,7 +74,12 @@ export async function handleDamageRoll(event, message) {
             pow: item.system.pow || 0,
             str: actor.system.secondaryAttributes?.STR || 0
         });
-    } else {
+    } else if (item.type === "rangedWeapon"){
+        damageRoll = new Roll("2d6 + @pow", {
+            pow: item.system.pow || 0,
+        });
+    } else if  (item.type === "spell") {
+        console.log("ITAEM",item);
         damageRoll = new Roll("2d6 + @pow", {
             pow: item.system.pow || 0,
         });

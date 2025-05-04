@@ -390,21 +390,6 @@ class IKRPGBaseSheet extends ActorSheet {
             });
         });
 
-        html.find(".spell-roll").click(async ev => {
-            ev.preventDefault();
-            const li = ev.currentTarget.closest("tr.item");
-            const item = this.actor.items.get(li.dataset.itemId);
-            const pow = item.system.POW || 0;
-
-            // Rolagem básica: 2d6 + POW
-            const roll = new Roll("2d6 + @pow", {pow});
-            await roll.evaluate({async: true});
-            roll.toMessage({
-                speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Feitiço: ${item.name}`
-            });
-        });
-
         html.find(".item-delete").click(ev => {
             ev.preventDefault();
             const li = ev.currentTarget.closest(".item");
@@ -559,8 +544,6 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             const targets = Array.from(game.user.targets);
 
             if (item.system.OFFENSIVE) {
-
-
                 const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
                 let targetInfo = targets.length > 0
                     ? `<p>🎯 Alvos: ${formattedTargets}</p>`
@@ -568,7 +551,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
 
                 const content = `
         <div class="chat-spell-roll">
-            <h3>${item.name}</h3>
+            <h3>Casting -> ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                 <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
@@ -582,6 +565,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: content
                 });
             }
+            // todo implement some way to control spell points
         });
     }
 }
@@ -646,7 +630,7 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
 
             const content = `
         <div class="chat-weapon-roll">
-            <h3>${item.name}</h3>
+            <h3>Attacking with ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                 <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>

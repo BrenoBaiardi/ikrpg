@@ -240,11 +240,11 @@
                         {{#if (eq item.type "spell")}}
                         <tr class="item text-center" data-item-id="{{item._id}}">
                             <td>{{item.name}}</td>
-                            <td>{{item.system.COST}}</td>
-                            <td>{{item.system.RNG}}</td>
-                            <td>{{item.system.POW}}</td>
-                            <td>{{#if item.system.UPKEEP}}✔️{{/if}}</td>
-                            <td>{{#if item.system.OFFENSIVE}}✔️{{/if}}</td>
+                            <td>{{item.system.cost}}</td>
+                            <td>{{item.system.rng}}</td>
+                            <td>{{item.system.pow}}</td>
+                            <td>{{#if item.system.upkeep}}✔️{{/if}}</td>
+                            <td>{{#if item.system.offensive}}✔️{{/if}}</td>
                             <td>{{item.system.AOE}}</td>
                             <td>
                                 <button class="spell-roll dice-button">🎲</button>
