@@ -343,7 +343,7 @@ describe("getAttackValues", () => {
             }
         };
 
-        test("usa secondaryAttributes se atributo não está em mainAttributes", () => {
+        test("deve permitir uso de secondary attributes", () => {
             const actor = {
                 type: "character",
                 system: {
@@ -360,7 +360,7 @@ describe("getAttackValues", () => {
             expect(result).toEqual({ attr: 4, skill: 2 });
         });
 
-        test("retorna skill 'undefined' se perícia não for encontrada", () => {
+        test("retorna skill 'undefined' se perícia militar não for encontrada", () => {
 
             const item = { system: { skill: "Inexistente" }, type: "meleeWeapon" };
 
@@ -371,7 +371,7 @@ describe("getAttackValues", () => {
     });
 
     describe("Tipo inválido", () => {
-        test("retorna null e emite warning para tipo de ator desconhecido", () => {
+        test("retorna 0 e emite warning para tipo de ator desconhecido", () => {
             const actor = {
                 type: "npc",
                 system: {}
