@@ -1,0 +1,11 @@
+{
+  "IKRPG.Item.Spell": "Feitiço",
+  "IKRPG.Item.MeleeWeapon": "Arma Corpo-a-Corpo",
+  "IKRPG.Sheet.Weaver.Enable": "Tecelão da vontade",
+  "IKRPG.Sheet.Fatigue.Value": "Fadiga",
+  "IKRPG.Sheet.Focuser.Enable": "Focalizador",
+  "IKRPG.Sheet.Focuser.Value": "Foco",
+  "IKRPG.Sheet.Fatigue.Max": "Max",
+  "IKRPG.Dialog.DeleteTitle": "Confirmar Exclusão",
+  "IKRPG.Dialog.DeleteConfirm": "Deseja realmente excluir «{item}»?"
+}

@@ -14,6 +14,11 @@ import {
 Hooks.once("init", function () {
     CONFIG.Actor.documentClass = IKRPGActor;
 
+    // Register a Handlebars helper for localization
+    Handlebars.registerHelper("t", (key) => {
+        return game.i18n.localize(key);
+    });
+
     CONFIG.Actor.typeLabels = {
         character: "Personagem"
     };

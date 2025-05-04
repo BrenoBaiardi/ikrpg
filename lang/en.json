@@ -1,0 +1,12 @@
+{
+  "IKRPG.Item.Spell": "Spell",
+  "IKRPG.Item.MeleeWeapon": "Melee Weapon",
+  "IKRPG.Sheet.Weaver.Enable": "Will Weaver",
+  "IKRPG.Sheet.Fatigue.Value": "Fatigue",
+  "IKRPG.Sheet.Focuser.Enable": "Focuser",
+  "IKRPG.Sheet.Focuser.Value": "Focus",
+  "IKRPG.Sheet.Fatigue.Max": "Max",
+  "IKRPG.Dialog.DeleteTitle": "Confirm Deletion",
+  "IKRPG.Dialog.DeleteConfirm": "Do you really want to delete «{item}»?"
+
+}
