@@ -370,6 +370,70 @@ describe("getAttackValues", () => {
         });
     });
 
+    describe("Spells", () => {
+
+        test("should return attr=ARC and skill=0 when using spell as a character", () => {
+            const actor = {
+                type: "character",
+                system: {
+                    secondaryAttributes: { ARC: 5 },
+                    mainAttributes:     { STR: 2 }
+                }
+            };
+            const item = { type: "spell" };
+
+            const result = getAttackValues(actor, item);
+            expect(result).toEqual({ attr: 5, skill: 0 });
+        });
+
+        test("should return 0 when trying to run with steamjack", () => {
+            const actor = {
+                type: "steamjack",
+                system: {
+                    derivedAttributes: { MAT: 7, RAT: 3 }
+                }
+            };
+            const item = { type: "spell" };
+
+            const result = getAttackValues(actor, item);
+
+            // must warn
+            expect(global.ui.notifications.warn).toHaveBeenCalledWith(
+                expect.stringMatching(/Erro: atributo para rolagem não encontrado/)
+            );
+            // AND return zeroes
+            expect(result).toEqual({ attr: 0, skill: 0 });
+        });
+
+        test("should return ARC normally even if is NPC", () => {
+            const actor = {
+                type: "npc",
+                system: {
+                    secondaryAttributes: { ARC: 2 }
+                }
+            };
+            const item = { type: "spell" };
+
+            const result = getAttackValues(actor, item);
+            expect(result).toEqual({ attr: 2, skill: 0 });
+        });
+
+        test("Personagem sem ARC definido retorna skill=0 e attr=undefined→0", () => {
+            const actor = {
+                type: "character",
+                system: {
+                    secondaryAttributes: {},  // sem ARC
+                }
+            };
+            const item = { type: "spell" };
+
+            const result = getAttackValues(actor, item);
+            // ARC indefinido acaba virando undefined, mas no uso prático você pode forçar default 0:
+            expect(result.attr).toBe(0);
+            expect(result.skill).toBe(0);
+        });
+    });
+
     describe("Tipo inválido", () => {
         test("retorna 0 e emite warning para tipo de ator desconhecido", () => {
             const actor = {

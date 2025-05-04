@@ -175,7 +175,7 @@ export function buildHitResult(targets, roll) {
 /**
  * @param {Object} actor
  * @param {Object} item
- * @returns {{attr: (number), skill: number}} Associated attribute level and Skill level
+ * @returns {{attr: number, skill: number}} Associated attribute level and Skill level
  */
 export function getAttackValues(actor, item) {
     const isSteamjack = actor.type === "steamjack";
@@ -200,7 +200,7 @@ export function getAttackValues(actor, item) {
             ?? 0;
         return { attr: attrValue, skill: skill.level || 0 };
     } else if (isSpell){
-        return { attr: actor.system.secondaryAttributes.ARC, skill: 0 };
+        return { attr: actor.system.secondaryAttributes.ARC ?? 0, skill: 0 };
     }
 
     console.warn("No character type configured for -> " + actor.type);
