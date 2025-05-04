@@ -19,7 +19,10 @@
   ],
   "actorTypes": ["character", "npc", "steamjack"],
   "styles": ["styles/ikrpg.css"],
-  "languages": [],
+  "languages": [
+    { "lang": "en",    "name": "English",           "path": "lang/en.json"    },
+    { "lang": "pt-BR", "name": "Português (Brasil)", "path": "lang/pt-BR.json" }
+  ],
   "packs": [],
   "compatibility": {
     "minimum": "12.0",

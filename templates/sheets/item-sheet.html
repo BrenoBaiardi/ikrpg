@@ -5,12 +5,12 @@
 
     <section class="sheet-body" style="padding: 0.5rem;">
         <div class="form-group">
-            <label>Tipo</label>
+            <label>{{t "IKRPG.Table.Header.Type"}}</label>
             <input type="text" value="{{item.type}}" disabled/>
         </div>
 
         <div>
-            <label>Tags (comma-separated):</label>
+            <label>{{t "IKRPG.Sheet.Item.Tags"}}:</label>
             <input type="text" name="system.tags" value="{{tagsToString system.tags}}"/>
         </div>
 
@@ -45,26 +45,26 @@
             </select>
         </div>
         <div class="form-group">
-            <label>Mod. de Ataque</label>
+            <label>{{t "IKRPG.Table.Header.AttackMod"}}</label>
             <input type="number" name="system.attackMod" value="{{system.attackMod}}"/>
         </div>
         <div class="form-group">
-            <label>POW</label>
+            <label>{{t "IKRPG.Table.Header.POW"}}</label>
             <input type="number" name="system.pow" value="{{system.pow}}"/>
         </div>
         {{/if}}
 
         {{#if (eq item.type "rangedWeapon")}}
         <div class="form-group">
-            <label>Munição</label>
+            <label>{{t "IKRPG.Table.Header.Ammo"}}</label>
             <input type="text" name="system.ammo" value="{{system.ammo}}"/>
         </div>
         <div class="form-group">
-            <label>Alcance Eficaz</label>
+            <label>{{t "IKRPG.Table.Header.EffectiveRange"}}</label>
             <input type="text" name="system.effectiveRange" value="{{system.effectiveRange}}"/>
         </div>
         <div class="form-group">
-            <label>Alcance Máximo</label>
+            <label>{{t "IKRPG.Table.Header.ExtremeRange"}}</label>
             <input type="text" name="system.extremeRange" value="{{system.extremeRange}}"/>
         </div>
         <div class="form-group">
@@ -111,16 +111,16 @@
 
         {{#if (eq item.type "armor")}}
         <div class="form-group">
-            <label>Armor</label>
+            <label>{{t "IKRPG.Sheet.Item.Armor"}}</label>
             <input type="number" name="system.armorBonus" value="{{system.armorBonus}}"
                    style="width: 4ch; text-align: center;"/>
         </div>
         <div>
-            <label>Equipada:</label>
+            <label>{{t "IKRPG.Table.Header.Equipped"}}:</label>
             <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}}/>
         </div>
         <div class="form-group">
-            <label>Penalidade de Armadura:</label>
+            <label>{{t "IKRPG.Sheet.Item.DefPenalty"}}:</label>
             <input type="number"
                    name="system.defPenalty"
                    value="{{item.system.defPenalty}}"
@@ -128,7 +128,7 @@
                    style="width: 4ch; text-align: center;"/>
         </div>
         <div class="form-group">
-            <label>Penalidade de Movimento:</label>
+            <label>{{t "IKRPG.Sheet.Item.SpdPenalty"}}:</label>
             <input type="number"
                    name="system.spdPenalty"
                    value="{{item.system.spdPenalty}}"
@@ -139,33 +139,33 @@
 
         {{#if (eq item.type "spell")}}
         <div class="form-group">
-            <label for="system.cost">Custo (COST)</label>
+            <label for="system.cost">{{t "IKRPG.Table.Header.Cost"}}</label>
             <input id="system.cost" name="system.cost" type="number" value="{{system.cost}}"/>
         </div>
         <div class="form-group">
-            <label for="system.rng">Alcance (RNG)</label>
+            <label for="system.rng">{{t "IKRPG.Table.Header.Range"}}</label>
             <input id="system.rng" name="system.rng" type="text" value="{{system.rng}}"/>
         </div>
         <div class="form-group">
-            <label for="system.pow">Poder (POW)</label>
+            <label for="system.pow">{{t "IKRPG.Table.Header.POW"}}</label>
             <input id="system.pow" name="system.pow" type="number" value="{{system.pow}}"/>
         </div>
         <div class="form-group inline-group">
             <input id="system.upkeep" name="system.upkeep" type="checkbox" {{checked system.upkeep}}/>
-            <label for="system.upkeep">Mantém Ativo (UPKEEP)</label>
+            <label for="system.upkeep">{{t "IKRPG.Table.Header.Upkeep"}}</label>
         </div>
         <div class="form-group inline-group">
             <input id="system.offensive" name="system.offensive" type="checkbox" {{checked system.offensive}}/>
-            <label for="system.offensive">Ofensivo (OFFENSIVE)</label>
+            <label for="system.offensive">{{t "IKRPG.Table.Header.Offensive"}}</label>
         </div>
         <div class="form-group">
-            <label for="system.AOE">Área de Efeito (AoE)</label>
+            <label for="system.AOE">{{t "IKRPG.Table.Header.AoE"}}</label>
             <input id="system.AOE" name="system.AOE" type="text" value="{{system.AOE}}"/>
         </div>
         {{/if}}
 
         <div class="form-group">
-            <label>Descrição</label>
+            <label>{{t "IKRPG.Sheet.Item.Description"}}</label>
             <textarea name="system.description">{{system.description}}</textarea>
         </div>
     </section>

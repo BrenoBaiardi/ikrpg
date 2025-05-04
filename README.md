@@ -11,8 +11,7 @@ derived stats according to the IKRPG rules.
 
 ## 🎯 Purpose
 
-This system aims to provide a structured and automated character sheet for use in campaigns set in the Iron Kingdoms
-setting, with a focus on:
+This system aims to provide a structured and automated experience for campaigns set in the Iron Kingdoms setting, with a focus on:
 
 - Clean, functional, and modular character sheets
 - Automatic dice rolls using 2d6 + modifiers
@@ -25,57 +24,73 @@ setting, with a focus on:
 
 ## 🧰 Features
 
-### Character sheets
+### Character Sheets
+- **Main & Secondary Attributes:** STR, AGL, PHY, INT, PER, ARC, PRW, POI, SPD
+- **Derived Attributes:** INIT, WILL, DEF, ARM, HP (auto-calculated for characters)
+- **Rollable Attributes:** click on any attribute name to roll 2d6 + that attribute
+- **Occupational & Military Skills:**
+  - Predefined skill list
+  - Automatic skill rolls: 2d6 + attribute + level
+  - Social skills allow neutral attribute association (using `--`)
 
-- **Main and Secondary Attributes**: STR, AGL, PHY, INT, PER, ARC, PRW, POI, SPD
-- **Derived Attributes**: INIT, WILL, DEF, ARM, HP (auto-calculated for characters)
-- **Rollable Attributes**: Click on any attribute name to roll 2d6 + that attribute
-- **Occupational & Military Skills**:
-    - Predefined skill names
-    - Automatic skill rolls: 2d6 + attribute + level
-    - Social skills allow neutral attribute association (using `--`)
-- **Dynamic Inventory System**:
-    - Separate item types: melee weapons, ranged weapons, armor, and equipment
-    - Dedicated inventory tabs for weapons and general equipment
-    - Weapon entries allow customizable tags (e.g., "fire", "magical", "cutting")
-    - Roll attacks directly from weapon entries using associated skill rolls
-- **Armor Integration**:
-    - Equipped armor modifies DEF, ARM, and MOVE
-    - Auto-calculated penalties and bonuses
-- **HP Management**:
-    - Integrated buttons to easily increase or decrease HP
   <p align="center">
   <img src="./assets/char-sheet-a.png" alt="char-sheet-a" width="45%" />
   <img src="./assets/char-sheet-b.png" alt="char-sheet-b" width="45%" />
   </p>
 
-### Combat
+### Inventory & Combat
+- **Dynamic Inventory:** melee weapons, ranged weapons, armor, equipment tabs
+- Weapon entries allow customizable tags (e.g., "fire", "magical", "slashing")
+- **Weapon Rolls:** tag-driven rolls and attack/damage buttons in chat
+- **Armor Integration:** equipped armor modifies DEF, ARM, and MOVE
 
-- **Automation**:
-    - Initiative integrated into Foundry VTT's combat tracker
-    - Combat rolls sent to chat with hit/miss and damage resolution
   <p align="center">
   <img src="./assets/attack-roll-chat.png" alt="attack-roll" width="20%" />
   <img src="./assets/token-appearance.png" alt="token-appearance" width="20%" />
-  </p>
-- **Steamjack Support**:
-  - Dedicated actor type and sheet
-  - Includes fields like chassis, fuel, cortex (text for now)
-  - Steamjacks do not recalculate derived stats automatically, some jacks have stats not relying on atributes
-  - Chassis selector (Light/Heavy) changes token size in real-time
-- **Token Direction Indicators**:
-  - Tokens display red (front) and blue (rear) directional arrows
-  - Works with square and hex grids
-  - Updates on rotation with automatic angle snapping
+  </p>  
+
+
+
+
+### Steamjack Support
+- Dedicated actor type and sheet
+- Fields: chassis, fuel, cortex, imprint, damage grid, etc.
+- Chassis selector (Light/Heavy) changes token size in real time
+- Tokens display front/rear directional arrows
+- Automated token size according to jack chassis type (light/heavy)
+
+### 🪄 Spell Management
+- Full support for `spell` items with fields: **COST**, **RNG**, **POW**, **UPKEEP**, **OFFENSIVE**, **AoE**, **description**
+- 🎲 Spell-roll button rolls `2d6 + POW` in chat, tagged with spell name
+- “New Spell” button to create and manage spell items
+- Isolated spell-sheet template for editing spells
+
+### 🛡 Optional Fatigue & Focus
+- Toggle **Use Fatigue** and **Use Focus** per character
+- Numeric **value** and **max** fields appear only if enabled
+- Automatic regeneration at start of character’s turn in combat via `Hooks.on("updateCombat")`
+- Chat notification styled as a recovery alert
+
+### ⚙️ Other Improvements
+- **Deletion Confirmation:** dialogs before deleting any item
+- **Scoped CSS:** styles limited to `form.ikrpg.sheet.actor` and `form.ikrpg.sheet.item`
+- **Unit Tests with Jest:** coverage for core logic (attacks, spells, damage, fatigue regen)
+
+---
+
+## 🌐 Localization
+
+- **Supported languages:** pt-BR and en
+- Open to addition of new json files for new languages. (not planned)
 
 ---
 
 ## 🛠 Planned Features
 
-- Ability and Spell management (planned architecture ready)
-- Status and condition tracking (tentative, depending on complexity)
-- Localization (pt-BR and en-US initially, system prepared for further languages)
-- No official compendium creation (due to legal and maintenance concerns)
+- Status and condition tracking
+- Steamjack damage grid. 
+- Advanced ability/spell effects (area, duration, conditions)
+- No official compendium creation (legal/maintenance constraints)
 
 ---
 
@@ -92,5 +107,4 @@ their material.
 
 This project is a work in progress. If you'd like to contribute code, help test, or provide feedback, feel free to fork
 or contact the author.
-
 ---

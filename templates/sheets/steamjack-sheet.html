@@ -3,8 +3,8 @@
 
         <!-- Nome e Imagem -->
         <div class="character-name-container">
-            <label>STEAMJACK
-                <input name="name" type="text" value="{{actor.name}}" placeholder="Steamjack" class="character-name"/>
+            <label>
+                <input name="name" type="text" value="{{actor.name}}" placeholder='{{t "IKRPG.Sheet.Labels.Steamjack"}}' class="character-name"/>
             </label>
         </div>
 
@@ -16,41 +16,42 @@
                         <label class="hp-group">
                             <button type="button" class="hp-minus hp-button">-</button>
                             <label class="hp-label v-align">
-                                HP
+                                {{t "IKRPG.Sheet.Labels.HP"}}
                                 <input type="number" name="system.hp.value" value="{{system.hp.value}}"/>
                             </label>
                             <button type="button" class="hp-plus hp-button">+</button>
                         </label>
                         <label class="hp-label v-align">
-                            Max
+                            {{t "IKRPG.Sheet.Labels.Max"}}
                             <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled/>
                         </label>
                     </div>
                     <div class="chassis-radial">
                         <label>
-                            <strong>Tipo de Chassi:</strong><br/>
+                            <strong>{{t "IKRPG.Sheet.Labels.ChassisType"}}:</strong><br/>
                             <label><input type="radio" name="system.chassisSize" value="light" {{#if (eq
                                           system.chassisSize
-                                "light")}}checked{{/if}}> Leve</label>
+                                "light")}}checked{{/if}}> {{t "IKRPG.Sheet.Labels.Light"}}
+                            </label>
                             <label><input type="radio" name="system.chassisSize" value="heavy" {{#if (eq
                                           system.chassisSize
-                                "heavy")}}checked{{/if}}> Pesado</label>
+                                "heavy")}}checked{{/if}}> {{t "IKRPG.Sheet.Labels.Heavy"}}</label>
                         </label>
                     </div>
                 </div>
 
                 <div class="info-block">
-                    <h2>Informações</h2>
+                    <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>
                     <div>
-                        <div class="info-attribute"><label>Chassi:<input type="text" name="system.chassis"
+                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Chassis"}}:<input type="text" name="system.chassis"
                                                                          value="{{system.chassis}}"/></label></div>
-                        <div class="info-attribute"><label>Cortex:<input type="text" name="system.cortex"
+                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Cortex"}}:<input type="text" name="system.cortex"
                                                                          value="{{system.cortex}}"/></label></div>
-                        <div class="info-attribute"><label>Imprint:<input type="text" name="system.imprint"
+                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Imprint"}}:<input type="text" name="system.imprint"
                                                                           value="{{system.imprint}}"/></label></div>
                         <div class="info-attribute">
-                            <label>Altura:<input type="text" name="system.height" value="{{system.height}}"/></label>
-                            <label>Peso:<input type="text" name="system.weight" value="{{system.weight}}"/></label>
+                            <label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}"/></label>
+                            <label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}"/></label>
                         </div>
                     </div>
                 </div>
@@ -59,11 +60,11 @@
             <table class="item-table">
                 <thead>
                 <tr>
-                    <th class="col-name">Nome</th>
-                    <th>Perícia</th>
-                    <th>Tags</th>
-                    <th class="col-pow">POW</th>
-                    <th class="col-mod">Mod.</th>
+                    <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                    <th>{{t "IKRPG.Table.Header.Skill"}}</th>
+                    <th>{{t "IKRPG.Table.Header.Tags"}}</th>
+                    <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
+                    <th class="col-mod">{{t "IKRPG.Table.Header.Mod"}}</th>
                     <th class="col-item-roll">🎲</th>
                     <th class="col-manage">⚙️</th>
                 </tr>
@@ -98,7 +99,7 @@
                 </tbody>
             </table>
             <div class="add-item">
-                <button class="item-create" data-type="meleeWeapon" title="Nova Arma Melee">➕🗡️
+                <button class="item-create" data-type="meleeWeapon" title='{{t "IKRPG.Button.Add.MeleeWeapon"}}'>➕🗡️
                 </button>
             </div>
 
@@ -106,11 +107,11 @@
             <table class="item-table">
                 <thead>
                 <tr>
-                    <th class="col-name">Nome</th>
-                    <th>Perícia</th>
-                    <th>Tags</th>
-                    <th>Alcance</th>
-                    <th class="col-pow">POW</th>
+                    <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                    <th>{{t "IKRPG.Table.Header.Skill"}}</th>
+                    <th>{{t "IKRPG.Table.Header.Tags"}}</th>
+                    <th>{{t "IKRPG.Table.Header.Range"}}</th>
+                    <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
                     <th class="col-item-roll">🎲</th>
                     <th class="col-manage">⚙️</th>
                 </tr>
@@ -143,7 +144,7 @@
                 </tbody>
             </table>
             <div class="add-item">
-                <button class="item-create" data-type="rangedWeapon" title="Nova Arma Ranged">➕🏹
+                <button class="item-create" data-type="rangedWeapon" title='{{t "IKRPG.Button.Add.RangedWeapon"}}'>➕🏹
                 </button>
             </div>
 
@@ -157,7 +158,7 @@
                 <div class="flexrow">
 
                     <div class="attribute-block">
-                        <h3>Principal</h3>
+                        <h3>{{t "IKRPG.Sheet.Attributes.Main"}}</h3>
                         <div class="grid-2cols">
                             {{#each system.mainAttributes as |value key|}}
                             <div class="attribute">
@@ -171,7 +172,7 @@
                     </div>
 
                     <div class="attribute-block">
-                        <h3>Secundarios</h3>
+                        <h3>{{t "IKRPG.Sheet.Attributes.Secondary"}}</h3>
                         <div class="grid-2cols">
                             {{#each system.secondaryAttributes as |value key|}}
                             <div class="attribute">
@@ -185,7 +186,7 @@
                     </div>
 
                     <div class="attribute-block">
-                        <h3>Derivados</h3>
+                        <h3>{{t "IKRPG.Sheet.Attributes.Derived"}}</h3>
                         <div class="grid-2cols">
                             {{#each system.derivedAttributes as |value key|}}
                             <div class="attribute">

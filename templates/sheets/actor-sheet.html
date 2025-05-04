@@ -2,7 +2,7 @@
     <div class="sheet-container">
 
         <div class="character-name-container">
-            <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
+            <input name="name" type="text" value="{{actor.name}}"  placeholder='{{t "IKRPG.Sheet.Placeholder.Name"}}'
                    class="character-name"/>
         </div>
 
@@ -23,7 +23,7 @@
                         <div class="hp-group">
                             <button type="button" class="hp-minus hp-button">–</button>
                             <label>
-                                HP
+                                {{t "IKRPG.Sheet.Labels.HP"}}
                                 <input
                                         type="number"
                                         name="system.hp.value"
@@ -36,7 +36,7 @@
                         <!-- Max HP -->
                         <div class="hp-max">
                             <label>
-                                Max
+                                {{t "IKRPG.Sheet.Labels.Max"}}
                                 <input
                                         type="number"
                                         name="system.hp.max"
@@ -52,7 +52,7 @@
                     <div class="fatigue-row">
                         <div class="fatigue-value">
                             <label>
-                                Fadiga
+                                {{t "IKRPG.Sheet.Labels.Fatigue"}}
                                 <input
                                         id="system.fatigue.value"
                                         name="system.fatigue.value"
@@ -65,7 +65,7 @@
                         </div>
                         <div class="fatigue-max">
                             <label>
-                                Max
+                                {{t "IKRPG.Sheet.Labels.Max"}}
                                 <input
                                         id="system.fatigue.max"
                                         name="system.fatigue.max"
@@ -83,7 +83,7 @@
                     <div class="fatigue-row">
                         <div class="fatigue-value">
                             <label>
-                                Foco
+                                {{t "IKRPG.Sheet.Labels.Focus"}}
                                 <input
                                         id="system.focus.value"
                                         name="system.focus.value"
@@ -96,7 +96,7 @@
                         </div>
                         <div class="focus-max">
                             <label>
-                                Max
+                                {{t "IKRPG.Sheet.Labels.Max"}}
                                 <input
                                         id="system.focus.max"
                                         name="system.focus.max"
@@ -116,43 +116,45 @@
                             id="system.fatigue.enabled"
                             type="checkbox"
                             name="system.fatigue.enabled"
-                            {{checked system.fatigue.enabled}}
-                    />Weaver</label>
+                            {{checked system.fatigue.enabled}}/>
+                    {{t "IKRPG.Sheet.Labels.Weaver"}}
+                </label>
                 <label for="system.focus.enabled">
                     <input
                             id="system.focus.enabled"
                             type="checkbox"
                             name="system.focus.enabled"
-                            {{checked system.focus.enabled}}
-                    />Focuser</label>
+                            {{checked system.focus.enabled}}/>
+                    {{t "IKRPG.Sheet.Labels.Focuser"}}
+                </label>
             </div>
 
 
             <div class="info-block">
-                <h2>Informações</h2>
+                <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>
                 <div class="flexrow">
-                    <div><label>Jogador:<input type="text" name="system.player" value="{{system.player}}"/></label>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Player"}}:<input type="text" name="system.player" value="{{system.player}}"/></label>
                     </div>
-                    <div><label>Arquetipo:<input type="text" name="system.archetype"
+                    <div><label>{{t "IKRPG.Sheet.Labels.Archetype"}}:<input type="text" name="system.archetype"
                                                  value="{{system.archetype}}"/></label>
                     </div>
-                    <div><label>Raça:<input type="text" name="system.race" value="{{system.race}}"/></label></div>
-                    <div><label>Carreiras:<input type="text" name="system.careers" value="{{system.careers}}"/></label>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Race"}}:<input type="text" name="system.race" value="{{system.race}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Careers"}}:<input type="text" name="system.careers" value="{{system.careers}}"/></label>
                     </div>
                 </div>
                 <div class="flexrow">
-                    <div><label>Altura:<input type="text" name="system.height" value="{{system.height}}"/></label></div>
-                    <div><label>Peso:<input type="text" name="system.weight" value="{{system.weight}}"/></label></div>
-                    <div><label>Sexo:<input type="text" name="system.sex" value="{{system.sex}}"/></label></div>
-                    <div><label>Fé:<input type="text" name="system.faith" value="{{system.faith}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Gender"}}:<input type="text" name="system.sex" value="{{system.sex}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Faith"}}:<input type="text" name="system.faith" value="{{system.faith}}"/></label></div>
                 </div>
             </div>
         </header>
 
         <nav aria-label="inventory-menu" class="sheet-item-tabs tabs" data-group="inventory">
-            <a class="nav-item" data-tab="weapons">Armas</a>
-            <a class="nav-item" data-tab="equipment">Equipamentos</a>
-            <a class="nav-item" data-tab="spells">Feitiços</a>
+            <a class="nav-item" data-tab="weapons">{{t "IKRPG.Sheet.Tab.Weapons"}}</a>
+            <a class="nav-item" data-tab="equipment">{{t "IKRPG.Sheet.Tab.Equipment"}}</a>
+            <a class="nav-item" data-tab="spells">{{t "IKRPG.Sheet.Tab.Spells"}}</a>
 
         </nav>
         <section class="sheet-items tabbed-area card">
@@ -160,11 +162,11 @@
                 <table class="item-table">
                     <thead>
                     <tr>
-                        <th class="col-name">Nome</th>
-                        <th>Perícia</th>
-                        <th>Tags</th>
-                        <th class="col-pow">POW</th>
-                        <th class="col-mod">Mod.</th>
+                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                        <th>{{t "IKRPG.Table.Header.Skill"}}</th>
+                        <th>{{t "IKRPG.Table.Header.Tags"}}</th>
+                        <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
+                        <th class="col-mod">{{t "IKRPG.Table.Header.Mod"}}</th>
                         <th class="col-item-roll">🎲</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
@@ -199,7 +201,7 @@
                     </tbody>
                 </table>
                 <div class="add-item">
-                    <button class="item-create" data-type="meleeWeapon" title="Nova Arma Melee">➕🗡️
+                    <button class="item-create" data-type="meleeWeapon" title='{{t "IKRPG.Button.Add.MeleeWeapon"}}'>➕🗡️
                     </button>
                 </div>
 
@@ -207,11 +209,11 @@
                 <table class="item-table">
                     <thead>
                     <tr>
-                        <th class="col-name">Nome</th>
-                        <th>Perícia</th>
-                        <th>Tags</th>
-                        <th>Alcance</th>
-                        <th class="col-pow">POW</th>
+                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                        <th>{{t "IKRPG.Table.Header.Skill"}}</th>
+                        <th>{{t "IKRPG.Table.Header.Tags"}}</th>
+                        <th>{{t "IKRPG.Table.Header.Range"}}</th>
+                        <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
                         <th class="col-item-roll">🎲</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
@@ -244,7 +246,7 @@
                     </tbody>
                 </table>
                 <div class="add-item">
-                    <button class="item-create" data-type="rangedWeapon" title="Nova Arma Ranged">➕🏹
+                    <button class="item-create" data-type="rangedWeapon" title='{{t "IKRPG.Button.Add.RangedWeapon"}}'>➕🏹
                     </button>
                 </div>
 
@@ -253,11 +255,11 @@
                 <table class="item-table">
                     <thead>
                     <tr>
-                        <th class="col-name">Nome</th>
-                        <th>Equipada</th>
-                        <th>ARM</th>
-                        <th>DEF</th>
-                        <th>SPD</th>
+                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                        <th>{{t "IKRPG.Table.Header.Equipped"}}</th>
+                        <th>{{t "IKRPG.Table.Header.ARM"}}</th>
+                        <th>{{t "IKRPG.Table.Header.DEF"}}</th>
+                        <th>{{t "IKRPG.Table.Header.SPD"}}</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
                     </thead>
@@ -288,13 +290,13 @@
                     </tbody>
                 </table>
                 <div class="add-item">
-                    <button class="item-create" data-type="armor" title="Nova Armadura">➕🛡️
+                    <button class="item-create" data-type="armor" title='{{t "IKRPG.Button.Add.Armor"}}'>➕🛡️
                     </button>
                 </div>
                 <table class="item-table">
                     <thead>
                     <tr>
-                        <th class="col-name">Nome</th>
+                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
                     </thead>
@@ -315,7 +317,7 @@
                     </tbody>
                 </table>
                 <div class="add-item">
-                    <button class="item-create" data-type="equipment" title="Novo Equipamento">➕📦
+                    <button class="item-create" data-type="equipment" title='{{t "IKRPG.Button.Add.Equipment"}}'>➕📦
                     </button>
                 </div>
 
@@ -325,13 +327,13 @@
                     <table class="item-table">
                         <thead>
                         <tr>
-                            <th>Nome</th>
-                            <th>Custo</th>
-                            <th>RNG</th>
-                            <th>POW</th>
-                            <th>Upkeep?</th>
-                            <th>Ofensivo?</th>
-                            <th>AoE</th>
+                            <th>{{t "IKRPG.Table.Header.Name"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Cost"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Range"}}</th>
+                            <th>{{t "IKRPG.Table.Header.POW"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Upkeep"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Offensive"}}</th>
+                            <th>{{t "IKRPG.Table.Header.AoE"}}</th>
                             <th>🎲</th>
                             <th>⚙️</th>
                         </tr>
@@ -362,15 +364,15 @@
                         </tbody>
                     </table>
                     <div class="add-item">
-                        <button class="item-create" data-type="spell" title="Novo Feitiço">➕✨</button>
+                        <button class="item-create" data-type="spell" title='{{t "IKRPG.Button.Add.Spell"}}'>➕✨</button>
                     </div>
                 </section>
             </div>
         </section>
 
         <nav aria-label="primary-menu" class="sheet-primary-tabs tabs" data-group="primary">
-            <a class="nav-item" data-tab="attributes">Atributos</a>
-            <a class="nav-item" data-tab="occupationalSkills">Perícias</a>
+            <a class="nav-item" data-tab="attributes">{{t "IKRPG.Sheet.Tab.Attributes"}}</a>
+            <a class="nav-item" data-tab="occupationalSkills">{{t "IKRPG.Sheet.Tab.Skills"}}</a>
         </nav>
         <section class="sheet-body tabbed-area card">
             <div class="fixed-height-400">
@@ -379,7 +381,7 @@
                     <div class="flexrow">
 
                         <div class="attribute-block">
-                            <h3>Principal</h3>
+                            <h3>{{t "IKRPG.Sheet.Attributes.Main"}}</h3>
                             <div class="grid-2cols">
                                 {{#each system.mainAttributes as |value key|}}
                                 <div class="attribute">
@@ -393,7 +395,7 @@
                         </div>
 
                         <div class="attribute-block">
-                            <h3>Secundarios</h3>
+                            <h3>{{t "IKRPG.Sheet.Attributes.Secondary"}}</h3>
                             <div class="grid-2cols">
                                 {{#each system.secondaryAttributes as |value key|}}
                                 <div class="attribute">
@@ -407,7 +409,7 @@
                         </div>
 
                         <div class="attribute-block">
-                            <h3>Derivados</h3>
+                            <h3>{{t "IKRPG.Sheet.Attributes.Derived"}}</h3>
                             <div class="grid-2cols">
                                 {{#each system.derivedAttributes as |value key|}}
                                 <div class="attribute">
@@ -421,12 +423,12 @@
                         </div>
                         <div class="additional-fields">
                             <div class="additional-field">
-                                <label for="system.featPoints" class="big-label">Feat Points:</label>
+                                <label for="system.featPoints" class="big-label">{{t "IKRPG.Sheet.Label.FeatPoints"}}:</label>
                                 <input type="number" name="system.featPoints" value="{{system.featPoints}}" min="0"
                                        class="big-input"/>
                             </div>
                             <div class="additional-field">
-                                <label for="system.gold" class="big-label">Gold:</label>
+                                <label for="system.gold" class="big-label">{{t "IKRPG.Sheet.Label.Gold"}}:</label>
                                 <input type="number" name="system.gold" value="{{system.gold}}" min="0"
                                        class="big-input"/>
                             </div>
@@ -439,9 +441,9 @@
                         <table class="skills-table">
                             <thead>
                             <tr>
-                                <th class="col-name">Nome</th>
-                                <th class="col-attr">Atributo</th>
-                                <th class="col-lvl">Lvl</th>
+                                <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                                <th class="col-attr">{{t "IKRPG.Table.Header.Attribute"}}</th>
+                                <th class="col-lvl">{{t "IKRPG.Table.Header.Level"}}</th>
                                 <th class="col-skill-roll">🎲</th>
                             </tr>
                             </thead>
@@ -488,9 +490,9 @@
                         <table class="skills-table">
                             <thead>
                             <tr>
-                                <th class="col-name">Nome</th>
-                                <th class="col-attr">Atributo</th>
-                                <th class="col-lvl">Lvl</th>
+                                <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                                <th class="col-attr">{{t "IKRPG.Table.Header.Attribute"}}</th>
+                                <th class="col-lvl">{{t "IKRPG.Table.Header.Level"}}</th>
                                 <th class="col-skill-roll">🎲</th>
                             </tr>
                             </thead>
@@ -533,4 +535,5 @@
             </div>
         </section>
     </div>
+    <label>{{t "IKRPG.Flag.Icon"}}</label>
 </form>
