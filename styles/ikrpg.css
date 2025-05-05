@@ -531,20 +531,23 @@ button.item-create {
 .steamjack-grid {
     display: flex;
     gap: 0.5rem;
+    --cell-size: 32px;
 }
 
-/* cada coluna */
-.column {
+/* Cada coluna não deve expandir seu conteúdo */
+.steamjack-grid .column {
     display: grid;
-    grid-auto-rows: 24px; /* cada célula 24px de altura */
-    gap: 2px;
+    grid-auto-rows: var(--cell-size);
+    gap: 4px;
+    /* Remove qualquer comportamento flex ou width automática */
+    width: auto;
 }
 
 /* célula básica */
 .cell {
     position: relative;
-    width: 24px;
-    height: 24px;
+    width: var(--cell-size);
+    height: var(--cell-size);
     background: #f0f0f0;
     border: 1px solid #999;
     display: flex;
@@ -577,5 +580,39 @@ button.item-create {
 .steamjack-grid.edit-mode .cell {
     background: #fffbe6;
     border-color: #cc0;
+}
+
+.column-height-display {
+    text-align: center;
+    margin-bottom: 0.25rem;
+}
+
+.steamjack-grid .col-height-input {
+    display: inline-block;          /* inline-block respeita largura fixa */
+    width: var(--cell-size) !important;
+    max-width: var(--cell-size) !important;
+    height: var(--cell-size) !important;
+    box-sizing: border-box;
+    padding: 0;                     /* sem padding extra */
+    margin: 0;                      /* sem margem extra */
+    text-align: center;
+    font-size: 0.85rem;
+    background: transparent;
+    border: 1px solid #999;
+}
+
+/* por padrão, escondemos o editor de altura */
+.column-height-editor { display: none; }
+
+/* quando o grid tiver a classe edit-mode, mostramos */
+.steamjack-grid.edit-mode .column-height-editor {
+    display: block;
+}
+
+.steamjack-grid .column-height-editor label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
 }
 
