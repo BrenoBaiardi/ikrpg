@@ -643,6 +643,19 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
 
     getData() {
         const data = super.getData();
+
+        console.log("SISTEAMAAAAA", data)
+        const grid = data.actor.system.damageGrid;
+        if (Array.isArray(grid?.columns)) {
+            grid.columns = grid.columns.map(col => {
+                // Se já tiver o array certo, não mexe
+                if (Array.isArray(col.cells) && col.cells.length === col.height) return col;
+                // Caso contrário preenche com 'hull' intacto
+                const cells = Array.from({length: col.height}, () => ({type: " ", destroyed: false}));
+                return {...col, cells};
+            });
+        }
+
         data.system = this.actor.system;
         data.isSteamjack = this.actor.type === "steamjack";
         data.items = this.actor.items;  // ← ESSENCIAL
@@ -703,6 +716,48 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
                 content: content
             });
         });
+
+        html.find('.edit-grid-toggle').click(ev => {
+            ev.preventDefault();
+            this._editMode = !this._editMode;
+            html.find('.steamjack-grid')
+                .toggleClass('edit-mode', this._editMode);
+        });
+        // cell click handler
+
+        html.find('.steamjack-grid .cell').click(ev => {
+            ev.preventDefault();
+            const cellEl = ev.currentTarget;
+            const col = cellEl.dataset.col;
+            const row = cellEl.dataset.row;
+            const hiddenType = html.find(`input[name="system.damageGrid.columns.${col}.cells.${row}.type"]`);
+            const hiddenDestroyed = html.find(`input[name="system.damageGrid.columns.${col}.cells.${row}.destroyed"]`);
+
+            if (this._editMode) {
+                // cycle through types
+                const types = ['LEFT', 'RIGHT', 'MOVEMENT', 'CORTEX', ' '];
+                const current = hiddenType.val();
+                const next = types[(types.indexOf(current) + 1) % types.length];
+                hiddenType.val(next);
+                cellEl.querySelector('.cell-content').textContent = next.charAt(0);
+            } else {
+                // toggle destroyed
+                const destroyed = hiddenDestroyed.val() === 'true';
+                hiddenDestroyed.val(!destroyed);
+                cellEl.classList.toggle('destroyed', !destroyed);
+            }
+        });
+    }
+
+    /** @override */
+    async _updateObject(event, formData) {
+        // Converte "true"/"false" das células para boolean
+        for (const key of Object.keys(formData)) {
+            if (key.match(/^system\.damageGrid\.columns\.\d+\.cells\.\d+\.destroyed$/)) {
+                formData[key] = formData[key] === "true";
+            }
+        }
+        return super._updateObject(event, formData);
     }
 }
 

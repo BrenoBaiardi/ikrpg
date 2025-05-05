@@ -525,4 +525,57 @@ button.item-create {
     font-size: 1rem;
 }
 
+/*Damage grid*/
+
+/* grid container */
+.steamjack-grid {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* cada coluna */
+.column {
+    display: grid;
+    grid-auto-rows: 24px; /* cada célula 24px de altura */
+    gap: 2px;
+}
+
+/* célula básica */
+.cell {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    background: #f0f0f0;
+    border: 1px solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* conteúdo da célula (a inicial do tipo) */
+.cell-content {
+    font-size: 0.8rem;
+    user-select: none;
+}
+
+/* destruição: sobrepõe um X */
+.cell.destroyed::after {
+    content: "✕";
+    color: #c33;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+/* estilo extra em modo de edição */
+.steamjack-grid.edit-mode .cell {
+    background: #fffbe6;
+    border-color: #cc0;
+}
 

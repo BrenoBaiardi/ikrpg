@@ -202,4 +202,35 @@
             </div>
         </section>
     </div>
+
+
+    <button type="button" class="edit-grid-toggle">Edit Grid</button>
+    <!-- Damage Grid -->
+    <div class="steamjack-grid">
+        {{#each system.damageGrid.columns as |col colIndex|}}
+        <div class="column" data-col="{{colIndex}}">
+            {{#each col.cells as |cell rowIndex|}}
+            <div
+                    class="cell {{#if cell.destroyed}}destroyed{{/if}}"
+                    data-col="{{colIndex}}"
+                    data-row="{{rowIndex}}"
+            >
+                <span class="cell-content">{{cell.type.[0]}}</span>
+            </div>
+            <!-- hidden fields for form submission -->
+            <input
+                    type="hidden"
+                    name="system.damageGrid.columns.{{colIndex}}.cells.{{rowIndex}}.type"
+                    value="{{cell.type}}"
+            />
+            <input
+                    type="hidden"
+                    name="system.damageGrid.columns.{{colIndex}}.cells.{{rowIndex}}.destroyed"
+                    value="{{cell.destroyed}}"
+            />
+            {{/each}}
+        </div>
+        {{/each}}
+    </div>
+
 </form>

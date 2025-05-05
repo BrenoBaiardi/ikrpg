@@ -77,5 +77,9 @@
   "IKRPG.Sheet.Label.Gold": "Ouro",
   "IKRPG.Sheet.Attributes.Main": "Principal",
   "IKRPG.Sheet.Attributes.Secondary": "Secundários",
-  "IKRPG.Sheet.Attributes.Derived": "Derivados"
+  "IKRPG.Sheet.Attributes.Derived": "Derivados",
+  "IKRPG.Sheet.Damage.Hull": "Casco",
+  "IKRPG.Sheet.Damage.Cortex": "Cortex",
+  "IKRPG.Sheet.Damage.Movement": "Movement",
+  "IKRPG.Sheet.Damage.Destroyed": "Destruído"
 }
