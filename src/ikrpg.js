@@ -7,6 +7,7 @@ import {
     regenerateFatigue
 } from "./logic.js";
 
+const DEFAULT_GRID_HEIGHT = 8;
 
 // ================================
 // 📦 CONFIGURAÇÃO DO SISTEMA
@@ -630,6 +631,8 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
 }
 
 class IKRPGSteamjackSheet extends IKRPGBaseSheet {
+
+
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             classes: ["ikrpg", "sheet", "steamjack"],
@@ -644,7 +647,6 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
     getData() {
         const data = super.getData();
 
-        console.log("SISTEAMAAAAA", data)
         const grid = data.actor.system.damageGrid;
         if (Array.isArray(grid?.columns)) {
             grid.columns = grid.columns.map(col => {
@@ -717,13 +719,18 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
             });
         });
 
-        html.find('.edit-grid-toggle').click(ev => {
+        html.find('.edit-grid-toggle').click(async ev => {
             ev.preventDefault();
-            this._editMode = !this._editMode;
-            html.find('.steamjack-grid')
-                .toggleClass('edit-mode', this._editMode);
+
+            const wasEditing = this._editMode;
+            this._toggleEditMode(html);
+
+            // Se está saindo do modo de edição, coleta e salva TUDO
+            if (wasEditing && !this._editMode) {
+                const grid = this._collectGridData(html);
+                await this._saveGrid(grid);
+            }
         });
-        // cell click handler
 
         html.find('.steamjack-grid .cell').click(ev => {
             ev.preventDefault();
@@ -734,19 +741,59 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
             const hiddenDestroyed = html.find(`input[name="system.damageGrid.columns.${col}.cells.${row}.destroyed"]`);
 
             if (this._editMode) {
-                // cycle through types
                 const types = ['LEFT', 'RIGHT', 'MOVEMENT', 'CORTEX', ' '];
                 const current = hiddenType.val();
                 const next = types[(types.indexOf(current) + 1) % types.length];
                 hiddenType.val(next);
                 cellEl.querySelector('.cell-content').textContent = next.charAt(0);
             } else {
-                // toggle destroyed
                 const destroyed = hiddenDestroyed.val() === 'true';
                 hiddenDestroyed.val(!destroyed);
                 cellEl.classList.toggle('destroyed', !destroyed);
             }
         });
+    }
+
+
+    /**
+     * Inverte o modo de edição e aplica/remover a classe no DOM.
+     */
+    _toggleEditMode(html) {
+        this._editMode = !this._editMode;
+        html.find('.steamjack-grid').toggleClass('edit-mode', this._editMode);
+    }
+
+    /**
+     * Lê o DOM e monta o objeto completo do damageGrid.
+     * @param {jQuery} html A raiz da ficha
+     * @returns {{ columns: Array<{height:number, cells:Array<{type:string, destroyed:boolean}>}> }}
+     */
+    _collectGridData(html) {
+        const columns = [];
+        html.find('.steamjack-grid .column').each((_, colEl) => {
+            const $col   = $(colEl);
+            const idx    = Number($col.data('col'));
+            const height = Number($col.find(`.col-height-input`).val()) || DEFAULT_GRID_HEIGHT;
+            const cells  = [];
+
+            $col.find('.cell').each((_, cellEl) => {
+                const $cell      = $(cellEl);
+                const row        = Number($cell.data('row'));
+                const type       = html.find(`input[name="system.damageGrid.columns.${idx}.cells.${row}.type"]`).val();
+                const destroyed  = html.find(`input[name="system.damageGrid.columns.${idx}.cells.${row}.destroyed"]`).is(':checked');
+                cells.push({ type, destroyed });
+            });
+
+            columns.push({ height, cells });
+        });
+        return { columns };
+    }
+
+    /**
+     * Persiste o damageGrid de uma vez só no actor.
+     */
+    async _saveGrid(grid) {
+        await this.actor.update({ 'system.damageGrid': grid });
     }
 
     /** @override */
