@@ -1438,5 +1438,15 @@ describe("damageGrid management", () => {
             // não há cells do tipo "Cortex" → vacuamente true
             expect(areAllCellsOfTypeDestroyed(grid, "Cortex")).toBe(false);
         });
+        test("should be case-insensitive to check for types", () => {
+            const grid = {
+                columns: [
+                    { cells: [ { type: "mOvE",   destroyed: true } ] }
+                ]
+            };
+            expect(areAllCellsOfTypeDestroyed(grid, "move")).toBe(true);
+            expect(areAllCellsOfTypeDestroyed(grid, "MOVE")).toBe(true);
+            expect(areAllCellsOfTypeDestroyed(grid, "MoVe")).toBe(true);
+        });
     });
 });
