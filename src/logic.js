@@ -343,3 +343,15 @@ export function applyDamageToGrid(damageGrid, damageValue, startColumn) {
 
     return damageGrid;
 }
+
+/**
+ * @param {{ columns?: { cells?: { destroyed: boolean }[] }[] }} damageGrid
+ * @returns {boolean}
+ */
+export function isGridDestroyed(damageGrid) {
+    updateDamageGrid(damageGrid);
+    return damageGrid.columns.every(column => {
+        const cells = Array.isArray(column.cells) ? column.cells : [];
+        return cells.every(cell => cell.destroyed === true);
+    });
+}

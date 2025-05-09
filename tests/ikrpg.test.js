@@ -6,7 +6,7 @@ import {
     buildHitResult,
     getAttackValues,
     updateDamageGrid,
-    applyDamageToGrid
+    applyDamageToGrid, isGridDestroyed
 } from "../src/logic.js";
 
 // Simula o objeto global ui
@@ -1124,7 +1124,10 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 3,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{"type": " Blank", "destroyed": true}, {
+                            "type": " Blank",
+                            "destroyed": false
+                        }, {"type": " Blank", "destroyed": false}]
                     },
                     {
                         "height": 2,
@@ -1152,7 +1155,10 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 3,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [{"type": " Blank", "destroyed": true}, {
+                            "type": " Blank",
+                            "destroyed": true
+                        }, {"type": " Blank", "destroyed": true}]
                     },
                     {
                         "height": 2,
@@ -1171,6 +1177,174 @@ describe("damageGrid management", () => {
             const damaged = applyDamageToGrid(startGrid, 2, 2);
             expect(damaged).toEqual(targetGrid);
             expect(startGrid).toEqual(targetGrid);
+        });
+    });
+
+    describe("Status Checks", () => {
+        test("should state grid destroyed if all cells are destroyed=true", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                ]
+            };
+            expect(isGridDestroyed(startGrid)).toEqual(true);
+        });
+
+        test("should not state grid destroyed if any cells are destroyed=false", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                ]
+            };
+            expect(isGridDestroyed(startGrid)).toEqual(false);
+        });
+
+        test("should update column before checking status", () => {
+            const startGrid = {
+                "columns": []
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+
+            expect(isGridDestroyed(startGrid)).toEqual(false); //returns false because all additions will be false for this case
+            expect(startGrid).toEqual(targetGrid); // makes sure it was transformed
+        });
+
+        test("should update column before checking status", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [
+                            {"type": " Blank", "destroyed": true},
+                            {"type": " Blank", "destroyed": false} // ill be removed after method call
+                        ]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": true}]
+                    },
+                ]
+            };
+
+            expect(isGridDestroyed(startGrid)).toEqual(true); //returns true because gridUpdate will remove cell with false
+            expect(startGrid).toEqual(targetGrid); // makes sure it was transformed
         });
     });
 });
