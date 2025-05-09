@@ -22,6 +22,9 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
+const blankDestroyedCell = () => ({type: " Blank", destroyed: true});
+const blankCell = () => ({type: " Blank", destroyed: false});
+
 describe("calculateDamage", () => {
     test("Common damage situation", () => {
         const result = calculateDamage(20, 5, 10);
@@ -461,45 +464,43 @@ describe("getAttackValues", () => {
 
 
 describe("damageGrid management", () => {
+
+
     describe("transformations", () => {
         test("Should have Size set to height when initialized", () => {
             const startGrid = {
                 "columns": [
-                    {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
-                    {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
-                    {"height": 3, "cells": [{"type": " Blank", "destroyed": false}]},
-                    {"height": 1, "cells": [{"type": " Blank", "destroyed": false}]},
+                    {"height": 2, "cells": [blankCell()]},
+                    {"height": 2, "cells": [blankCell()]},
+                    {"height": 3, "cells": [blankCell()]},
+                    {"height": 1, "cells": [blankCell()]},
                 ]
             };
             const targetGrid = {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 3,
-                        "cells": [
-                            {"type": " Blank", "destroyed": false},
-                            {"type": " Blank", "destroyed": false},
-                            {"type": " Blank", "destroyed": false}
-                        ]
+                        "cells": [blankCell(), blankCell(), blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }
                 ]
             };
@@ -514,19 +515,19 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: false}, blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: true}, blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: false}]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": "LEFT", "destroyed": true}]
+                        "cells": [{type: "LEFT", destroyed: true}]
                     },
                 ]
             };
@@ -534,27 +535,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: false}, blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: true}, blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: false}, blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": "LEFT", "destroyed": true}]
+                        "cells": [{type: "LEFT", destroyed: true}]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }
                 ]
             };
@@ -569,7 +570,7 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: false}, blankCell()]
                     },
                     {
                         "height": 0,
@@ -581,7 +582,7 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [{type: "LEFT", destroyed: false}, blankCell()]
                     },
                     {
                         "height": 0,
@@ -589,19 +590,19 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }
                 ]
             };
@@ -626,27 +627,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -662,10 +663,10 @@ describe("damageGrid management", () => {
                     {
                         "height": 2,
                         "cells": [
-                            {"type": "LEFT", "destroyed": false},
-                            {"type": " Blank", "destroyed": false},
-                            {"type": " Blank", "destroyed": false},
-                            {"type": "LEFT", "destroyed": false}
+                            {type: "LEFT", destroyed: false},
+                            blankCell(),
+                            blankCell(),
+                            {type: "LEFT", destroyed: false}
                         ]
                     }
                 ]
@@ -675,29 +676,29 @@ describe("damageGrid management", () => {
                     {
                         "height": 2,
                         "cells": [
-                            {"type": "LEFT", "destroyed": false},
-                            {"type": " Blank", "destroyed": false}
+                            {type: "LEFT", destroyed: false},
+                            blankCell()
                         ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -715,27 +716,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -750,35 +751,35 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -786,27 +787,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -822,8 +823,8 @@ describe("damageGrid management", () => {
                     {
                         "height": 3,
                         "cells": [
-                            {"type": "LEFT", "destroyed": false, "number": 0},
-                            {"type": " Blank", "destroyed": false, "extra": ""},
+                            {type: "LEFT", destroyed: false, "number": 0},
+                            {type: " Blank", destroyed: false, "extra": ""},
                         ]
                     }
                 ]
@@ -833,26 +834,26 @@ describe("damageGrid management", () => {
                     {
                         "height": 3,
                         "cells": [
-                            {"type": "LEFT", "destroyed": false, "number": 0},
-                            {"type": " Blank", "destroyed": false, "extra": ""},
-                            {"type": " Blank", "destroyed": false},
+                            {type: "LEFT", destroyed: false, "number": 0},
+                            {type: " Blank", destroyed: false, "extra": ""},
+                            blankCell(),
                         ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }, {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }, {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }, {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     }, {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -868,27 +869,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -896,27 +897,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankDestroyedCell() , blankCell()]
                     },
                 ]
             };
@@ -930,27 +931,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -958,27 +959,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankDestroyedCell() , blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                 ]
             };
@@ -992,27 +993,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -1020,27 +1021,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                 ]
             };
@@ -1054,27 +1055,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -1082,27 +1083,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -1116,30 +1117,30 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 3,
-                        "cells": [{"type": " Blank", "destroyed": true}, {
-                            "type": " Blank",
-                            "destroyed": false
-                        }, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankDestroyedCell() , {
+                            type: " Blank",
+                            destroyed: false
+                        }, blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -1147,30 +1148,30 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 3,
-                        "cells": [{"type": " Blank", "destroyed": true}, {
-                            "type": " Blank",
-                            "destroyed": true
-                        }, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , {
+                            type: " Blank",
+                            destroyed: true
+                        }, blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell(), blankCell()]
                     },
                 ]
             };
@@ -1186,27 +1187,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                 ]
             };
@@ -1218,27 +1219,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankCell(), blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                     {
                         "height": 2,
-                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
                     },
                 ]
             };
@@ -1253,27 +1254,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": false}]
+                        "cells": [blankCell()]
                     },
                 ]
             };
@@ -1288,29 +1289,29 @@ describe("damageGrid management", () => {
                     {
                         "height": 1,
                         "cells": [
-                            {"type": " Blank", "destroyed": true},
-                            {"type": " Blank", "destroyed": false} // ill be removed after method call
+                            blankDestroyedCell() ,
+                            blankCell() // ill be removed after method call
                         ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                 ]
             };
@@ -1318,27 +1319,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                     {
                         "height": 1,
-                        "cells": [{"type": " Blank", "destroyed": true}]
+                        "cells": [blankDestroyedCell() ]
                     },
                 ]
             };
