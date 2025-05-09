@@ -371,6 +371,64 @@
         "value": 0,
         "max": 0
       },
+      "damageGrid": {
+        "columns": [
+          {
+            "height": 8,
+            "cells": [
+              {
+                "type": " Blank",
+                "destroyed": false
+              }
+            ]
+          },
+          {
+            "height": 8,
+            "cells": [
+              {
+                "type": " Blank",
+                "destroyed": false
+              }
+            ]
+          },
+          {
+            "height": 8,
+            "cells": [
+              {
+                "type": " Blank",
+                "destroyed": false
+              }
+            ]
+          },
+          {
+            "height": 8,
+            "cells": [
+              {
+                "type": " Blank",
+                "destroyed": false
+              }
+            ]
+          },
+          {
+            "height": 8,
+            "cells": [
+              {
+                "type": " Blank",
+                "destroyed": false
+              }
+            ]
+          },
+          {
+            "height": 8,
+            "cells": [
+              {
+                "type": " Blank",
+                "destroyed": false
+              }
+            ]
+          }
+        ]
+      },
       "name": "",
       "chassis": "",
       "cortex": "",
@@ -401,14 +459,6 @@
         "ARM": 0,
         "MAT": 0,
         "RAT": 0
-      },
-      "damageGrid": {
-        "1": false,
-        "2": false,
-        "3": false,
-        "4": false,
-        "5": false,
-        "6": false
       },
       "notes": "",
       "prototypeToken": {

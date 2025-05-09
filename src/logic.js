@@ -254,3 +254,42 @@ export async function handleAttackRoll(event, message) {
         });
     }
 }
+
+// Damage grid operations
+/**
+ * - Tenha a propriedade height (default = 1)
+ * - Tenha a propriedade cells como array
+ * - Tenha exatamente height células, preservando as existentes
+ *   e adicionando novas { type: " Blank", destroyed: false } quando faltarem
+ * @param {{ columns: { height: number, cells: { type: string, destroyed: boolean }[] }[] }} damageGrid
+ * @returns O próprio damageGrid, modificado in-place
+ */
+export function updateDamageGrid(damageGrid) {
+    damageGrid.columns.forEach(column => {
+        // Fixes missing height, default=1
+        if (typeof column.height !== 'number') {
+            column.height = 1;
+        }
+
+        // Adds cell array if missing
+        if (!Array.isArray(column.cells)) {
+            column.cells = [];
+        }
+
+        // Transforms grid
+        const {height, cells} = column;
+        const cellsMissing = height - cells.length;
+        if (cellsMissing > 0) {
+            for (let i = 0; i < cellsMissing; i++) {
+                cells.push({type: " Blank", destroyed: false});
+            }
+        }
+
+        // Truncate exceeding cells
+        if (column.cells.length > column.height) {
+          column.cells.length = column.height;
+        }
+
+    });
+    return damageGrid;
+}
