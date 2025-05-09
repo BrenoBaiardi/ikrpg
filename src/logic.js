@@ -256,57 +256,101 @@ export async function handleAttackRoll(event, message) {
 }
 
 // Damage grid operations
-/**
- * - Tenha a propriedade height (default = 1)
- * - Tenha a propriedade cells como array
- * - Tenha exatamente height células, preservando as existentes
- *   e adicionando novas { type: " Blank", destroyed: false } quando faltarem
- * @param {{ columns: { height: number, cells: { type: string, destroyed: boolean }[] }[] }} damageGrid
- * @returns O próprio damageGrid, modificado in-place
- */
-export function updateDamageGrid(damageGrid) {
+const DEFAULT_HEIGHT = 1;
+const DEFAULT_CELL = { type: " Blank", destroyed: false };
+const REQUIRED_COLUMNS = 6;
 
-    // Ensure column size is 6
-    const cols = damageGrid.columns
-    if (cols.length < 6) {
-        const faltam = 6 - cols.length;
-        for (let i = 0; i < faltam; i++) {
-            cols.push({ height: 1, cells: [{ type: " Blank", destroyed: false }] });
-        }
-    } else if (cols.length > 6) {
-        cols.length = 6;
+function ensureColumnsArray(damageGrid) {
+    if (!Array.isArray(damageGrid.columns)) {
+        damageGrid.columns = [];
     }
-    damageGrid.columns = cols;
-
-    damageGrid.columns.forEach(column => {
-        // Fixes missing height, default=1
-        if (typeof column.height !== 'number') {
-            column.height = 1;
-        }
-
-        // Adds cell array if missing
-        if (!Array.isArray(column.cells)) {
-            column.cells = [];
-        }
-
-        // Transforms grid
-        const {height, cells} = column;
-        const cellsMissing = height - cells.length;
-        if (cellsMissing > 0) {
-            for (let i = 0; i < cellsMissing; i++) {
-                cells.push({type: " Blank", destroyed: false});
-            }
-        }
-
-        // Truncate exceeding cells
-        if (column.cells.length > column.height) {
-          column.cells.length = column.height;
-        }
-
-    });
-    return damageGrid;
 }
 
+/**
+ * Ensures number of column is REQUIRED_COLUMNS
+ *
+ * @param {object} column - cells: { type: string, destroyed: boolean }[]
+ */
+function ensureColumnCount(columns) {
+    if (columns.length < REQUIRED_COLUMNS) {
+        const faltam = REQUIRED_COLUMNS - columns.length;
+        for (let i = 0; i < faltam; i++) {
+            columns.push({ height: DEFAULT_HEIGHT, cells: [ { ...DEFAULT_CELL } ] });
+        }
+    } else if (columns.length > REQUIRED_COLUMNS) {
+        columns.length = REQUIRED_COLUMNS;
+    }
+}
+
+/**
+ * Ensures column height exists.
+ * If missing or invalid, assumed DEFAULT_HEIGHT
+ *
+ * @param {object} column - cells: { type: string, destroyed: boolean }[]
+ */
+function ensureHeight(column) {
+    if (typeof column.height !== 'number') {
+        column.height = DEFAULT_HEIGHT;
+    } else {
+        column.height = Math.max(0, Math.floor(column.height));
+    }
+}
+
+function ensureCellsArray(column) {
+    if (!Array.isArray(column.cells)) {
+        column.cells = [];
+    }
+}
+
+function fillCells(column) {
+    const { height, cells } = column;
+    const faltam = height - cells.length;
+    for (let i = 0; i < faltam; i++) {
+        cells.push({ ...DEFAULT_CELL });
+    }
+}
+
+/**
+ * If height is less than the current cells, exceeding cells are removed
+ * @param column cells: { type: string, destroyed: boolean }[]
+ */
+function truncateCells(column) {
+    if (column.cells.length > column.height) {
+        column.cells.length = column.height;
+    }
+}
+
+/**
+ * Applies normalization to received column:
+ * - Ensures valid height
+ * - Ensures cell array
+ * - Fills or truncate cells according to height
+ *
+ * @param {object} column - cells: { type: string, destroyed: boolean }[]
+ * @returns {object} the same column after transformation
+ */
+function normalizeColumn(column) {
+    ensureHeight(column);
+    ensureCellsArray(column);
+    fillCells(column);
+    truncateCells(column);
+    return column;
+}
+
+/**
+ * Guarantees that damage grid follows these rules:
+ * 1. Ensures grid size format
+ * 2. For each column, updates height
+ *
+ * @param {object} damageGrid - {{ columns: { cells: { type: string, destroyed: boolean }[] }[] }}
+ * @returns {object} the modified in place damageGrid object
+ */
+export function updateDamageGrid(damageGrid) {
+    ensureColumnsArray(damageGrid);
+    ensureColumnCount(damageGrid.columns);
+    damageGrid.columns.forEach(normalizeColumn);
+    return damageGrid;
+}
 /**
  * @param {{ columns: { cells: { destroyed: boolean }[] }[] }} damageGrid
  * @param {number} damageValue
