@@ -306,3 +306,40 @@ export function updateDamageGrid(damageGrid) {
     });
     return damageGrid;
 }
+
+/**
+ * @param {{ columns: { cells: { destroyed: boolean }[] }[] }} damageGrid
+ * @param {number} damageValue
+ * @param {number} [startColumn]
+ * @returns updated damageGrid
+ */
+export function applyDamageToGrid(damageGrid, damageValue, startColumn) {
+    const cols = damageGrid.columns || [];
+    const totalCols = cols.length;
+    let remaining = Math.floor(damageValue);
+    if (totalCols === 0 || remaining <= 0) return damageGrid;
+
+    // determina índice inicial
+    const startIdx = (typeof startColumn === 'number'
+        && startColumn >= 0
+        && startColumn < totalCols)
+        ? startColumn
+        : Math.floor(Math.random() * totalCols);
+
+    let idx = startIdx;
+
+    // faz um laço circular que termina ao completar o ciclo ou zerar remaining
+    do {
+        const col = cols[idx];
+        for (let cell of col.cells) {
+            if (remaining === 0) break;
+            if (!cell.destroyed) {
+                cell.destroyed = true;
+                remaining--;
+            }
+        }
+        idx = (idx + 1) % totalCols;
+    } while (idx !== startIdx && remaining > 0);
+
+    return damageGrid;
+}

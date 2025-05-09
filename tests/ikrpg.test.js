@@ -5,7 +5,8 @@ import {
     findMilitarySkill,
     buildHitResult,
     getAttackValues,
-    updateDamageGrid
+    updateDamageGrid,
+    applyDamageToGrid
 } from "../src/logic.js";
 
 // Simula o objeto global ui
@@ -459,404 +460,717 @@ describe("getAttackValues", () => {
 });
 
 
-describe("Damage grid management", () => {
-    test("Should have Size set to height when initialized", () => {
-        const startGrid = {
-            "columns": [
-                {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
-                {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
-                {"height": 3, "cells": [{"type": " Blank", "destroyed": false}]},
-                {"height": 1, "cells": [{"type": " Blank", "destroyed": false}]},
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 2,
-                    "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 3,
-                    "cells": [
-                        {"type": " Blank", "destroyed": false},
-                        {"type": " Blank", "destroyed": false},
-                        {"type": " Blank", "destroyed": false}
-                    ]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid); // compares results
-        expect(startGrid).toEqual(targetGrid); // grid should be muted instead of copied
-        console.log(initialized);
-    });
+describe("damageGrid management", () => {
+    describe("transformations", () => {
+        test("Should have Size set to height when initialized", () => {
+            const startGrid = {
+                "columns": [
+                    {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
+                    {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
+                    {"height": 3, "cells": [{"type": " Blank", "destroyed": false}]},
+                    {"height": 1, "cells": [{"type": " Blank", "destroyed": false}]},
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 3,
+                        "cells": [
+                            {"type": " Blank", "destroyed": false},
+                            {"type": " Blank", "destroyed": false},
+                            {"type": " Blank", "destroyed": false}
+                        ]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid); // compares results
+            expect(startGrid).toEqual(targetGrid); // grid should be muted instead of copied
 
-    test("Should Keep current cells state when adding new cells", () => {
-        const startGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": "LEFT", "destroyed": true}]
-                },
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": "LEFT", "destroyed": true}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
-    });
+        });
 
-    test("Should have a default behavior for 0 height", () => {
-        const startGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 0,
-                    "cells": []
-                }
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 0,
-                    "cells": []
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
-    });
+        test("Should Keep current cells state when adding new cells", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": "LEFT", "destroyed": true}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": "LEFT", "destroyed": true}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
 
-    test("Should fix inconsistencies in grid", () => {
-        const startGrid = {
-            "columns": [
-                {
-                    "cells": []
-                },
-                {
-                    "height": 2
-                }
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 2,
-                    "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
-    });
+        });
 
-    test("Should truncate exceeding cells to height size", () => {
-        const startGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [
-                        {"type": "LEFT", "destroyed": false},
-                        {"type": " Blank", "destroyed": false},
-                        {"type": " Blank", "destroyed": false},
-                        {"type": "LEFT", "destroyed": false}
-                    ]
-                }
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 2,
-                    "cells": [
-                        {"type": "LEFT", "destroyed": false},
-                        {"type": " Blank", "destroyed": false}
-                    ]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
-    });
+        test("Should have a default behavior for 0 height", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 0,
+                        "cells": []
+                    }
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 0,
+                        "cells": []
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
 
-    test("Should add columns until 6 if missing", () => {
-        const startGrid = {
-            "columns": []
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
-    });
+        });
 
-    test("Should remove columns until 6 if missing", () => {
-        const startGrid = {
-            "columns": [
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
-    });
+        test("Should fix inconsistencies in grid", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "cells": []
+                    },
+                    {
+                        "height": 2
+                    }
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
 
-    test("Should preserve extra properties", () => {
-        const startGrid = {
-            "columns": [
-                {
-                    "height": 3,
-                    "cells": [
-                        {"type": "LEFT", "destroyed": false, "number": 0},
-                        {"type": " Blank", "destroyed": false, "extra": ""},
-                    ]
-                }
-            ]
-        };
-        const targetGrid = {
-            "columns": [
-                {
-                    "height": 3,
-                    "cells": [
-                        {"type": "LEFT", "destroyed": false, "number": 0},
-                        {"type": " Blank", "destroyed": false, "extra": ""},
-                        {"type": " Blank", "destroyed": false},
-                    ]
-                },
-                {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }, {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }, {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }, {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                }, {
-                    "height": 1,
-                    "cells": [{"type": " Blank", "destroyed": false}]
-                },
-            ]
-        };
-        const initialized = updateDamageGrid(startGrid)
-        expect(initialized).toEqual(targetGrid);
-        expect(startGrid).toEqual(targetGrid);
-        console.log(initialized);
+        });
+
+        test("Should truncate exceeding cells to height size", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [
+                            {"type": "LEFT", "destroyed": false},
+                            {"type": " Blank", "destroyed": false},
+                            {"type": " Blank", "destroyed": false},
+                            {"type": "LEFT", "destroyed": false}
+                        ]
+                    }
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [
+                            {"type": "LEFT", "destroyed": false},
+                            {"type": " Blank", "destroyed": false}
+                        ]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+
+        });
+
+        test("Should add columns until 6 if missing", () => {
+            const startGrid = {
+                "columns": []
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+
+        });
+
+        test("Should remove columns until 6 if missing", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+
+        });
+
+        test("Should preserve extra properties", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 3,
+                        "cells": [
+                            {"type": "LEFT", "destroyed": false, "number": 0},
+                            {"type": " Blank", "destroyed": false, "extra": ""},
+                        ]
+                    }
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 3,
+                        "cells": [
+                            {"type": "LEFT", "destroyed": false, "number": 0},
+                            {"type": " Blank", "destroyed": false, "extra": ""},
+                            {"type": " Blank", "destroyed": false},
+                        ]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }, {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }, {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }, {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    }, {
+                        "height": 1,
+                        "cells": [{"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const initialized = updateDamageGrid(startGrid)
+            expect(initialized).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+
+        });
+    });
+    describe("Damage dealing", () => {
+        test("should deal damage increasing columns", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const damaged = applyDamageToGrid(startGrid, 5, 3);
+            expect(damaged).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+        });
+
+        test("should deal damage from column 6 back to 1", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                ]
+            };
+            const damaged = applyDamageToGrid(startGrid, 3, 5);
+            expect(damaged).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+        });
+
+        test("should be able to fill in damage to full", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                ]
+            };
+            const damaged = applyDamageToGrid(startGrid, 12, 5);
+            expect(damaged).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+        });
+
+        test("should skip already damaged cells", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const damaged = applyDamageToGrid(startGrid, 4, 1);
+            expect(damaged).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+        });
+
+        test("should be able to skip one cell keep damaging column", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 3,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const targetGrid = {
+                "columns": [
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 3,
+                        "cells": [{"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}, {"type": " Blank", "destroyed": true}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                    {
+                        "height": 2,
+                        "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                    },
+                ]
+            };
+            const damaged = applyDamageToGrid(startGrid, 2, 2);
+            expect(damaged).toEqual(targetGrid);
+            expect(startGrid).toEqual(targetGrid);
+        });
     });
 });
