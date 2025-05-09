@@ -344,14 +344,43 @@ export function applyDamageToGrid(damageGrid, damageValue, startColumn) {
     return damageGrid;
 }
 
-/**
- * @param {{ columns?: { cells?: { destroyed: boolean }[] }[] }} damageGrid
- * @returns {boolean}
- */
-export function isGridDestroyed(damageGrid) {
-    updateDamageGrid(damageGrid);
+function isAllDestroyed(damageGrid) {
     return damageGrid.columns.every(column => {
         const cells = Array.isArray(column.cells) ? column.cells : [];
         return cells.every(cell => cell.destroyed === true);
     });
+}
+
+/**
+ * @param {{ columns?: { cells?: { destroyed: boolean }[] }[] }} damageGrid
+ * @returns {boolean}
+ */
+export function updateIsGridDestroyed(damageGrid) {
+    updateDamageGrid(damageGrid);
+    return isAllDestroyed(damageGrid);
+}
+
+/**
+ * @param {{ columns: { cells: { type: string, destroyed: boolean }[] }[] }} damageGrid
+ * @param {string} targetType
+ * @returns {boolean}
+ */
+export function areAllCellsOfTypeDestroyed(damageGrid, targetType) {
+    const lower = targetType.toLowerCase();
+
+    //Builds a sub grid to reuse isAllDestroyed method
+    let totalMatched = 0;
+    const filteredGrid = {
+        columns: damageGrid.columns.map(column => {
+            const matched = column.cells.filter(cell => cell.type.toLowerCase() === lower);
+            totalMatched += matched.length;
+            return { cells: matched };
+        })
+    };
+
+    if (totalMatched === 0) {
+        return false;
+    }
+
+    return isAllDestroyed(filteredGrid);
 }

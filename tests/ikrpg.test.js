@@ -6,7 +6,9 @@ import {
     buildHitResult,
     getAttackValues,
     updateDamageGrid,
-    applyDamageToGrid, isGridDestroyed
+    applyDamageToGrid,
+    updateIsGridDestroyed,
+    areAllCellsOfTypeDestroyed
 } from "../src/logic.js";
 
 // Simula o objeto global ui
@@ -22,8 +24,10 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-const blankDestroyedCell = () => ({type: " Blank", destroyed: true});
+const destroyedBlankCell = () => ({type: " Blank", destroyed: true});
 const blankCell = () => ({type: " Blank", destroyed: false});
+const moveCell = () => ({type: "Move", destroyed: false});
+const destroyedMoveCell = () => ({type: "Move", destroyed: true});
 
 describe("calculateDamage", () => {
     test("Common damage situation", () => {
@@ -909,15 +913,15 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankCell()]
+                        "cells": [destroyedBlankCell(), blankCell()]
                     },
                 ]
             };
@@ -959,7 +963,7 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankCell()]
+                        "cells": [destroyedBlankCell(), blankCell()]
                     },
                     {
                         "height": 2,
@@ -979,7 +983,7 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                 ]
             };
@@ -1021,27 +1025,27 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                 ]
             };
@@ -1063,7 +1067,7 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
@@ -1087,15 +1091,15 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
@@ -1125,7 +1129,7 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 3,
-                        "cells": [blankDestroyedCell() , {
+                        "cells": [destroyedBlankCell(), {
                             type: " Blank",
                             destroyed: false
                         }, blankCell()]
@@ -1156,10 +1160,10 @@ describe("damageGrid management", () => {
                     },
                     {
                         "height": 3,
-                        "cells": [blankDestroyedCell() , {
+                        "cells": [destroyedBlankCell(), {
                             type: " Blank",
                             destroyed: true
-                        }, blankDestroyedCell() ]
+                        }, destroyedBlankCell()]
                     },
                     {
                         "height": 2,
@@ -1187,31 +1191,31 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                 ]
             };
-            expect(isGridDestroyed(startGrid)).toEqual(true);
+            expect(updateIsGridDestroyed(startGrid)).toEqual(true);
         });
 
         test("should not state grid destroyed if any cells are destroyed=false", () => {
@@ -1219,31 +1223,31 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 2,
-                        "cells": [blankCell(), blankDestroyedCell() ]
+                        "cells": [blankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                     {
                         "height": 2,
-                        "cells": [blankDestroyedCell() , blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell(), destroyedBlankCell()]
                     },
                 ]
             };
-            expect(isGridDestroyed(startGrid)).toEqual(false);
+            expect(updateIsGridDestroyed(startGrid)).toEqual(false);
         });
 
         test("should update column before checking status", () => {
@@ -1279,7 +1283,7 @@ describe("damageGrid management", () => {
                 ]
             };
 
-            expect(isGridDestroyed(startGrid)).toEqual(false); //returns false because all additions will be false for this case
+            expect(updateIsGridDestroyed(startGrid)).toEqual(false); //returns false because all additions will be false for this case
             expect(startGrid).toEqual(targetGrid); // makes sure it was transformed
         });
 
@@ -1289,29 +1293,29 @@ describe("damageGrid management", () => {
                     {
                         "height": 1,
                         "cells": [
-                            blankDestroyedCell() ,
+                            destroyedBlankCell(),
                             blankCell() // ill be removed after method call
                         ]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                 ]
             };
@@ -1319,33 +1323,120 @@ describe("damageGrid management", () => {
                 "columns": [
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                     {
                         "height": 1,
-                        "cells": [blankDestroyedCell() ]
+                        "cells": [destroyedBlankCell()]
                     },
                 ]
             };
 
-            expect(isGridDestroyed(startGrid)).toEqual(true); //returns true because gridUpdate will remove cell with false
+            expect(updateIsGridDestroyed(startGrid)).toEqual(true); //returns true because gridUpdate will remove cell with false
             expect(startGrid).toEqual(targetGrid); // makes sure it was transformed
+        });
+
+        test("should initialize and return false to grid with empty columns list", () => {
+            const grid = {columns:[]};          // colunas ausentes
+            expect(updateIsGridDestroyed(grid)).toBe(false);
+            // should create 6 default columns
+            expect(Array.isArray(grid.columns)).toBe(true);
+            expect(grid.columns).toHaveLength(6);
+            expect(grid.columns.every(c => c.height === 1 && c.cells.length === 1)).toBe(true);
+        });
+    });
+
+    describe("Crippled Systems", () => {
+
+        test("should state that system is crippled", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [destroyedMoveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [destroyedMoveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [destroyedMoveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [blankCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [blankCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [blankCell()]
+                    },
+                ]
+            };
+
+            expect(areAllCellsOfTypeDestroyed(startGrid, "Move")).toEqual(true);
+        });
+        test("should not state that system is crippled if any cell is found undamaged", () => {
+            const startGrid = {
+                "columns": [
+                    {
+                        "height": 1,
+                        "cells": [destroyedMoveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [destroyedMoveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [destroyedMoveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [moveCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [blankCell()]
+                    },
+                    {
+                        "height": 1,
+                        "cells": [blankCell()]
+                    },
+                ]
+            };
+
+            expect(areAllCellsOfTypeDestroyed(startGrid, "Move")).toEqual(false);
+        });
+        test("should not state crippled when no cells of requested type are present", () => {
+            const grid = {
+                columns: [
+                    { cells: [blankCell(), destroyedBlankCell()] },
+                    { cells: [blankCell()] }
+                ]
+            };
+            // não há cells do tipo "Cortex" → vacuamente true
+            expect(areAllCellsOfTypeDestroyed(grid, "Cortex")).toBe(false);
         });
     });
 });
