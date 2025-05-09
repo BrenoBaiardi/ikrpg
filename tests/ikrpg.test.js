@@ -491,6 +491,14 @@ describe("Damage grid management", () => {
                     "height": 1,
                     "cells": [{"type": " Blank", "destroyed": false}]
                 },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                }
             ]
         };
         const initialized = updateDamageGrid(startGrid)
@@ -538,6 +546,14 @@ describe("Damage grid management", () => {
                     "height": 1,
                     "cells": [{"type": "LEFT", "destroyed": true}]
                 },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                }
             ]
         };
         const initialized = updateDamageGrid(startGrid)
@@ -568,6 +584,22 @@ describe("Damage grid management", () => {
                 {
                     "height": 0,
                     "cells": []
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
                 }
             ]
         };
@@ -597,6 +629,22 @@ describe("Damage grid management", () => {
                 {
                     "height": 2,
                     "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
                 },
             ]
         };
@@ -628,7 +676,27 @@ describe("Damage grid management", () => {
                         {"type": "LEFT", "destroyed": false},
                         {"type": " Blank", "destroyed": false}
                     ]
-                }
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
             ]
         };
         const initialized = updateDamageGrid(startGrid)
@@ -637,12 +705,108 @@ describe("Damage grid management", () => {
         console.log(initialized);
     });
 
-    test("Should not transform empty column", () => {
+    test("Should add columns until 6 if missing", () => {
         const startGrid = {
             "columns": []
         };
         const targetGrid = {
-            "columns": []
+            "columns": [
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
+    });
+
+    test("Should remove columns until 6 if missing", () => {
+        const startGrid = {
+            "columns": [
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+            ]
         };
         const initialized = updateDamageGrid(startGrid)
         expect(initialized).toEqual(targetGrid);
@@ -671,7 +835,23 @@ describe("Damage grid management", () => {
                         {"type": " Blank", "destroyed": false, "extra": ""},
                         {"type": " Blank", "destroyed": false},
                     ]
-                }
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                }, {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                }, {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                }, {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                }, {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
             ]
         };
         const initialized = updateDamageGrid(startGrid)

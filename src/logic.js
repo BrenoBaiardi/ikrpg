@@ -265,6 +265,19 @@ export async function handleAttackRoll(event, message) {
  * @returns O próprio damageGrid, modificado in-place
  */
 export function updateDamageGrid(damageGrid) {
+
+    // Ensure column size is 6
+    const cols = damageGrid.columns
+    if (cols.length < 6) {
+        const faltam = 6 - cols.length;
+        for (let i = 0; i < faltam; i++) {
+            cols.push({ height: 1, cells: [{ type: " Blank", destroyed: false }] });
+        }
+    } else if (cols.length > 6) {
+        cols.length = 6;
+    }
+    damageGrid.columns = cols;
+
     damageGrid.columns.forEach(column => {
         // Fixes missing height, default=1
         if (typeof column.height !== 'number') {
