@@ -74,12 +74,12 @@ export async function handleDamageRoll(event, message) {
             pow: item.system.pow || 0,
             str: actor.system.secondaryAttributes?.STR || 0
         });
-    } else if (item.type === "rangedWeapon"){
+    } else if (item.type === "rangedWeapon") {
         damageRoll = new Roll("2d6 + @pow", {
             pow: item.system.pow || 0,
         });
-    } else if  (item.type === "spell") {
-        console.log("ITAEM",item);
+    } else if (item.type === "spell") {
+        console.log("ITAEM", item);
         damageRoll = new Roll("2d6 + @pow", {
             pow: item.system.pow || 0,
         });
@@ -188,8 +188,8 @@ export function getAttackValues(actor, item) {
 
     if (isSteamjack) {
         const derived = actor.system.derivedAttributes || {};
-        if (isMeleeWeapon) return { attr: derived.MAT ?? 0, skill: 0 };
-        if (isRangedWeapon) return { attr: derived.RAT ?? 0, skill: 0 };
+        if (isMeleeWeapon) return {attr: derived.MAT ?? 0, skill: 0};
+        if (isRangedWeapon) return {attr: derived.RAT ?? 0, skill: 0};
 
         ui.notifications.warn("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT).");
         return {"attr": 0, "skill": 0};
@@ -198,9 +198,9 @@ export function getAttackValues(actor, item) {
         const attrValue = actor.system.mainAttributes?.[skill.attr]
             ?? actor.system.secondaryAttributes?.[skill.attr]
             ?? 0;
-        return { attr: attrValue, skill: skill.level || 0 };
-    } else if (isSpell){
-        return { attr: actor.system.secondaryAttributes.ARC ?? 0, skill: 0 };
+        return {attr: attrValue, skill: skill.level || 0};
+    } else if (isSpell) {
+        return {attr: actor.system.secondaryAttributes.ARC ?? 0, skill: 0};
     }
 
     console.warn("No character type configured for -> " + actor.type);
@@ -257,7 +257,7 @@ export async function handleAttackRoll(event, message) {
 
 // Damage grid operations
 const DEFAULT_HEIGHT = 1;
-const DEFAULT_CELL = { type: " Blank", destroyed: false };
+const DEFAULT_CELL = {type: " Blank", destroyed: false};
 const REQUIRED_COLUMNS = 6;
 
 function ensureColumnsArray(damageGrid) {
@@ -275,7 +275,7 @@ function ensureColumnCount(columns) {
     if (columns.length < REQUIRED_COLUMNS) {
         const faltam = REQUIRED_COLUMNS - columns.length;
         for (let i = 0; i < faltam; i++) {
-            columns.push({ height: DEFAULT_HEIGHT, cells: [ { ...DEFAULT_CELL } ] });
+            columns.push({height: DEFAULT_HEIGHT, cells: [{...DEFAULT_CELL}]});
         }
     } else if (columns.length > REQUIRED_COLUMNS) {
         columns.length = REQUIRED_COLUMNS;
@@ -303,10 +303,10 @@ function ensureCellsArray(column) {
 }
 
 function fillCells(column) {
-    const { height, cells } = column;
+    const {height, cells} = column;
     const faltam = height - cells.length;
     for (let i = 0; i < faltam; i++) {
-        cells.push({ ...DEFAULT_CELL });
+        cells.push({...DEFAULT_CELL});
     }
 }
 
@@ -351,48 +351,116 @@ export function updateDamageGrid(damageGrid) {
     damageGrid.columns.forEach(normalizeColumn);
     return damageGrid;
 }
+
 /**
- * @param {{ columns: { cells: { destroyed: boolean }[] }[] }} damageGrid
+ * Floors and clamps the incoming damage value to a non-negative integer.
+ *
+ * @param {number} damageValue - The raw damage amount.
+ * @returns {number} A non-negative integer representing the damage to apply.
+ */
+function normalizeDamageValue(damageValue) {
+    const val = Math.floor(damageValue);
+    return val > 0 ? val : 0;
+}
+
+/**
+ * Safely retrieves the `columns` array from the grid, defaulting to an empty array.
+ *
+ * @param {{ columns?: any[] }} damageGrid - The grid object.
+ * @returns {any[]} The columns array (never null/undefined).
+ */
+function getColumns(damageGrid) {
+    return Array.isArray(damageGrid.columns) ? damageGrid.columns : [];
+}
+
+/**
+ * Determines a valid starting index for damage distribution.
+ *
+ * @param {number} totalCols - Total number of columns in the grid.
+ * @param {number} [startColumn] - Optional user-specified start index.
+ * @returns {number} An index in [0, totalCols-1].
+ */
+function determineStartIndex(totalCols, startColumn) {
+    if (
+        typeof startColumn === "number" &&
+        Number.isInteger(startColumn) &&
+        startColumn >= 0 &&
+        startColumn < totalCols
+    ) {
+        return startColumn;
+    }
+    return Math.floor(Math.random() * totalCols);
+}
+
+/**
+ * Applies as much damage as possible to one column, marking cells destroyed in order.
+ *
+ * @param {{ cells: { destroyed: boolean }[] }} column - A single damage column.
+ * @param {number} remaining - Damage points remaining to apply.
+ * @returns {number} Updated remaining damage after this column.
+ */
+function applyDamageToColumn(column, remaining) {
+    for (const cell of column.cells) {
+        if (remaining <= 0) break;
+        if (!cell.destroyed) {
+            cell.destroyed = true;
+            remaining--;
+        }
+    }
+    return remaining;
+}
+
+/**
+ * Distributes damage in a circular sweep over all columns,
+ * stopping when either damage is exhausted or a full cycle completes.
+ *
+ * @param {Array<{ cells: { destroyed: boolean }[] }>} columns - The grid's columns.
+ * @param {number} remaining - Initial damage points to distribute.
+ * @param {number} startIdx - Index at which to begin distribution.
+ */
+function distributeDamageCircular(columns, remaining, startIdx) {
+    let idx = startIdx;
+    do {
+        remaining = applyDamageToColumn(columns[idx], remaining);
+        idx = (idx + 1) % columns.length;
+    } while (idx !== startIdx && remaining > 0);
+}
+
+/**
+ * Applies damage to the grid by marking cells as destroyed.
+ *
+ * @param {{ columns: Array<{ cells: { destroyed: boolean }[] }> }} damageGrid
+ *   The damage grid to modify in-place.
  * @param {number} damageValue
+ *   Total damage points to apply.
  * @param {number} [startColumn]
- * @returns updated damageGrid
+ *   Optional column index at which to begin applying damage. Uses random number if not given.
+ * @returns {{ columns: Array }} The updated damageGrid.
  */
 export function applyDamageToGrid(damageGrid, damageValue, startColumn) {
-    const cols = damageGrid.columns || [];
-    const totalCols = cols.length;
-    let remaining = Math.floor(damageValue);
-    if (totalCols === 0 || remaining <= 0) return damageGrid;
-
-    // determina índice inicial
-    const startIdx = (typeof startColumn === 'number'
-        && startColumn >= 0
-        && startColumn < totalCols)
-        ? startColumn
-        : Math.floor(Math.random() * totalCols);
-
-    let idx = startIdx;
-
-    // faz um laço circular que termina ao completar o ciclo ou zerar remaining
-    do {
-        const col = cols[idx];
-        for (let cell of col.cells) {
-            if (remaining === 0) break;
-            if (!cell.destroyed) {
-                cell.destroyed = true;
-                remaining--;
-            }
-        }
-        idx = (idx + 1) % totalCols;
-    } while (idx !== startIdx && remaining > 0);
-
+    const columns = getColumns(damageGrid);
+    const remainingDamage = normalizeDamageValue(damageValue);
+    if (columns.length === 0 || remainingDamage === 0) {
+        return damageGrid;
+    }
+    const startIdx = determineStartIndex(columns.length, startColumn);
+    distributeDamageCircular(columns, remainingDamage, startIdx);
     return damageGrid;
 }
 
-function isAllDestroyed(damageGrid) {
-    return damageGrid.columns.every(column => {
-        const cells = Array.isArray(column.cells) ? column.cells : [];
-        return cells.every(cell => cell.destroyed === true);
-    });
+/**
+ * Checks whether every cell in every column is destroyed.
+ *
+ * @param {{ columns?: Array<{ cells?: { destroyed: boolean }[] }> }} damageGrid
+ *   The grid to inspect.
+ * @returns {boolean} True if all existing cells are marked destroyed, false otherwise.
+ */
+export function isAllDestroyed(damageGrid) {
+    return Array.isArray(damageGrid.columns) &&
+        damageGrid.columns.every(column => {
+            const cells = Array.isArray(column.cells) ? column.cells : [];
+            return cells.every(cell => cell.destroyed === true);
+        });
 }
 
 /**
@@ -418,7 +486,7 @@ export function areAllCellsOfTypeDestroyed(damageGrid, targetType) {
         columns: damageGrid.columns.map(column => {
             const matched = column.cells.filter(cell => cell.type.toLowerCase() === lower);
             totalMatched += matched.length;
-            return { cells: matched };
+            return {cells: matched};
         })
     };
 
