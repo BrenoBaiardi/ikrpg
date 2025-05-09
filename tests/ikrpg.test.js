@@ -1,4 +1,25 @@
-import {calculateDamage, calculateDerivedAttributes, getSnappedRotation, findMilitarySkill, buildHitResult, getAttackValues} from "../src/logic.js";
+import {
+    calculateDamage,
+    calculateDerivedAttributes,
+    getSnappedRotation,
+    findMilitarySkill,
+    buildHitResult,
+    getAttackValues,
+    updateDamageGrid
+} from "../src/logic.js";
+
+// Simula o objeto global ui
+global.ui = {
+    notifications: {
+        warn: jest.fn()
+    }
+};
+
+console.warn = jest.fn();
+
+afterEach(() => {
+    jest.clearAllMocks();
+});
 
 describe("calculateDamage", () => {
     test("Common damage situation", () => {
@@ -190,7 +211,7 @@ describe("buildHitResult", () => {
             }
         ];
 
-        const roll = { total: 12 };
+        const roll = {total: 12};
 
         const result = buildHitResult(targets, roll);
         expect(result).toContain('✅ Hit!');
@@ -211,12 +232,13 @@ describe("buildHitResult", () => {
             }
         ];
 
-        const roll = { total: 12 };
+        const roll = {total: 12};
 
         const result = buildHitResult(targets, roll);
         expect(result).toContain('✅ Hit!');
         expect(result).toContain('Contra Goblin: DEF 12');
     });
+
     it("should display ❌ Miss! When roll is bellow DEF", () => {
         const targets = [
             {
@@ -231,7 +253,7 @@ describe("buildHitResult", () => {
             }
         ];
 
-        const roll = { total: 13 };
+        const roll = {total: 13};
 
         const result = buildHitResult(targets, roll);
         expect(result).toContain('❌ Miss!');
@@ -250,7 +272,7 @@ describe("buildHitResult", () => {
             }
         ];
 
-        const roll = { total: 5 };
+        const roll = {total: 5};
 
         const result = buildHitResult(targets, roll);
         expect(result).toContain('✅ Hit!');
@@ -263,7 +285,7 @@ describe("buildHitResult", () => {
                 name: "Orc",
                 actor: {
                     system: {
-                        derivedAttributes: { DEF: 12 }
+                        derivedAttributes: {DEF: 12}
                     }
                 }
             },
@@ -271,13 +293,13 @@ describe("buildHitResult", () => {
                 name: "Elfo",
                 actor: {
                     system: {
-                        derivedAttributes: { DEF: 14 }
+                        derivedAttributes: {DEF: 14}
                     }
                 }
             }
         ];
 
-        const roll = { total: 13 };
+        const roll = {total: 13};
 
         const result = buildHitResult(targets, roll);
         expect(result.split("<br>").length).toBe(2);
@@ -287,43 +309,30 @@ describe("buildHitResult", () => {
 });
 
 
-// Simula o objeto global ui
-global.ui = {
-    notifications: {
-        warn: jest.fn()
-    }
-};
-
-console.warn = jest.fn();
-
-afterEach(() => {
-    jest.clearAllMocks();
-});
-
 describe("getAttackValues", () => {
     describe("Steamjack", () => {
 
         const steamjackActor = {
             type: "steamjack",
-            system: { derivedAttributes: { RAT: 5, MAT:4 } }
+            system: {derivedAttributes: {RAT: 5, MAT: 4}}
         };
 
         test("should use MAT for meleeWeapon", () => {
-            const item = { type: "meleeWeapon" };
+            const item = {type: "meleeWeapon"};
             const result = getAttackValues(steamjackActor, item);
-            expect(result).toEqual({ attr: steamjackActor.system.derivedAttributes.MAT, skill: 0 });
+            expect(result).toEqual({attr: steamjackActor.system.derivedAttributes.MAT, skill: 0});
         });
 
         test("should use RAT for rangedWeapon", () => {
-            const item = { type: "rangedWeapon" };
+            const item = {type: "rangedWeapon"};
             const result = getAttackValues(steamjackActor, item);
-            expect(result).toEqual({ attr: steamjackActor.system.derivedAttributes.RAT, skill: 0 });
+            expect(result).toEqual({attr: steamjackActor.system.derivedAttributes.RAT, skill: 0});
         });
 
         test("should return 0 and warn about wrong weapon types", () => {
-            const item = { type: "tool" };
+            const item = {type: "tool"};
             const result = getAttackValues(steamjackActor, item);
-            expect(result).toEqual({ attr: 0, skill: 0 });
+            expect(result).toEqual({attr: 0, skill: 0});
             expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("Erro: atributo para rolagem não encontrado (esperado MAT ou RAT)."));
         });
     });
@@ -333,10 +342,10 @@ describe("getAttackValues", () => {
             type: "character",
             system: {
                 militarySkills: {
-                    skill1: { name: "Great Weapon", attr: "PRW", level: 1 },
-                    skill2: { name: "Hand Weapon", attr: "PRW", level: 2 },
-                    skill3: { name: "Pistol", attr: "PRW", level: 2 },
-                    skill4: { name: "mainattr", attr: "PHY", level: 99 }
+                    skill1: {name: "Great Weapon", attr: "PRW", level: 1},
+                    skill2: {name: "Hand Weapon", attr: "PRW", level: 2},
+                    skill3: {name: "Pistol", attr: "PRW", level: 2},
+                    skill4: {name: "mainattr", attr: "PHY", level: 99}
                 },
                 mainAttributes: {PHY: 88},
                 secondaryAttributes: {POI: 4, PRW: 3}
@@ -348,24 +357,24 @@ describe("getAttackValues", () => {
                 type: "character",
                 system: {
                     militarySkills: {
-                        skill1: { name: "Tactics", attr: "INT", level: 2 }
+                        skill1: {name: "Tactics", attr: "INT", level: 2}
                     },
                     mainAttributes: {},
-                    secondaryAttributes: { INT: 4 }
+                    secondaryAttributes: {INT: 4}
                 }
             };
-            const item = { system: { skill: "Tactics" }, type: "meleeWeapon" };
+            const item = {system: {skill: "Tactics"}, type: "meleeWeapon"};
 
             const result = getAttackValues(actor, item);
-            expect(result).toEqual({ attr: 4, skill: 2 });
+            expect(result).toEqual({attr: 4, skill: 2});
         });
 
         test("retorna skill 'undefined' se perícia militar não for encontrada", () => {
 
-            const item = { system: { skill: "Inexistente" }, type: "meleeWeapon" };
+            const item = {system: {skill: "Inexistente"}, type: "meleeWeapon"};
 
             const result = getAttackValues(sampleActor, item);
-            expect(result).toEqual({ attr: 0, skill: 0 });
+            expect(result).toEqual({attr: 0, skill: 0});
             expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("Perícia militar não encontrada -> [Inexistente]."));
         });
     });
@@ -376,24 +385,24 @@ describe("getAttackValues", () => {
             const actor = {
                 type: "character",
                 system: {
-                    secondaryAttributes: { ARC: 5 },
-                    mainAttributes:     { STR: 2 }
+                    secondaryAttributes: {ARC: 5},
+                    mainAttributes: {STR: 2}
                 }
             };
-            const item = { type: "spell" };
+            const item = {type: "spell"};
 
             const result = getAttackValues(actor, item);
-            expect(result).toEqual({ attr: 5, skill: 0 });
+            expect(result).toEqual({attr: 5, skill: 0});
         });
 
         test("should return 0 when trying to run with steamjack", () => {
             const actor = {
                 type: "steamjack",
                 system: {
-                    derivedAttributes: { MAT: 7, RAT: 3 }
+                    derivedAttributes: {MAT: 7, RAT: 3}
                 }
             };
-            const item = { type: "spell" };
+            const item = {type: "spell"};
 
             const result = getAttackValues(actor, item);
 
@@ -402,20 +411,20 @@ describe("getAttackValues", () => {
                 expect.stringMatching(/Erro: atributo para rolagem não encontrado/)
             );
             // AND return zeroes
-            expect(result).toEqual({ attr: 0, skill: 0 });
+            expect(result).toEqual({attr: 0, skill: 0});
         });
 
         test("should return ARC normally even if is NPC", () => {
             const actor = {
                 type: "npc",
                 system: {
-                    secondaryAttributes: { ARC: 2 }
+                    secondaryAttributes: {ARC: 2}
                 }
             };
-            const item = { type: "spell" };
+            const item = {type: "spell"};
 
             const result = getAttackValues(actor, item);
-            expect(result).toEqual({ attr: 2, skill: 0 });
+            expect(result).toEqual({attr: 2, skill: 0});
         });
 
         test("Personagem sem ARC definido retorna skill=0 e attr=undefined→0", () => {
@@ -425,7 +434,7 @@ describe("getAttackValues", () => {
                     secondaryAttributes: {},  // sem ARC
                 }
             };
-            const item = { type: "spell" };
+            const item = {type: "spell"};
 
             const result = getAttackValues(actor, item);
             // ARC indefinido acaba virando undefined, mas no uso prático você pode forçar default 0:
@@ -443,8 +452,231 @@ describe("getAttackValues", () => {
             const item = {};
 
             const result = getAttackValues(actor, item);
-            expect(result).toEqual({ attr: 0, skill: 0 });
+            expect(result).toEqual({attr: 0, skill: 0});
             expect(console.warn).toHaveBeenCalledWith(expect.stringContaining("No character type configured"));
         });
+    });
+});
+
+
+describe("Damage grid management", () => {
+    test("Should have Size set to height when initialized", () => {
+        const startGrid = {
+            "columns": [
+                {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
+                {"height": 2, "cells": [{"type": " Blank", "destroyed": false}]},
+                {"height": 3, "cells": [{"type": " Blank", "destroyed": false}]},
+                {"height": 1, "cells": [{"type": " Blank", "destroyed": false}]},
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 2,
+                    "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 3,
+                    "cells": [
+                        {"type": " Blank", "destroyed": false},
+                        {"type": " Blank", "destroyed": false},
+                        {"type": " Blank", "destroyed": false}
+                    ]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid); // compares results
+        expect(startGrid).toEqual(targetGrid); // grid should be muted instead of copied
+        console.log(initialized);
+    });
+
+    test("Should Keep current cells state when adding new cells", () => {
+        const startGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": "LEFT", "destroyed": true}]
+                },
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": true}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 1,
+                    "cells": [{"type": "LEFT", "destroyed": true}]
+                },
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
+    });
+
+    test("Should have a default behavior for 0 height", () => {
+        const startGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 0,
+                    "cells": []
+                }
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [{"type": "LEFT", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 0,
+                    "cells": []
+                }
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
+    });
+
+    test("Should fix inconsistencies in grid", () => {
+        const startGrid = {
+            "columns": [
+                {
+                    "cells": []
+                },
+                {
+                    "height": 2
+                }
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 1,
+                    "cells": [{"type": " Blank", "destroyed": false}]
+                },
+                {
+                    "height": 2,
+                    "cells": [{"type": " Blank", "destroyed": false}, {"type": " Blank", "destroyed": false}]
+                },
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
+    });
+
+    test("Should truncate exceeding cells to height size", () => {
+        const startGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [
+                        {"type": "LEFT", "destroyed": false},
+                        {"type": " Blank", "destroyed": false},
+                        {"type": " Blank", "destroyed": false},
+                        {"type": "LEFT", "destroyed": false}
+                    ]
+                }
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 2,
+                    "cells": [
+                        {"type": "LEFT", "destroyed": false},
+                        {"type": " Blank", "destroyed": false}
+                    ]
+                }
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
+    });
+
+    test("Should not transform empty column", () => {
+        const startGrid = {
+            "columns": []
+        };
+        const targetGrid = {
+            "columns": []
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
+    });
+
+    test("Should preserve extra properties", () => {
+        const startGrid = {
+            "columns": [
+                {
+                    "height": 3,
+                    "cells": [
+                        {"type": "LEFT", "destroyed": false, "number": 0},
+                        {"type": " Blank", "destroyed": false, "extra": ""},
+                    ]
+                }
+            ]
+        };
+        const targetGrid = {
+            "columns": [
+                {
+                    "height": 3,
+                    "cells": [
+                        {"type": "LEFT", "destroyed": false, "number": 0},
+                        {"type": " Blank", "destroyed": false, "extra": ""},
+                        {"type": " Blank", "destroyed": false},
+                    ]
+                }
+            ]
+        };
+        const initialized = updateDamageGrid(startGrid)
+        expect(initialized).toEqual(targetGrid);
+        expect(startGrid).toEqual(targetGrid);
+        console.log(initialized);
     });
 });
