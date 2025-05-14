@@ -611,7 +611,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             // Identificar alvos
             const targets = Array.from(game.user.targets);
 
-            if (item.system.OFFENSIVE) {
+            if (item.system.offensive) {
                 const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
                 let targetInfo = targets.length > 0
                     ? `<p>🎯 Alvos: ${formattedTargets}</p>`
