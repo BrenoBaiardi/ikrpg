@@ -51,22 +51,26 @@ Hooks.once("init", function () {
         makeDefault: true,
         label: "IKRPG Feitiço"
     });
+});
+
+Hooks.once("ready", () => {
+
     if (game.modules.get("drag-ruler")?.active) {
-        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
+        game.settings.register("drag-ruler", "speedProviders.ikrpg.color.normal", {
             name: 'normal',
             scope: 'world',
             config: false,
             type: Number,
             default: 0x00FF00 // Verde
         });
-        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
+        game.settings.register('drag-ruler', 'speedProviders.ikrpg.color.penalty', {
             name: 'penalty',
             scope: 'world',
             config: false,
             type: Number,
             default: 0xFFB733 // Laranja
         });
-        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
+        game.settings.register('drag-ruler', 'speedProviders.ikrpg.color.prohibited', {
             name: 'prohibited',
             scope: 'world',
             config: false,
@@ -75,10 +79,6 @@ Hooks.once("init", function () {
         });
     }
 
-
-});
-
-Hooks.once("ready", () => {
     CONFIG.Grid.gridDistance = 1;
     CONFIG.token.MovementSpeed = {
         formula: "@attributes.movement.current"
