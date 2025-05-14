@@ -4,7 +4,8 @@ import {
     getSnappedRotation,
     handleDamageRoll,
     handleAttackRoll,
-    regenerateFatigue
+    regenerateFatigue,
+    promptBonus
 } from "./logic.js";
 
 
@@ -399,7 +400,11 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? this.actor.system.derivedAttributes?.[attr]
                 ?? 0;
 
-            const roll = new Roll("2d6 + @mod", {mod: value});
+            const bonus = await promptBonus();
+            let formula = `2d6 + ${value}`;
+            if (bonus) formula += ` + (${bonus})`;
+
+            const roll = new Roll(formula);
             await roll.evaluate({async: true});
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
@@ -418,10 +423,11 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? 0;
             const level = skill.level || 0;
 
-            const roll = new Roll("2d6 + @attr + @lvl", {
-                attr: attrValue,
-                lvl: level
-            });
+            const bonus = await promptBonus();
+            let formula = `2d6 + ${attrValue} + ${level}`;
+            if (bonus) formula += ` + (${bonus})`;
+
+            const roll = new Roll(formula);
 
             await roll.evaluate({async: true});
             roll.toMessage({
@@ -440,7 +446,11 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? 0;
             const level = skill.level || 0;
 
-            const roll = new Roll("2d6 + @attr + @lvl", {attr: attrValue, lvl: level});
+            const bonus = await promptBonus();
+            let formula = `2d6 + ${attrValue} + ${level}`;
+            if (bonus) formula += ` + (${bonus})`;
+
+            const roll = new Roll(formula);
             await roll.evaluate({async: true});
 
             roll.toMessage({
@@ -475,7 +485,6 @@ class IKRPGBaseSheet extends ActorSheet {
                 default: "no"
             }).render(true);
         });
-
     }
 }
 
@@ -624,7 +633,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: content
                 });
             }
-            // todo implement some way to control spell points
+            // TODO implement some way to control spell points
         });
     }
 }

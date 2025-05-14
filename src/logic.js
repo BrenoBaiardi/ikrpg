@@ -68,20 +68,24 @@ export async function handleDamageRoll(event, message) {
         return;
     }
 
+    const bonus = await promptBonus();
     let damageRoll = new Roll("2d6")
     if (item.type === "meleeWeapon") {
-        damageRoll = new Roll("2d6 + @pow + @str", {
+        damageRoll = new Roll("2d6 + @pow + @str + @bonus", {
             pow: item.system.pow || 0,
-            str: actor.system.secondaryAttributes?.STR || 0
+            str: actor.system.secondaryAttributes?.STR || 0,
+            bonus: bonus
         });
     } else if (item.type === "rangedWeapon") {
-        damageRoll = new Roll("2d6 + @pow", {
+        damageRoll = new Roll("2d6 + @pow + @bonus", {
             pow: item.system.pow || 0,
+            bonus: bonus
         });
     } else if (item.type === "spell") {
         console.log("ITAEM", item);
-        damageRoll = new Roll("2d6 + @pow", {
+        damageRoll = new Roll("2d6 + @pow + @bonus", {
             pow: item.system.pow || 0,
+            bonus: bonus
         });
     }
 
@@ -225,17 +229,18 @@ export async function handleAttackRoll(event, message) {
         return;
     }
 
+
     const attackValues = getAttackValues(actor, item);
     let attrValue = attackValues.attr;
     let skillLevel = attackValues.skill;
 
     const attackMod = item.system.attackMod || 0;
 
-    const roll = new Roll("2d6 + @attr + @skill + @atk", {
-        attr: attrValue,
-        skill: skillLevel,
-        atk: attackMod
-    });
+    const bonus = await promptBonus();
+    let formula = `2d6 + ${attrValue} + ${skillLevel} + ${attackMod}`;
+    if (bonus) formula += ` + (${bonus})`;
+
+    const roll = new Roll(formula);
 
     await roll.evaluate({async: true});
     await sendAttackToChat(roll, actor, item);
@@ -495,4 +500,39 @@ export function areAllCellsOfTypeDestroyed(damageGrid, targetType) {
     }
 
     return isAllDestroyed(filteredGrid);
+}
+
+/**
+ * Prompt the user for an extra bonus (number or dice/formula string).
+ * @returns {Promise<string>} The raw bonus string (or empty if none).
+ */
+export function promptBonus() {
+    return new Promise(resolve => {
+        new Dialog({
+            title: "Bonus",
+            content: `
+        <div>
+          <label>Bonus formula (e.g. 1, 2+@mod, 1d6):</label>
+          <input type="text" id="bonus-input" placeholder="0" style="width:100%"/>
+        </div>
+      `,
+            buttons: {
+                ok: {
+                    icon: "<i class='fas fa-check'></i>",
+                    label: "Apply",
+                    callback: html => {
+                        const val = html.find("#bonus-input").val().trim();
+                        resolve(val);
+                    }
+                },
+                cancel: {
+                    icon: "<i class='fas fa-times'></i>",
+                    label: "None",
+                    callback: () => resolve("")
+                }
+            },
+            default: "ok",
+            close: () => resolve("")  // treat closing as “no bonus”
+        }).render(true);
+    });
 }
