@@ -400,9 +400,7 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? this.actor.system.derivedAttributes?.[attr]
                 ?? 0;
 
-            const bonus = await promptBonus();
-            let formula = `2d6 + ${value}`;
-            if (bonus) formula += ` + (${bonus})`;
+            const formula = await promptBonus(`${value}`);
 
             const roll = new Roll(formula);
             await roll.evaluate({async: true});
@@ -423,9 +421,7 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? 0;
             const level = skill.level || 0;
 
-            const bonus = await promptBonus();
-            let formula = `2d6 + ${attrValue} + ${level}`;
-            if (bonus) formula += ` + (${bonus})`;
+            const formula = await promptBonus(`${attrValue} + ${level}`);
 
             const roll = new Roll(formula);
 
@@ -446,9 +442,7 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? 0;
             const level = skill.level || 0;
 
-            const bonus = await promptBonus();
-            let formula = `2d6 + ${attrValue} + ${level}`;
-            if (bonus) formula += ` + (${bonus})`;
+            let formula = await promptBonus(`${attrValue} + ${level}`);
 
             const roll = new Roll(formula);
             await roll.evaluate({async: true});

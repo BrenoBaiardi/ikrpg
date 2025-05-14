@@ -68,26 +68,18 @@ export async function handleDamageRoll(event, message) {
         return;
     }
 
-    const bonus = await promptBonus();
     let damageRoll = new Roll("2d6")
     if (item.type === "meleeWeapon") {
-        damageRoll = new Roll("2d6 + @pow + @str + @bonus", {
-            pow: item.system.pow || 0,
-            str: actor.system.secondaryAttributes?.STR || 0,
-            bonus: bonus
-        });
+        const formula = await promptBonus(`${item.system.pow || 0} + ${actor.system.secondaryAttributes?.STR || 0}`)
+        damageRoll = new Roll(formula);
     } else if (item.type === "rangedWeapon") {
-        damageRoll = new Roll("2d6 + @pow + @bonus", {
-            pow: item.system.pow || 0,
-            bonus: bonus
-        });
+        const formula = await promptBonus(`${item.system.pow || 0}`)
+        damageRoll = new Roll(formula);
     } else if (item.type === "spell") {
-        console.log("ITAEM", item);
-        damageRoll = new Roll("2d6 + @pow + @bonus", {
-            pow: item.system.pow || 0,
-            bonus: bonus
-        });
+        const formula = await promptBonus(`${item.system.pow || 0}`)
+        damageRoll = new Roll(formula);
     }
+
 
 
     await damageRoll.evaluate({async: true});
@@ -236,9 +228,7 @@ export async function handleAttackRoll(event, message) {
 
     const attackMod = item.system.attackMod || 0;
 
-    const bonus = await promptBonus();
-    let formula = `2d6 + ${attrValue} + ${skillLevel} + ${attackMod}`;
-    if (bonus) formula += ` + (${bonus})`;
+    const formula = await promptBonus(`${attrValue} + ${skillLevel} + ${attackMod}`)
 
     const roll = new Roll(formula);
 
@@ -503,36 +493,51 @@ export function areAllCellsOfTypeDestroyed(damageGrid, targetType) {
 }
 
 /**
- * Prompt the user for an extra bonus (number or dice/formula string).
- * @returns {Promise<string>} The raw bonus string (or empty if none).
+ * Prompt the user for a bonus and return the full roll formula.
+ * @param {string} defaultModifiers – e.g. "2+3"
+ * @returns {Promise<string>} A formula like "2d6+2+3" or "3d6kh2+2+3"
  */
-export function promptBonus() {
+export function promptBonus(defaultModifiers) {
     return new Promise(resolve => {
         new Dialog({
-            title: "Bonus",
+            title: "Additional Bonus",
             content: `
         <div>
-          <label>Bonus formula (e.g. 1, 2+@mod, 1d6):</label>
-          <input type="text" id="bonus-input" placeholder="0" style="width:100%"/>
+          <label>Bonus
+            <input
+              type="text"
+              id="mod-input"
+              value=""
+              placeholder="0"
+              style="width:100%;"
+            />
+          </label>
         </div>
       `,
             buttons: {
-                ok: {
-                    icon: "<i class='fas fa-check'></i>",
-                    label: "Apply",
+                roll: {
+                    icon: "<i class='fas fa-dice'></i>",
+                    label: "Roll",
                     callback: html => {
-                        const val = html.find("#bonus-input").val().trim();
-                        resolve(val);
+                        // Read input or fallback to defaultModifiers
+                        const bonus = html.find("#mod-input").val().trim() || 0;
+                        resolve(`2d6+${defaultModifiers}+${bonus}`);
                     }
                 },
-                cancel: {
-                    icon: "<i class='fas fa-times'></i>",
-                    label: "None",
-                    callback: () => resolve("")
+                boost: {
+                    icon: "<i class='fas fa-bolt'></i>",
+                    label: "Boost!",
+                    callback: html => {
+                        const bonus = html.find("#mod-input").val().trim() || 0;
+                        resolve(`3d6kh2+${defaultModifiers}+${bonus}`);
+                    }
                 }
             },
-            default: "ok",
-            close: () => resolve("")  // treat closing as “no bonus”
+            default: "roll",
+            close: () => {
+                // If dialog is closed, use normal roll + defaultModifiers
+                resolve(`2d6+${defaultModifiers}`);
+            }
         }).render(true);
     });
 }
