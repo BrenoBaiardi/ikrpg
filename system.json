@@ -31,5 +31,13 @@
   "url": "https://github.com/BrenoBaiardi/ikrpg",
   "manifest": "https://github.com/BrenoBaiardi/ikrpg/system.json",
   "download": "https://github.com/BrenoBaiardi/ikrpg/releases/tag/v0.1.2/system.zip",
-  "license": "MIT"
+  "license": "MIT",
+  "statusEffects": [
+    {
+      "id": "exhausted",
+      "label": "IKRPG.Status.Exhausted",
+      "icon": "systems/ikrpg/icons/exhausted.svg",
+      "flags": { "core": { "statusId": "exhausted" } }
+    }
+  ]
 }

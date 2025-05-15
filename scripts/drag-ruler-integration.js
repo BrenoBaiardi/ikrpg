@@ -5,17 +5,17 @@ Hooks.once('dragRuler.ready', (SpeedProvider) => {
                 {
                     id: "normal",
                     default: 0x00FF00,
-                    name: "Normal (Base até 2x)"
+                    name: "Normal"
                 },
                 {
                     id: "penalty",
                     default: 0xFFB733,
-                    name: "Atenção (2x a 3x)"
+                    name: "Atenção (Base a 2x)"
                 },
                 {
                     id: "prohibited",
                     default: 0xFF2222,
-                    name: "Perigoso (Acima de 3x)"
+                    name: "Perigoso (Acima de 2x)"
                 }
             ];
         }

@@ -149,6 +149,7 @@ export async function fatigueRoll(actor) {
             speaker: ChatMessage.getSpeaker({actor}),
             content: `❌ ${actor.name} failed, and is now exhausted (rolled ${total}).`
         });
+        applyExhaustedStatus(actor)
     } else {
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor}),
@@ -180,6 +181,24 @@ export async function regenerateFatigue(actor) {
         speaker: ChatMessage.getSpeaker({actor}),
         content
     });
+}
+
+async function applyExhaustedStatus(actor) {
+    // Evita duplicação
+    if ( actor.effects.find(e => e.data.flags.core?.statusId === "exhausted") ) return;
+
+    const statusDef = CONFIG.statusEffects.find(e => e.id === "exhausted");
+    const effectData = {
+        label: statusDef.label,
+        icon: statusDef.icon,
+        origin: actor.uuid,
+        disabled: false,
+        flags: statusDef.flags
+    };
+    await actor.createEmbeddedDocuments("ActiveEffect", [ effectData ]);
+
+    const token = canvas.tokens.placeables.find(t => t.actor.id === actor.id);
+    if (token) token.toggleEffect(statusDef.icon);
 }
 
 export async function clearFocus(actor) {

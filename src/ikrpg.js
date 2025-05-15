@@ -15,6 +15,14 @@ import {
 Hooks.once("init", function () {
     CONFIG.Actor.documentClass = IKRPGActor;
 
+    // Status effects
+    CONFIG.statusEffects.push({
+        id: "exhausted",
+        label: "IKRPG.Status.Exhausted",    // chave de tradução
+        icon: "systems/ikrpg/icons/exhausted.svg",
+        flags: { core: { statusId: "exhausted" } }
+    });
+
     // Register a Handlebars helper for localization
     Handlebars.registerHelper("t", (key) => {
         return game.i18n.localize(key);
