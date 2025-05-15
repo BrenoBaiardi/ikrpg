@@ -8,7 +8,7 @@ Hooks.once('dragRuler.ready', (SpeedProvider) => {
                     name: "Normal (Base até 2x)"
                 },
                 {
-                    id: "run",
+                    id: "penalty",
                     default: 0xFFB733,
                     name: "Atenção (2x a 3x)"
                 },

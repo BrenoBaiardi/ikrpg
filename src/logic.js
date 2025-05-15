@@ -70,20 +70,16 @@ export async function handleDamageRoll(event, message) {
 
     let damageRoll = new Roll("2d6")
     if (item.type === "meleeWeapon") {
-        damageRoll = new Roll("2d6 + @pow + @str", {
-            pow: item.system.pow || 0,
-            str: actor.system.secondaryAttributes?.STR || 0
-        });
+        const formula = await promptBonus(`${item.system.pow || 0} + ${actor.system.secondaryAttributes?.STR || 0}`)
+        damageRoll = new Roll(formula);
     } else if (item.type === "rangedWeapon") {
-        damageRoll = new Roll("2d6 + @pow", {
-            pow: item.system.pow || 0,
-        });
+        const formula = await promptBonus(`${item.system.pow || 0}`)
+        damageRoll = new Roll(formula);
     } else if (item.type === "spell") {
-        console.log("ITAEM", item);
-        damageRoll = new Roll("2d6 + @pow", {
-            pow: item.system.pow || 0,
-        });
+        const formula = await promptBonus(`${item.system.pow || 0}`)
+        damageRoll = new Roll(formula);
     }
+
 
 
     await damageRoll.evaluate({async: true});
@@ -225,17 +221,16 @@ export async function handleAttackRoll(event, message) {
         return;
     }
 
+
     const attackValues = getAttackValues(actor, item);
     let attrValue = attackValues.attr;
     let skillLevel = attackValues.skill;
 
     const attackMod = item.system.attackMod || 0;
 
-    const roll = new Roll("2d6 + @attr + @skill + @atk", {
-        attr: attrValue,
-        skill: skillLevel,
-        atk: attackMod
-    });
+    const formula = await promptBonus(`${attrValue} + ${skillLevel} + ${attackMod}`)
+
+    const roll = new Roll(formula);
 
     await roll.evaluate({async: true});
     await sendAttackToChat(roll, actor, item);
@@ -495,4 +490,54 @@ export function areAllCellsOfTypeDestroyed(damageGrid, targetType) {
     }
 
     return isAllDestroyed(filteredGrid);
+}
+
+/**
+ * Prompt the user for a bonus and return the full roll formula.
+ * @param {string} defaultModifiers – e.g. "2+3"
+ * @returns {Promise<string>} A formula like "2d6+2+3" or "3d6kh2+2+3"
+ */
+export function promptBonus(defaultModifiers) {
+    return new Promise(resolve => {
+        new Dialog({
+            title: "Additional Bonus",
+            content: `
+        <div>
+          <label>Bonus
+            <input
+              type="text"
+              id="mod-input"
+              value=""
+              placeholder="0"
+              style="width:100%;"
+            />
+          </label>
+        </div>
+      `,
+            buttons: {
+                roll: {
+                    icon: "<i class='fas fa-dice'></i>",
+                    label: "Roll",
+                    callback: html => {
+                        // Read input or fallback to defaultModifiers
+                        const bonus = html.find("#mod-input").val().trim() || 0;
+                        resolve(`2d6+${defaultModifiers}+${bonus}`);
+                    }
+                },
+                boost: {
+                    icon: "<i class='fas fa-bolt'></i>",
+                    label: "Boost!",
+                    callback: html => {
+                        const bonus = html.find("#mod-input").val().trim() || 0;
+                        resolve(`3d6kh2+${defaultModifiers}+${bonus}`);
+                    }
+                }
+            },
+            default: "roll",
+            close: () => {
+                // If dialog is closed, use normal roll + defaultModifiers
+                resolve(`2d6+${defaultModifiers}`);
+            }
+        }).render(true);
+    });
 }

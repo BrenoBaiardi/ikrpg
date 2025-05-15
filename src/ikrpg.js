@@ -4,7 +4,8 @@ import {
     getSnappedRotation,
     handleDamageRoll,
     handleAttackRoll,
-    regenerateFatigue
+    regenerateFatigue,
+    promptBonus
 } from "./logic.js";
 
 
@@ -50,22 +51,26 @@ Hooks.once("init", function () {
         makeDefault: true,
         label: "IKRPG Feitiço"
     });
+});
+
+Hooks.once("ready", () => {
+
     if (game.modules.get("drag-ruler")?.active) {
-        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.normal', {
+        game.settings.register("drag-ruler", "speedProviders.ikrpg.color.normal", {
             name: 'normal',
             scope: 'world',
             config: false,
             type: Number,
             default: 0x00FF00 // Verde
         });
-        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.penalty', {
+        game.settings.register('drag-ruler', 'speedProviders.ikrpg.color.penalty', {
             name: 'penalty',
             scope: 'world',
             config: false,
             type: Number,
             default: 0xFFB733 // Laranja
         });
-        game.settings.register('drag-ruler', 'speedProviders.system.ikrpg.color.prohibited', {
+        game.settings.register('drag-ruler', 'speedProviders.ikrpg.color.prohibited', {
             name: 'prohibited',
             scope: 'world',
             config: false,
@@ -74,10 +79,6 @@ Hooks.once("init", function () {
         });
     }
 
-
-});
-
-Hooks.once("ready", () => {
     CONFIG.Grid.gridDistance = 1;
     CONFIG.token.MovementSpeed = {
         formula: "@attributes.movement.current"
@@ -399,7 +400,9 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? this.actor.system.derivedAttributes?.[attr]
                 ?? 0;
 
-            const roll = new Roll("2d6 + @mod", {mod: value});
+            const formula = await promptBonus(`${value}`);
+
+            const roll = new Roll(formula);
             await roll.evaluate({async: true});
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
@@ -418,10 +421,9 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? 0;
             const level = skill.level || 0;
 
-            const roll = new Roll("2d6 + @attr + @lvl", {
-                attr: attrValue,
-                lvl: level
-            });
+            const formula = await promptBonus(`${attrValue} + ${level}`);
+
+            const roll = new Roll(formula);
 
             await roll.evaluate({async: true});
             roll.toMessage({
@@ -440,7 +442,9 @@ class IKRPGBaseSheet extends ActorSheet {
                 ?? 0;
             const level = skill.level || 0;
 
-            const roll = new Roll("2d6 + @attr + @lvl", {attr: attrValue, lvl: level});
+            let formula = await promptBonus(`${attrValue} + ${level}`);
+
+            const roll = new Roll(formula);
             await roll.evaluate({async: true});
 
             roll.toMessage({
@@ -475,7 +479,6 @@ class IKRPGBaseSheet extends ActorSheet {
                 default: "no"
             }).render(true);
         });
-
     }
 }
 
@@ -602,7 +605,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             // Identificar alvos
             const targets = Array.from(game.user.targets);
 
-            if (item.system.OFFENSIVE) {
+            if (item.system.offensive) {
                 const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
                 let targetInfo = targets.length > 0
                     ? `<p>🎯 Alvos: ${formattedTargets}</p>`
@@ -624,7 +627,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: content
                 });
             }
-            // todo implement some way to control spell points
+            // TODO implement some way to control spell points
         });
     }
 }

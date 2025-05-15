@@ -50,8 +50,6 @@ This system aims to provide a structured and automated experience for campaigns 
   </p>  
 
 
-
-
 ### Steamjack Support
 - Dedicated actor type and sheet
 - Fields: chassis, fuel, cortex, imprint, damage grid, etc.
@@ -101,6 +99,18 @@ All intellectual property related to Iron Kingdoms is owned by its respective ow
 This project is not affiliated with or endorsed by _Privateer Press_ or _Steamforged Games_ and claims no ownership over
 their material.
 
+### *No IP content included*
+This module does **not** include any copyrighted material from the Iron Kingdoms RPG.  
+To use all features of this system, **users must supply their own content** from the official books they legally own.
+
+- No Character classes, archetypes, races and career options.
+- No Spells, abilities, and item data (weapons, armor, equipment)
+- No Creature stats, bestiary entries, and lore descriptions
+- Does not include any artwork, tokens or map assets
+- The frameworks to allow the management of those items will be present, but blank for filling.
+
+This project provides only the rules engine, character-sheet layouts and automation tools.  
+No proprietary text, images or compendium entries are distributed with the module.
 ---
 
 ## 💡 Contributions & Feedback
