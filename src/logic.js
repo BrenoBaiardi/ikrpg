@@ -81,7 +81,6 @@ export async function handleDamageRoll(event, message) {
     }
 
 
-
     await damageRoll.evaluate({async: true});
 
     await damageRoll.toMessage({
@@ -103,6 +102,57 @@ export async function handleDamageRoll(event, message) {
             <h3>Aplicar Dano (${item.name})</h3>
             ${buttons}
         `
+        });
+    }
+}
+
+export async function increaseFatigue(actor, cost) {
+    if (!actor.system.fatigue.enabled) return;
+    const current = actor.system.fatigue.value;
+    const newValue = current + cost;
+    if (newValue > actor.system.fatigue.max) { // if exceeds ARCx2 - fatigue roll
+        console.log("Add message to say it should not be allowed. dont know what to do in this case")
+    } else if (newValue > actor.system.secondaryAttributes.ARC) { // if fatigue exceeds ARC - fatigue roll
+        console.log("Add message to make fatigue roll and become exhausted")
+        fatigueRoll(actor);
+    }
+    await actor.update({"system.fatigue.value": newValue});
+}
+
+/**
+ * Perform a fatigue roll for a Will Weaver. Outputs results to chat
+ * @param {Actor} actor  The actor performing the fatigue roll.
+ */
+export async function fatigueRoll(actor) {
+    if (!actor.system.fatigue.enabled) return;
+
+    const fatigue = actor.system.fatigue.value;
+    if (fatigue <= actor.system.secondaryAttributes.ARC) return;
+
+    // 1) Roll
+    const roll = new Roll("2d6");
+    await roll.evaluate({async: true});
+
+    // 2) Send roll result to chat
+    roll.toMessage({
+        speaker: ChatMessage.getSpeaker({actor}),
+        flavor: `Fatigue Roll (Fatigue = ${fatigue})`
+    });
+
+    const total = roll.total;
+
+    // 3) Check success or exhaustion
+    if (total < fatigue) {
+        // Failed → actor becomes exhausted
+        await actor.update({"system.fatigue.exhausted": true});
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({actor}),
+            content: `❌ ${actor.name} failed, and is now exhausted (rolled ${total}).`
+        });
+    } else {
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({actor}),
+            content: `✅ ${actor.name} resists fatigue (rolled ${total}).`
         });
     }
 }

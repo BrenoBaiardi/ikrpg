@@ -5,7 +5,7 @@ import {
     handleDamageRoll,
     handleAttackRoll,
     regenerateFatigue,
-    promptBonus
+    promptBonus, increaseFatigue
 } from "./logic.js";
 
 
@@ -627,7 +627,14 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: content
                 });
             }
-            // TODO implement some way to control spell points
+
+            if (this.actor.type === "character" && this.actor.system.fatigue.enabled) {
+                ChatMessage.create({
+                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                    content: `<strong>${this.actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
+                });
+                increaseFatigue(this.actor, item.system.cost)
+            }
         });
     }
 }
