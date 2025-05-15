@@ -79,5 +79,6 @@
   "IKRPG.Sheet.Label.Gold": "Gold:",
   "IKRPG.Sheet.Attributes.Main": "Primary",
   "IKRPG.Sheet.Attributes.Secondary": "Secondary",
-  "IKRPG.Sheet.Attributes.Derived": "Derived"
+  "IKRPG.Sheet.Attributes.Derived": "Derived",
+  "IKRPG.Status.Exhausted": "Exhausted"
 }
