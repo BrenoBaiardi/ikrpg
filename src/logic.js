@@ -113,7 +113,6 @@ export async function increaseFatigue(actor, cost) {
     if (newValue > actor.system.fatigue.max) { // if exceeds ARCx2 - fatigue roll
         console.log("Add message to say it should not be allowed. dont know what to do in this case")
     } else if (newValue > actor.system.secondaryAttributes.ARC) { // if fatigue exceeds ARC - fatigue roll
-        console.log("Add message to make fatigue roll and become exhausted")
         fatigueRoll(actor);
     }
     await actor.update({"system.fatigue.value": newValue});
@@ -136,7 +135,7 @@ export async function fatigueRoll(actor) {
     // 2) Send roll result to chat
     roll.toMessage({
         speaker: ChatMessage.getSpeaker({actor}),
-        flavor: `Fatigue Roll (Fatigue = ${fatigue})`
+        flavor: game.i18n.format("IKRPG.Chat.Fatigue.Roll", { fatigue })
     });
 
     const total = roll.total;
@@ -147,13 +146,19 @@ export async function fatigueRoll(actor) {
         await actor.update({"system.fatigue.exhausted": true});
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor}),
-            content: `❌ ${actor.name} failed, and is now exhausted (rolled ${total}).`
+            content: game.i18n.format("IKRPG.Chat.Fatigue.Fail", {
+                name: actor.name,
+                total
+            })
         });
         applyExhaustedStatus(actor)
     } else {
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor}),
-            content: `✅ ${actor.name} resists fatigue (rolled ${total}).`
+            content: game.i18n.format("IKRPG.Chat.Fatigue.Success", {
+                name: actor.name,
+                total
+            })
         });
     }
 }

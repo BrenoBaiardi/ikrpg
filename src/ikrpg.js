@@ -358,7 +358,13 @@ class IKRPGActor extends Actor {
 
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor: this}),
-            content: `🗡️ ${this.name} sofreu <strong>${damageTaken}</strong> de dano (${amount} - ${arm} ARM), restando <strong>${newHP}</strong> HP.`
+            content: game.i18n.format("IKRPG.Chat.Damage.Applied", {
+                name: this.name,
+                damageTaken: damageTaken,
+                damageInput: amount,
+                armUsed: arm,
+                hpAfter: newHP
+            })
         });
 
         return {
