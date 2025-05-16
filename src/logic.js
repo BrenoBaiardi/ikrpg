@@ -118,50 +118,101 @@ export async function increaseFatigue(actor, cost) {
     await actor.update({"system.fatigue.value": newValue});
 }
 
+// fatigue.js
+
+/**
+ * Verifica se é necessário fazer o fatigue roll.
+ * @param {Actor} actor
+ * @returns {boolean}
+ */
+export function shouldRollFatigue(actor) {
+    return actor.system.fatigue.enabled
+        && actor.system.fatigue.value > actor.system.secondaryAttributes.ARC;
+}
+
+/**
+ * Cria e avalia um roll de 2d6.
+ * @returns {Promise<Roll>}
+ */
+export async function performFatigueRoll() {
+    const roll = new Roll("2d6");
+    await roll.evaluate({ async: true });
+    return roll;
+}
+
+/**
+ * Envia o resultado do roll para o chat.
+ * @param {Roll} roll
+ * @param {number} fatigue
+ */
+export function sendFatigueRollToChat(roll, fatigue) {
+    roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: roll.data._actor }), // actor atrelado ao Roll
+        flavor: game.i18n.format("IKRPG.Chat.Fatigue.Roll", { fatigue })
+    });
+}
+
+/**
+ * Determina se o roll falhou (exhaustion).
+ * @param {number} total
+ * @param {number} fatigue
+ * @returns {boolean}
+ */
+export function isExhausted(total, fatigue) {
+    return total < fatigue;
+}
+
+/**
+ * Aplica efeitos e mensagens de falha.
+ * @param {Actor} actor
+ * @param {number} total
+ */
+export async function handleFatigueFailure(actor, total) {
+    await actor.update({ "system.fatigue.exhausted": true });
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: game.i18n.format("IKRPG.Chat.Fatigue.Fail", {
+            name: actor.name,
+            total
+        })
+    });
+    applyExhaustedStatus(actor);
+}
+
+/**
+ * Envia mensagem de sucesso (resistiu).
+ * @param {Actor} actor
+ * @param {number} total
+ */
+export function handleFatigueSuccess(actor, total) {
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: game.i18n.format("IKRPG.Chat.Fatigue.Success", {
+            name: actor.name,
+            total
+        })
+    });
+}
+
 /**
  * Perform a fatigue roll for a Will Weaver. Outputs results to chat
  * @param {Actor} actor  The actor performing the fatigue roll.
  */
 export async function fatigueRoll(actor) {
-    if (!actor.system.fatigue.enabled) return;
+    if (!shouldRollFatigue(actor)) return;
 
     const fatigue = actor.system.fatigue.value;
-    if (fatigue <= actor.system.secondaryAttributes.ARC) return;
-
-    // 1) Roll
-    const roll = new Roll("2d6");
-    await roll.evaluate({async: true});
-
-    // 2) Send roll result to chat
-    roll.toMessage({
-        speaker: ChatMessage.getSpeaker({actor}),
-        flavor: game.i18n.format("IKRPG.Chat.Fatigue.Roll", { fatigue })
-    });
+    const roll    = await performFatigueRoll();
+    sendFatigueRollToChat(roll, fatigue);
 
     const total = roll.total;
-
-    // 3) Check success or exhaustion
-    if (total < fatigue) {
-        // Failed → actor becomes exhausted
-        await actor.update({"system.fatigue.exhausted": true});
-        ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({actor}),
-            content: game.i18n.format("IKRPG.Chat.Fatigue.Fail", {
-                name: actor.name,
-                total
-            })
-        });
-        applyExhaustedStatus(actor)
+    if (isExhausted(total, fatigue)) {
+        await handleFatigueFailure(actor, total);
     } else {
-        ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({actor}),
-            content: game.i18n.format("IKRPG.Chat.Fatigue.Success", {
-                name: actor.name,
-                total
-            })
-        });
+        handleFatigueSuccess(actor, total);
     }
 }
+
 
 export async function regenerateFatigue(actor) {
     if (!actor.system.fatigue.enabled) return;
@@ -188,8 +239,8 @@ export async function regenerateFatigue(actor) {
     });
 }
 
-async function applyExhaustedStatus(actor) {
-    // Evita duplicação
+export async function applyExhaustedStatus(actor) {
+    // Avoids duplication
     if ( actor.effects.find(e => e.data.flags.core?.statusId === "exhausted") ) return;
 
     const statusDef = CONFIG.statusEffects.find(e => e.id === "exhausted");

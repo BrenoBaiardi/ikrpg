@@ -20,7 +20,7 @@ Hooks.once("init", function () {
         id: "exhausted",
         label: "IKRPG.Status.Exhausted",    // chave de tradução
         icon: "systems/ikrpg/icons/exhausted.svg",
-        flags: { core: { statusId: "exhausted" } }
+        flags: {core: {statusId: "exhausted"}}
     });
 
     // Register a Handlebars helper for localization
@@ -253,7 +253,7 @@ Hooks.on("updateCombat", (combat, changed) => {
 
     const actor = combatant.actor;
     if (actor.type === "character" && actor.system.fatigue.enabled) {
-        actor.fatigue = regenerateFatigue(actor);
+        regenerateFatigue(actor);
     }
 
 });
