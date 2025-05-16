@@ -5,7 +5,7 @@ import {
     handleDamageRoll,
     handleAttackRoll,
     regenerateFatigue,
-    promptBonus
+    promptBonus, increaseFatigue
 } from "./logic.js";
 
 
@@ -14,6 +14,14 @@ import {
 // ================================
 Hooks.once("init", function () {
     CONFIG.Actor.documentClass = IKRPGActor;
+
+    // Status effects
+    CONFIG.statusEffects.push({
+        id: "exhausted",
+        label: "IKRPG.Status.Exhausted",    // chave de tradução
+        icon: "systems/ikrpg/icons/exhausted.svg",
+        flags: {core: {statusId: "exhausted"}}
+    });
 
     // Register a Handlebars helper for localization
     Handlebars.registerHelper("t", (key) => {
@@ -245,7 +253,7 @@ Hooks.on("updateCombat", (combat, changed) => {
 
     const actor = combatant.actor;
     if (actor.type === "character" && actor.system.fatigue.enabled) {
-        actor.fatigue = regenerateFatigue(actor);
+        regenerateFatigue(actor);
     }
 
 });
@@ -350,7 +358,13 @@ class IKRPGActor extends Actor {
 
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor: this}),
-            content: `🗡️ ${this.name} sofreu <strong>${damageTaken}</strong> de dano (${amount} - ${arm} ARM), restando <strong>${newHP}</strong> HP.`
+            content: game.i18n.format("IKRPG.Chat.Damage.Applied", {
+                name: this.name,
+                damageTaken: damageTaken,
+                damageInput: amount,
+                armUsed: arm,
+                hpAfter: newHP
+            })
         });
 
         return {
@@ -627,7 +641,14 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: content
                 });
             }
-            // TODO implement some way to control spell points
+
+            if (this.actor.type === "character" && this.actor.system.fatigue.enabled) {
+                ChatMessage.create({
+                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                    content: `<strong>${this.actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
+                });
+                increaseFatigue(this.actor, item.system.cost)
+            }
         });
     }
 }

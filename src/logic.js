@@ -81,7 +81,6 @@ export async function handleDamageRoll(event, message) {
     }
 
 
-
     await damageRoll.evaluate({async: true});
 
     await damageRoll.toMessage({
@@ -107,6 +106,114 @@ export async function handleDamageRoll(event, message) {
     }
 }
 
+export async function increaseFatigue(actor, cost) {
+    if (!actor.system.fatigue.enabled) return;
+    const current = actor.system.fatigue.value;
+    const newValue = current + cost;
+    if (newValue > actor.system.fatigue.max) { // if exceeds ARCx2 - fatigue roll
+        console.log("Add message to say it should not be allowed. dont know what to do in this case")
+    } else if (newValue > actor.system.secondaryAttributes.ARC) { // if fatigue exceeds ARC - fatigue roll
+        fatigueRoll(actor);
+    }
+    await actor.update({"system.fatigue.value": newValue});
+}
+
+// fatigue.js
+
+/**
+ * Verifica se é necessário fazer o fatigue roll.
+ * @param {Actor} actor
+ * @returns {boolean}
+ */
+export function shouldRollFatigue(actor) {
+    return actor.system.fatigue.enabled
+        && actor.system.fatigue.value > actor.system.secondaryAttributes.ARC;
+}
+
+/**
+ * Cria e avalia um roll de 2d6.
+ * @returns {Promise<Roll>}
+ */
+export async function performFatigueRoll() {
+    const roll = new Roll("2d6");
+    await roll.evaluate({ async: true });
+    return roll;
+}
+
+/**
+ * Envia o resultado do roll para o chat.
+ * @param {Roll} roll
+ * @param {number} fatigue
+ */
+export function sendFatigueRollToChat(roll, fatigue) {
+    roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: roll.data._actor }), // actor atrelado ao Roll
+        flavor: game.i18n.format("IKRPG.Chat.Fatigue.Roll", { fatigue })
+    });
+}
+
+/**
+ * Determina se o roll falhou (exhaustion).
+ * @param {number} total
+ * @param {number} fatigue
+ * @returns {boolean}
+ */
+export function isExhausted(total, fatigue) {
+    return total < fatigue;
+}
+
+/**
+ * Aplica efeitos e mensagens de falha.
+ * @param {Actor} actor
+ * @param {number} total
+ */
+export async function handleFatigueFailure(actor, total) {
+    await actor.update({ "system.fatigue.exhausted": true });
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: game.i18n.format("IKRPG.Chat.Fatigue.Fail", {
+            name: actor.name,
+            total
+        })
+    });
+    applyExhaustedStatus(actor);
+}
+
+/**
+ * Envia mensagem de sucesso (resistiu).
+ * @param {Actor} actor
+ * @param {number} total
+ */
+export function handleFatigueSuccess(actor, total) {
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: game.i18n.format("IKRPG.Chat.Fatigue.Success", {
+            name: actor.name,
+            total
+        })
+    });
+}
+
+/**
+ * Perform a fatigue roll for a Will Weaver. Outputs results to chat
+ * @param {Actor} actor  The actor performing the fatigue roll.
+ */
+export async function fatigueRoll(actor) {
+    if (!shouldRollFatigue(actor)) return;
+
+    const fatigue = actor.system.fatigue.value;
+    const roll    = await performFatigueRoll();
+    sendFatigueRollToChat(roll, fatigue);
+
+    const total = roll.total;
+    if (isExhausted(total, fatigue)) {
+        await handleFatigueFailure(actor, total);
+    } else {
+        handleFatigueSuccess(actor, total);
+    }
+}
+
+
 export async function regenerateFatigue(actor) {
     if (!actor.system.fatigue.enabled) return;
     const current = actor.system.fatigue.value;
@@ -130,6 +237,24 @@ export async function regenerateFatigue(actor) {
         speaker: ChatMessage.getSpeaker({actor}),
         content
     });
+}
+
+export async function applyExhaustedStatus(actor) {
+    // Avoids duplication
+    if ( actor.effects.find(e => e.data.flags.core?.statusId === "exhausted") ) return;
+
+    const statusDef = CONFIG.statusEffects.find(e => e.id === "exhausted");
+    const effectData = {
+        label: statusDef.label,
+        icon: statusDef.icon,
+        origin: actor.uuid,
+        disabled: false,
+        flags: statusDef.flags
+    };
+    await actor.createEmbeddedDocuments("ActiveEffect", [ effectData ]);
+
+    const token = canvas.tokens.placeables.find(t => t.actor.id === actor.id);
+    if (token) token.toggleEffect(statusDef.icon);
 }
 
 export async function clearFocus(actor) {

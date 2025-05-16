@@ -103,7 +103,6 @@
                 </button>
             </div>
 
-
             <table class="item-table">
                 <thead>
                 <tr>
@@ -148,6 +147,47 @@
                 </button>
             </div>
 
+            <table class="item-table">
+                <thead>
+                <tr>
+                    <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                    <th>{{t "IKRPG.Table.Header.Equipped"}}</th>
+                    <th>{{t "IKRPG.Table.Header.ARM"}}</th>
+                    <th>{{t "IKRPG.Table.Header.DEF"}}</th>
+                    <th>{{t "IKRPG.Table.Header.SPD"}}</th>
+                    <th class="col-manage">⚙️</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each items as |item|}}
+                {{#if (eq item.type "armor")}}
+                <tr class="item text-center" data-item-id="{{item._id}}">
+                    <td>{{item.name}}</td>
+                    <td>
+                        {{#if item.system.isEquipped}}
+                        ✔️
+                        {{else}}
+                        ⚪
+                        {{/if}}
+                    </td>
+                    <td>{{item.system.armorBonus}}</td>
+                    <td>{{item.system.defPenalty}}</td>
+                    <td>{{item.system.spdPenalty}}</td>
+                    <td class="action-buttons">
+                        <div class="button-group">
+                            <button class="item-edit edit-button">✎</button>
+                            <button class="item-delete trash-button">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+                {{/if}}
+                {{/each}}
+                </tbody>
+            </table>
+            <div class="add-item">
+                <button class="item-create" data-type="armor" title='{{t "IKRPG.Button.Add.Armor"}}'>➕🛡️
+                </button>
+            </div>
         </div>
 
         <!-- Atributos -->

@@ -8,7 +8,10 @@ import {
     updateDamageGrid,
     applyDamageToGrid,
     updateIsGridDestroyed,
-    areAllCellsOfTypeDestroyed
+    areAllCellsOfTypeDestroyed,
+    shouldRollFatigue,
+    applyExhaustedStatus,
+    regenerateFatigue
 } from "../src/logic.js";
 
 // Simula o objeto global ui
@@ -1448,5 +1451,119 @@ describe("damageGrid management", () => {
             expect(areAllCellsOfTypeDestroyed(grid, "MOVE")).toBe(true);
             expect(areAllCellsOfTypeDestroyed(grid, "MoVe")).toBe(true);
         });
+    });
+});
+
+describe("shouldRollFatigue", () => {
+    const makeActor = ({ enabled, value, arc }) => ({
+        system: {
+            fatigue: { enabled, value },
+            secondaryAttributes: { ARC: arc }
+        }
+    });
+
+    test("should return false when fatigue is disabled", () => {
+        const actor = makeActor({ enabled: false, value: 10, arc: 5 });
+        expect(shouldRollFatigue(actor)).toBe(false);
+    });
+
+    test("should return false when fatigue.value is equal to ARC", () => {
+        const actor = makeActor({ enabled: true, value: 5, arc: 5 });
+        expect(shouldRollFatigue(actor)).toBe(false);
+    });
+
+    test("should return false when fatigue.value is less than ARC", () => {
+        const actor = makeActor({ enabled: true, value: 3, arc: 5 });
+        expect(shouldRollFatigue(actor)).toBe(false);
+    });
+
+    test("should return true when fatigue enabled and value exceeds ARC", () => {
+        const actor = makeActor({ enabled: true, value: 7, arc: 5 });
+        expect(shouldRollFatigue(actor)).toBe(true);
+    });
+
+    test("should handle missing fatigue.value gracefully (defaults to 0)", () => {
+        const actor = {
+            system: {
+                fatigue: { enabled: true, value: undefined },
+                secondaryAttributes: { ARC: 0 }
+            }
+        };
+        expect(shouldRollFatigue(actor)).toBe(false);
+    });
+});
+
+describe("applyExhaustedStatus", () => {
+    let actor;
+
+    beforeEach(() => {
+        // Reset global CONFIG and canvas
+        global.CONFIG = {statusEffects: []};
+        global.canvas = { tokens: { placeables: [] } };
+    });
+
+    test("should do nothing if actor already has the exhausted effect", async () => {
+        actor = {
+            id: "actor1",
+            uuid: "Actor.1",
+            effects: [
+                {data: {flags: {core: {statusId: "exhausted"}}}}
+            ],
+            createEmbeddedDocuments: jest.fn()
+        };
+        // Even if we register a statusDef, it should early-return
+        global.CONFIG.statusEffects = [
+            {id: "exhausted", label: "Exhausted", icon: "icon.svg", flags: {core: {statusId: "exhausted"}}}
+        ];
+
+        await applyExhaustedStatus(actor);
+        expect(actor.effects.length).toBe(1);
+        expect(actor.createEmbeddedDocuments).not.toHaveBeenCalled();
+    });
+});
+
+describe("regenerateFatigue", () => {
+    let actor;
+    const originalValue = 5;
+    const arcValue = 2;
+
+    const speakerStub = { alias: "TestSpeaker" };
+
+    beforeAll(() => {
+        // Mock ChatMessage
+        global.ChatMessage = {
+            create: jest.fn(),
+            getSpeaker: jest.fn(() => speakerStub)
+        };
+    });
+
+    beforeEach(() => {
+        actor = {
+            system: {
+                fatigue: { enabled: true, value: originalValue },
+                secondaryAttributes: { ARC: arcValue }
+            },
+            update: jest.fn().mockResolvedValue(true)
+        };
+    });
+
+    test("does nothing if fatigue is disabled", async () => {
+        actor.system.fatigue.enabled = false;
+        await regenerateFatigue(actor);
+        expect(actor.update).not.toHaveBeenCalled();
+    });
+
+    test("never sets negative fatigue when ARC > current", async () => {
+        actor.system.fatigue.value = 1;
+        actor.system.secondaryAttributes.ARC = 5;
+        await regenerateFatigue(actor);
+        expect(actor.update).toHaveBeenCalledWith({ "system.fatigue.value": 0 });
+    });
+
+    test("reduces fatigue by ARC when current > ARC", async () => {
+        actor.system.fatigue.value = 6;
+        actor.system.secondaryAttributes.ARC = 5;
+        await regenerateFatigue(actor);
+        expect(actor.update).toHaveBeenCalledWith({ "system.fatigue.value": 1 });
     });
 });
