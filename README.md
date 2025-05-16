@@ -64,10 +64,15 @@ This system aims to provide a structured and automated experience for campaigns 
 - Isolated spell-sheet template for editing spells
 
 ### 🛡 Optional Fatigue & Focus
-- Toggle **Use Fatigue** and **Use Focus** per character
+- **Toggleable** per character: enable “Fatigue” and/or “Focus” in the header (pending Focus automation)
 - Numeric **value** and **max** fields appear only if enabled
-- Automatic regeneration at start of character’s turn in combat via `Hooks.on("updateCombat")`
-- Chat notification styled as a recovery alert
+- Automatic regeneration at start of character’s turn in combat.
+  - Subtracts ARC from current Fatigue (never below 0)
+  - Checks weather a fatigue roll is needed.
+- **Fatigue Roll** when spending beyond ARC:
+  - As soon as you exceed ARC, rolls **2d6** vs your current Fatigue points
+  - On failure: actor is marked **Exhausted**.
+  - Exhausted state integrates with Foundry’s status effects (token overlay + ActiveEffect)
 
 ### ⚙️ Other Improvements
 - **Deletion Confirmation:** dialogs before deleting any item
