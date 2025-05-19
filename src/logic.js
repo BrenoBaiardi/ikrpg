@@ -258,7 +258,42 @@ export async function applyExhaustedStatus(actor) {
 }
 
 export async function clearFocus(actor) {
-    //TODO focuser logic. remove all focus points in maintenance phase, then regain ARC in control phase
+    if (!actor.system.focus.enabled) return;
+    await actor.update({"system.focus.value": 0});
+
+    const content = `
+    <div class="ikrpg-chat-fatigue">
+      <h4>✨ Focusers lose their focus at the end of turn✨</h4>
+      <p>
+        <strong>${actor.name}</strong> has now
+        <strong>0</strong> Focus.
+      </p>
+    </div>
+  `;
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor}),
+        content
+    });
+}
+
+export async function addFocus(actor) {
+    if (!actor.system.focus.enabled) return;
+    await actor.update({"system.focus.value": actor.system.secondaryAttributes.ARC});
+    const content = `
+    <div class="ikrpg-chat-fatigue">
+      <h4>✨ Focusers Gain focus on start of turn✨</h4>
+      <p>
+        <strong>${actor.name}</strong> has now
+        <strong>${actor.system.secondaryAttributes.ARC}</strong> Focus.
+      </p>
+    </div>
+  `;
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor}),
+        content
+    });
 }
 
 export function findMilitarySkill(item, actor) {

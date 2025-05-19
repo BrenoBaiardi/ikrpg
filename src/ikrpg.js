@@ -5,7 +5,7 @@ import {
     handleDamageRoll,
     handleAttackRoll,
     regenerateFatigue,
-    promptBonus, increaseFatigue
+    promptBonus, increaseFatigue, addFocus, clearFocus
 } from "./logic.js";
 
 
@@ -244,18 +244,34 @@ Hooks.on("updateActor", async (actor, updateData, options, userId) => {
     }
 });
 
+let _lastTurnIndex = null
 Hooks.on("updateCombat", (combat, changed) => {
     if (!("turn" in changed)) return;
 
     const turnIndex = combat.turn;
     const combatant = combat.turns[turnIndex];
+    const turnOrder = combat.turns;
     if (!combatant) return;
 
+    // End turn handlers
+    if (_lastTurnIndex !== null) {
+        const prev = turnOrder[_lastTurnIndex];
+        if (prev?.actor?.type === "character" && prev?.actor?.system.focus.enabled) {
+            clearFocus(prev?.actor);
+        }
+    }
+
+    //Current turn Handlers
     const actor = combatant.actor;
     if (actor.type === "character" && actor.system.fatigue.enabled) {
         regenerateFatigue(actor);
     }
+    if (actor.type === "character" && actor.system.focus.enabled) {
+        addFocus(actor);
+    }
 
+    // 4) Atualize para a próxima vez
+    _lastTurnIndex = turnIndex;
 });
 
 
