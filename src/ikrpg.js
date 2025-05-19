@@ -5,7 +5,11 @@ import {
     handleDamageRoll,
     handleAttackRoll,
     regenerateFatigue,
-    promptBonus, increaseFatigue, addFocus, clearFocus
+    promptBonus,
+    increaseFatigue,
+    addFocus,
+    clearFocus,
+    useFocus
 } from "./logic.js";
 
 
@@ -322,6 +326,11 @@ class IKRPGActor extends Actor {
     prepareFatigue(data) {
         if (!data.fatigue.enabled) return;
         data.fatigue.max = data.secondaryAttributes.ARC * 2;
+    }
+
+    prepareFocus(data) {
+        if (!data.focus.enabled) return;
+        data.focus.max = data.secondaryAttributes.ARC;
     }
 
     updateCharacterHp(data) {
@@ -642,7 +651,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     : `<p>🎯 Sem alvos</p>`;
 
                 const content = `
-        <div class="chat-spell-roll">
+        <div class="chat-spell-roll">a
             <h3>Casting -> ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
@@ -664,6 +673,13 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: `<strong>${this.actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
                 });
                 increaseFatigue(this.actor, item.system.cost)
+                            }
+            if (this.actor.type === "character" && this.actor.system.focus.enabled) {
+                ChatMessage.create({
+                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                    content: `<strong>${this.actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
+                });
+                useFocus(this.actor, item.system.cost)
             }
         });
     }

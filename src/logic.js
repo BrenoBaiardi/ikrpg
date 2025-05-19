@@ -106,6 +106,20 @@ export async function handleDamageRoll(event, message) {
     }
 }
 
+// warcaster.js
+export async function useFocus(actor, cost) {
+    if (!actor.system.focus.enabled) return;
+    const current = actor.system.focus.value;
+    const newValue = current - cost;
+    if (newValue < 0) { // if exceeds ARCx2 - fatigue roll
+        ui.notifications.warn(`Not enough focus to cast spell!`);
+        return;
+    }
+    await actor.update({"system.focus.value": newValue});
+}
+
+// will-weaver.js
+
 export async function increaseFatigue(actor, cost) {
     if (!actor.system.fatigue.enabled) return;
     const current = actor.system.fatigue.value;
@@ -117,8 +131,6 @@ export async function increaseFatigue(actor, cost) {
     }
     await actor.update({"system.fatigue.value": newValue});
 }
-
-// fatigue.js
 
 /**
  * Verifica se é necessário fazer o fatigue roll.
