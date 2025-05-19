@@ -320,6 +320,7 @@ class IKRPGActor extends Actor {
             this.updateCharacterHp(data);
             this.updateArmorData(data);
             this.prepareFatigue(data);
+            this.prepareFocus(data)
         }
     }
 
