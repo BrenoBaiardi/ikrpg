@@ -5,7 +5,11 @@ import {
     handleDamageRoll,
     handleAttackRoll,
     regenerateFatigue,
-    promptBonus, increaseFatigue
+    promptBonus,
+    increaseFatigue,
+    addFocus,
+    clearFocus,
+    useFocus
 } from "./logic.js";
 
 
@@ -244,18 +248,34 @@ Hooks.on("updateActor", async (actor, updateData, options, userId) => {
     }
 });
 
+let _lastTurnIndex = null
 Hooks.on("updateCombat", (combat, changed) => {
     if (!("turn" in changed)) return;
 
     const turnIndex = combat.turn;
     const combatant = combat.turns[turnIndex];
+    const turnOrder = combat.turns;
     if (!combatant) return;
 
+    // End turn handlers
+    if (_lastTurnIndex !== null) {
+        const prev = turnOrder[_lastTurnIndex];
+        if (prev?.actor?.type === "character" && prev?.actor?.system.focus.enabled) {
+            clearFocus(prev?.actor);
+        }
+    }
+
+    //Current turn Handlers
     const actor = combatant.actor;
     if (actor.type === "character" && actor.system.fatigue.enabled) {
         regenerateFatigue(actor);
     }
+    if (actor.type === "character" && actor.system.focus.enabled) {
+        addFocus(actor);
+    }
 
+    // 4) Atualize para a próxima vez
+    _lastTurnIndex = turnIndex;
 });
 
 
@@ -300,12 +320,18 @@ class IKRPGActor extends Actor {
             this.updateCharacterHp(data);
             this.updateArmorData(data);
             this.prepareFatigue(data);
+            this.prepareFocus(data)
         }
     }
 
     prepareFatigue(data) {
         if (!data.fatigue.enabled) return;
         data.fatigue.max = data.secondaryAttributes.ARC * 2;
+    }
+
+    prepareFocus(data) {
+        if (!data.focus.enabled) return;
+        data.focus.max = data.secondaryAttributes.ARC;
     }
 
     updateCharacterHp(data) {
@@ -626,7 +652,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     : `<p>🎯 Sem alvos</p>`;
 
                 const content = `
-        <div class="chat-spell-roll">
+        <div class="chat-spell-roll">a
             <h3>Casting -> ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
@@ -648,6 +674,13 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: `<strong>${this.actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
                 });
                 increaseFatigue(this.actor, item.system.cost)
+                            }
+            if (this.actor.type === "character" && this.actor.system.focus.enabled) {
+                ChatMessage.create({
+                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                    content: `<strong>${this.actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
+                });
+                useFocus(this.actor, item.system.cost)
             }
         });
     }
