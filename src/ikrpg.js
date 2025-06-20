@@ -137,7 +137,7 @@ function addDirectionIndicator(token) {
     let arrowHeight = 65
     let arrowBaseHeight = 50
     const mainArrow = new PIXI.Graphics();
-    mainArrow.beginFill(0xFF0000, 0.8);
+    mainArrow.beginFill(0xEEFFEE, 0.8);
     mainArrow.moveTo(-arrowWidth, -arrowBaseHeight);
     mainArrow.lineTo(arrowWidth, -arrowBaseHeight);
     mainArrow.lineTo(0, -arrowHeight);
