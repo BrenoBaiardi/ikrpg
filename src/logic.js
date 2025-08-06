@@ -108,15 +108,24 @@ export async function handleDamageRoll(event, message) {
 
 // warcaster.js
 export async function useFocus(actor, cost) {
-    if (!actor.system.focus.enabled) return;
+    if (!actor.system.focus.enabled) return 0;
     const current = actor.system.focus.value;
     const newValue = current - cost;
     if (newValue < 0) { // if exceeds ARCx2 - fatigue roll
         ui.notifications.warn(`Not enough focus to cast spell!`);
-        return;
+        return actor.system.focus.value;
     }
     await actor.update({"system.focus.value": newValue});
+    return newValue;
 }
+
+export function checkFocus(actor, cost) {
+    if (!actor.system.focus.enabled) return false;
+    else if (actor.system.focus.value < cost) return false
+    return true;
+}
+
+
 
 // will-weaver.js
 

@@ -9,7 +9,8 @@ import {
     increaseFatigue,
     addFocus,
     clearFocus,
-    useFocus
+    useFocus,
+    checkFocus
 } from "./logic.js";
 
 
@@ -645,13 +646,14 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             // Identificar alvos
             const targets = Array.from(game.user.targets);
 
-            if (item.system.offensive) {
-                const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
-                let targetInfo = targets.length > 0
-                    ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-                    : `<p>🎯 Sem alvos</p>`;
+            if (checkFocus(this.actor, item.system.cost) || this.actor.system.fatigue.enabled){
+                if (item.system.offensive) {
+                    const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+                    let targetInfo = targets.length > 0
+                        ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+                        : `<p>🎯 Sem alvos</p>`;
 
-                const content = `
+                    const content = `
         <div class="chat-spell-roll">a
             <h3>Casting -> ${item.name}</h3>
             ${targetInfo}
@@ -662,10 +664,11 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         </div>
     `;
 
-                ChatMessage.create({
-                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                    content: content
-                });
+                    ChatMessage.create({
+                        speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                        content: content
+                    });
+                }
             }
 
             if (this.actor.type === "character" && this.actor.system.fatigue.enabled) {
@@ -676,10 +679,12 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                 increaseFatigue(this.actor, item.system.cost)
                             }
             if (this.actor.type === "character" && this.actor.system.focus.enabled) {
-                ChatMessage.create({
-                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                    content: `<strong>${this.actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
-                });
+                if (checkFocus(this.actor, item.system.cost)){
+                    ChatMessage.create({
+                        speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                        content: `<strong>${this.actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
+                    });
+                }
                 useFocus(this.actor, item.system.cost)
             }
         });

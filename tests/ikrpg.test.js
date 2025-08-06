@@ -1598,24 +1598,32 @@ describe("focusManagement", () => {
     test("does nothing if focus is disabled", async () => {
         actor.system.focus.enabled = false;
         await addFocus(actor);
-        await useFocus(actor,1);
+        const result = await useFocus(actor,1);
         await clearFocus(actor);
         expect(actor.update).not.toHaveBeenCalled();
+        expect(result).toBe(0);
     });
 
-    test("add focus should fill focus value with arc", async () => {
+    test("addFocus should fill focus value with arc", async () => {
         await addFocus(actor);
         expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": arcValue });
     });
 
-    test("useFocus", async () => {
+    test("useFocus should consume focus properly", async () => {
         actor.system.focus.value = 3;
-        await useFocus(actor, 1);
+        const result = await useFocus(actor, 1);
         expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": 2 });
+        expect(result).toBe(2);
+    });
+
+    test("useFocus with more than available focus should not consume any focus", async () => {
+        actor.system.focus.value = 1;
+        const result = await useFocus(actor, 3);
+        expect(actor.update).not.toHaveBeenCalled();
+        expect(result).toBe(1);
     });
 
     test("clearFocus", async () => {
-        await addFocus(actor);
         await clearFocus(actor);
         expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": 0 });
     });
