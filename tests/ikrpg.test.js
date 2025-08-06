@@ -11,7 +11,10 @@ import {
     areAllCellsOfTypeDestroyed,
     shouldRollFatigue,
     applyExhaustedStatus,
-    regenerateFatigue
+    regenerateFatigue,
+    addFocus,
+    clearFocus,
+    useFocus,
 } from "../src/logic.js";
 
 // Simula o objeto global ui
@@ -1565,5 +1568,55 @@ describe("regenerateFatigue", () => {
         actor.system.secondaryAttributes.ARC = 5;
         await regenerateFatigue(actor);
         expect(actor.update).toHaveBeenCalledWith({ "system.fatigue.value": 1 });
+    });
+});
+
+describe("focusManagement", () => {
+    let actor;
+    const arcValue = 3;
+
+    const speakerStub = { alias: "TestSpeaker" };
+
+    beforeAll(() => {
+        // Mock ChatMessage
+        global.ChatMessage = {
+            create: jest.fn(),
+            getSpeaker: jest.fn(() => speakerStub)
+        };
+    });
+
+    beforeEach(() => {
+        actor = {
+            system: {
+                focus: { enabled: true, value: 0 },
+                secondaryAttributes: { ARC: arcValue }
+            },
+            update: jest.fn().mockResolvedValue(true)
+        };
+    });
+
+    test("does nothing if focus is disabled", async () => {
+        actor.system.focus.enabled = false;
+        await addFocus(actor);
+        await useFocus(actor,1);
+        await clearFocus(actor);
+        expect(actor.update).not.toHaveBeenCalled();
+    });
+
+    test("add focus should fill focus value with arc", async () => {
+        await addFocus(actor);
+        expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": arcValue });
+    });
+
+    test("useFocus", async () => {
+        actor.system.focus.value = 3;
+        await useFocus(actor, 1);
+        expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": 2 });
+    });
+
+    test("clearFocus", async () => {
+        await addFocus(actor);
+        await clearFocus(actor);
+        expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": 0 });
     });
 });
