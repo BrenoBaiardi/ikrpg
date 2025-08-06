@@ -18,10 +18,10 @@
 
                 <div class="stats-group">
                     <!-- Row 1: HP e Max HP -->
-                    <div class="hp-row">
+                    <div class="hp-row hp-control-frame">
                         <!-- HP controls -->
-                        <div class="hp-group">
-                            <button type="button" class="hp-minus hp-button">–</button>
+                        <div class="editable-group">
+                            <button type="button" class="hp-minus control-button">–</button>
                             <label>
                                 {{t "IKRPG.Sheet.Labels.HP"}}
                                 <input
@@ -31,7 +31,7 @@
                                         class="small-field"
                                 />
                             </label>
-                            <button type="button" class="hp-plus hp-button">+</button>
+                            <button type="button" class="hp-plus control-button">+</button>
                         </div>
                         <!-- Max HP -->
                         <div class="hp-max">
@@ -49,8 +49,9 @@
                     </div>
 
                     {{#if system.fatigue.enabled}}
-                    <div class="fatigue-row">
-                        <div class="fatigue-value">
+                    <div class="fatigue-row fatigue-control-frame">
+                        <div class="editable-group">
+                            <button type="button" class="fatigue-minus control-button">-</button>
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Fatigue"}}
                                 <input
@@ -62,6 +63,7 @@
                                         class="small-field"
                                 />
                             </label>
+                            <button type="button" class="fatigue-plus control-button">+</button>
                         </div>
                         <div class="fatigue-max">
                             <label>
@@ -80,8 +82,9 @@
                     </div>
                     {{/if}}
                     {{#if system.focus.enabled}}
-                    <div class="fatigue-row">
-                        <div class="fatigue-value">
+                    <div class="focus-row focus-control-frame">
+                        <div class="editable-group">
+                            <button type="button" class="focus-minus control-button">-</button>
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Focus"}}
                                 <input
@@ -93,6 +96,7 @@
                                         class="small-field"
                                 />
                             </label>
+                            <button type="button" class="focus-plus control-button">+</button>
                         </div>
                         <div class="focus-max">
                             <label>

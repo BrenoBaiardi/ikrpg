@@ -411,7 +411,7 @@ class IKRPGBaseSheet extends ActorSheet {
     activateListeners(html) {
         super.activateListeners(html);
 
-        // Botões de HP
+        // HP Buttons
         html.find(".hp-plus").click(ev => {
             ev.preventDefault();
             const hp = foundry.utils.duplicate(this.actor.system.hp);
@@ -426,6 +426,26 @@ class IKRPGBaseSheet extends ActorSheet {
             if (hp.value > 0) {
                 this.actor.update({"system.hp.value": hp.value - 1});
             }
+        });
+
+        // Focus Buttons
+        html.find(".focus-plus").click(ev => {
+            ev.preventDefault();
+            this.actor.update({"system.focus.value": this.actor.system.focus.value + 1});
+        });
+
+        html.find(".focus-minus").click(ev => {
+            this.actor.update({"system.focus.value": this.actor.system.focus.value - 1});
+        });
+
+        // Fatigue Buttons
+        html.find(".fatigue-plus").click(ev => {
+            ev.preventDefault();
+            this.actor.update({"system.fatigue.value": this.actor.system.fatigue.value + 1});
+        });
+
+        html.find(".fatigue-minus").click(ev => {
+            this.actor.update({"system.fatigue.value": this.actor.system.fatigue.value - 1});
         });
 
         // Rolar atributos

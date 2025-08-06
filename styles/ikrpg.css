@@ -82,23 +82,43 @@ h2, h3 {
 
 /* Cada linha com campos lado a lado */
 .hp-row,
-.fatigue-row {
+.fatigue-row,
+.focus-row {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
+.hp-control-frame {
+    background-color: #d6ead6;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.fatigue-control-frame {
+    background-color: #f1dec4;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.focus-control-frame {
+    background-color: #dbf3ff;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
 /* HP controls: mantém botões + label alinhados */
-.hp-group {
+.editable-group {
     display: flex;
     align-items: center;
     gap: 0.25rem;
 }
 
-/* Cada field (HP-max, fatiga, max-fatiga) */
 .hp-max,
 .fatigue-value,
-.fatigue-max {
+.fatigue-max,
+.focus-value,
+.focus-max {
     display: flex;
     align-items: center;
     gap: 0.25rem;
@@ -492,13 +512,13 @@ button.item-create {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
-.hp-group input[type="number"] {
+.editable-group input[type="number"] {
     width: 5ch;
     text-align: center;
     font-size: 1rem;
 }
 
-.hp-button {
+.control-button {
     width: 24px;
     height: 24px;
     border: 1px solid #ccc;
