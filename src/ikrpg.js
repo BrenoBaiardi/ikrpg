@@ -124,7 +124,7 @@ Hooks.on("refreshToken", (token) => {
 function addDirectionIndicator(token) {
     if (!token) return;
 
-    // Remove anteriores, se existirem
+    // Remove previous drawings
     if (token.directionIndicator) {
         token.removeChild(token.directionIndicator);
         token.directionIndicator.destroy();
@@ -139,17 +139,19 @@ function addDirectionIndicator(token) {
     let arrowBaseHeight = 50
     const mainArrow = new PIXI.Graphics();
     mainArrow.beginFill(0xEEFFEE, 0.8);
+    mainArrow.lineStyle(1, 0x000000, 1);
     mainArrow.moveTo(-arrowWidth, -arrowBaseHeight);
     mainArrow.lineTo(arrowWidth, -arrowBaseHeight);
     mainArrow.lineTo(0, -arrowHeight);
     mainArrow.lineTo(-arrowWidth, -arrowBaseHeight);
     mainArrow.endFill();
 
-    let backUpperWidth = 65
-    let backLowerWidth = 30
-    let backHeight = 55
+    let backUpperWidth = 84
+    let backLowerWidth = 44
+    let backHeight = 75
     const backArrow = new PIXI.Graphics();
-    backArrow.beginFill(0x0000FF, 0.3);
+    backArrow.beginFill(0xff8f17, 0.3);
+    backArrow.lineStyle(1, 0x000000, 1);
     backArrow.moveTo(-backUpperWidth, 0);
     backArrow.lineTo(-backLowerWidth, backHeight);
     backArrow.lineTo(backLowerWidth, backHeight);
