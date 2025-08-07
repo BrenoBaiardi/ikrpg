@@ -106,6 +106,29 @@ export async function handleDamageRoll(event, message) {
     }
 }
 
+// warcaster.js
+export async function useFocus(actor, cost) {
+    if (!actor.system.focus.enabled) return 0;
+    const current = actor.system.focus.value;
+    const newValue = current - cost;
+    if (newValue < 0) { // if exceeds ARCx2 - fatigue roll
+        ui.notifications.warn(`Not enough focus to cast spell!`);
+        return actor.system.focus.value;
+    }
+    await actor.update({"system.focus.value": newValue});
+    return newValue;
+}
+
+export function checkFocus(actor, cost) {
+    if (!actor.system.focus.enabled) return false;
+    else if (actor.system.focus.value < cost) return false
+    return true;
+}
+
+
+
+// will-weaver.js
+
 export async function increaseFatigue(actor, cost) {
     if (!actor.system.fatigue.enabled) return;
     const current = actor.system.fatigue.value;
@@ -117,8 +140,6 @@ export async function increaseFatigue(actor, cost) {
     }
     await actor.update({"system.fatigue.value": newValue});
 }
-
-// fatigue.js
 
 /**
  * Verifica se é necessário fazer o fatigue roll.
@@ -258,7 +279,42 @@ export async function applyExhaustedStatus(actor) {
 }
 
 export async function clearFocus(actor) {
-    //TODO focuser logic. remove all focus points in maintenance phase, then regain ARC in control phase
+    if (!actor.system.focus.enabled) return;
+    await actor.update({"system.focus.value": 0});
+
+    const content = `
+    <div class="ikrpg-chat-fatigue">
+      <h4>✨ Focusers lose their focus at the end of turn✨</h4>
+      <p>
+        <strong>${actor.name}</strong> has now
+        <strong>0</strong> Focus.
+      </p>
+    </div>
+  `;
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor}),
+        content
+    });
+}
+
+export async function addFocus(actor) {
+    if (!actor.system.focus.enabled) return;
+    await actor.update({"system.focus.value": actor.system.secondaryAttributes.ARC});
+    const content = `
+    <div class="ikrpg-chat-fatigue">
+      <h4>✨ Focusers Gain focus on start of turn✨</h4>
+      <p>
+        <strong>${actor.name}</strong> has now
+        <strong>${actor.system.secondaryAttributes.ARC}</strong> Focus.
+      </p>
+    </div>
+  `;
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor}),
+        content
+    });
 }
 
 export function findMilitarySkill(item, actor) {

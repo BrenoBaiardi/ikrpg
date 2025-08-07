@@ -11,7 +11,10 @@ import {
     areAllCellsOfTypeDestroyed,
     shouldRollFatigue,
     applyExhaustedStatus,
-    regenerateFatigue
+    regenerateFatigue,
+    addFocus,
+    clearFocus,
+    useFocus,
 } from "../src/logic.js";
 
 // Simula o objeto global ui
@@ -1565,5 +1568,63 @@ describe("regenerateFatigue", () => {
         actor.system.secondaryAttributes.ARC = 5;
         await regenerateFatigue(actor);
         expect(actor.update).toHaveBeenCalledWith({ "system.fatigue.value": 1 });
+    });
+});
+
+describe("focusManagement", () => {
+    let actor;
+    const arcValue = 3;
+
+    const speakerStub = { alias: "TestSpeaker" };
+
+    beforeAll(() => {
+        // Mock ChatMessage
+        global.ChatMessage = {
+            create: jest.fn(),
+            getSpeaker: jest.fn(() => speakerStub)
+        };
+    });
+
+    beforeEach(() => {
+        actor = {
+            system: {
+                focus: { enabled: true, value: 0 },
+                secondaryAttributes: { ARC: arcValue }
+            },
+            update: jest.fn().mockResolvedValue(true)
+        };
+    });
+
+    test("does nothing if focus is disabled", async () => {
+        actor.system.focus.enabled = false;
+        await addFocus(actor);
+        const result = await useFocus(actor,1);
+        await clearFocus(actor);
+        expect(actor.update).not.toHaveBeenCalled();
+        expect(result).toBe(0);
+    });
+
+    test("addFocus should fill focus value with arc", async () => {
+        await addFocus(actor);
+        expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": arcValue });
+    });
+
+    test("useFocus should consume focus properly", async () => {
+        actor.system.focus.value = 3;
+        const result = await useFocus(actor, 1);
+        expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": 2 });
+        expect(result).toBe(2);
+    });
+
+    test("useFocus with more than available focus should not consume any focus", async () => {
+        actor.system.focus.value = 1;
+        const result = await useFocus(actor, 3);
+        expect(actor.update).not.toHaveBeenCalled();
+        expect(result).toBe(1);
+    });
+
+    test("clearFocus", async () => {
+        await clearFocus(actor);
+        expect(actor.update).toHaveBeenCalledWith({ "system.focus.value": 0 });
     });
 });

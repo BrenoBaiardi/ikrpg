@@ -5,7 +5,12 @@ import {
     handleDamageRoll,
     handleAttackRoll,
     regenerateFatigue,
-    promptBonus, increaseFatigue
+    promptBonus,
+    increaseFatigue,
+    addFocus,
+    clearFocus,
+    useFocus,
+    checkFocus
 } from "./logic.js";
 
 
@@ -133,7 +138,7 @@ function addDirectionIndicator(token) {
     let arrowHeight = 65
     let arrowBaseHeight = 50
     const mainArrow = new PIXI.Graphics();
-    mainArrow.beginFill(0xFF0000, 0.8);
+    mainArrow.beginFill(0xEEFFEE, 0.8);
     mainArrow.moveTo(-arrowWidth, -arrowBaseHeight);
     mainArrow.lineTo(arrowWidth, -arrowBaseHeight);
     mainArrow.lineTo(0, -arrowHeight);
@@ -244,18 +249,34 @@ Hooks.on("updateActor", async (actor, updateData, options, userId) => {
     }
 });
 
+let _lastTurnIndex = null
 Hooks.on("updateCombat", (combat, changed) => {
     if (!("turn" in changed)) return;
 
     const turnIndex = combat.turn;
     const combatant = combat.turns[turnIndex];
+    const turnOrder = combat.turns;
     if (!combatant) return;
 
+    // End turn handlers
+    if (_lastTurnIndex !== null) {
+        const prev = turnOrder[_lastTurnIndex];
+        if (prev?.actor?.type === "character" && prev?.actor?.system.focus.enabled) {
+            clearFocus(prev?.actor);
+        }
+    }
+
+    //Current turn Handlers
     const actor = combatant.actor;
     if (actor.type === "character" && actor.system.fatigue.enabled) {
         regenerateFatigue(actor);
     }
+    if (actor.type === "character" && actor.system.focus.enabled) {
+        addFocus(actor);
+    }
 
+    // 4) Atualize para a próxima vez
+    _lastTurnIndex = turnIndex;
 });
 
 
@@ -300,12 +321,18 @@ class IKRPGActor extends Actor {
             this.updateCharacterHp(data);
             this.updateArmorData(data);
             this.prepareFatigue(data);
+            this.prepareFocus(data)
         }
     }
 
     prepareFatigue(data) {
         if (!data.fatigue.enabled) return;
         data.fatigue.max = data.secondaryAttributes.ARC * 2;
+    }
+
+    prepareFocus(data) {
+        if (!data.focus.enabled) return;
+        data.focus.max = data.secondaryAttributes.ARC;
     }
 
     updateCharacterHp(data) {
@@ -384,7 +411,7 @@ class IKRPGBaseSheet extends ActorSheet {
     activateListeners(html) {
         super.activateListeners(html);
 
-        // Botões de HP
+        // HP Buttons
         html.find(".hp-plus").click(ev => {
             ev.preventDefault();
             const hp = foundry.utils.duplicate(this.actor.system.hp);
@@ -399,6 +426,26 @@ class IKRPGBaseSheet extends ActorSheet {
             if (hp.value > 0) {
                 this.actor.update({"system.hp.value": hp.value - 1});
             }
+        });
+
+        // Focus Buttons
+        html.find(".focus-plus").click(ev => {
+            ev.preventDefault();
+            this.actor.update({"system.focus.value": this.actor.system.focus.value + 1});
+        });
+
+        html.find(".focus-minus").click(ev => {
+            this.actor.update({"system.focus.value": this.actor.system.focus.value - 1});
+        });
+
+        // Fatigue Buttons
+        html.find(".fatigue-plus").click(ev => {
+            ev.preventDefault();
+            this.actor.update({"system.fatigue.value": this.actor.system.fatigue.value + 1});
+        });
+
+        html.find(".fatigue-minus").click(ev => {
+            this.actor.update({"system.fatigue.value": this.actor.system.fatigue.value - 1});
         });
 
         // Rolar atributos
@@ -619,14 +666,15 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
             // Identificar alvos
             const targets = Array.from(game.user.targets);
 
-            if (item.system.offensive) {
-                const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
-                let targetInfo = targets.length > 0
-                    ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-                    : `<p>🎯 Sem alvos</p>`;
+            if (checkFocus(this.actor, item.system.cost) || this.actor.system.fatigue.enabled){
+                if (item.system.offensive) {
+                    const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+                    let targetInfo = targets.length > 0
+                        ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+                        : `<p>🎯 Sem alvos</p>`;
 
-                const content = `
-        <div class="chat-spell-roll">
+                    const content = `
+        <div class="chat-spell-roll">a
             <h3>Casting -> ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
@@ -636,10 +684,11 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
         </div>
     `;
 
-                ChatMessage.create({
-                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                    content: content
-                });
+                    ChatMessage.create({
+                        speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                        content: content
+                    });
+                }
             }
 
             if (this.actor.type === "character" && this.actor.system.fatigue.enabled) {
@@ -648,6 +697,15 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
                     content: `<strong>${this.actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
                 });
                 increaseFatigue(this.actor, item.system.cost)
+                            }
+            if (this.actor.type === "character" && this.actor.system.focus.enabled) {
+                if (checkFocus(this.actor, item.system.cost)){
+                    ChatMessage.create({
+                        speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                        content: `<strong>${this.actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
+                    });
+                }
+                useFocus(this.actor, item.system.cost)
             }
         });
     }
