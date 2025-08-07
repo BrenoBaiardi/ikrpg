@@ -10,7 +10,7 @@ import {
     addFocus,
     clearFocus,
     useFocus,
-    checkFocus
+    checkFocus, handleSpellRoll, handleItemRoll
 } from "./logic.js";
 
 
@@ -98,7 +98,7 @@ Hooks.once("ready", () => {
     };
 });
 
-Hooks.on("updateToken", (document, changes, options, userId) => {
+Hooks.on("updateToken", async (document, changes, options, userId) => {
     const token = canvas.tokens.get(document.id);
     if (token) {
         token.once("refresh", () => {
@@ -106,6 +106,91 @@ Hooks.on("updateToken", (document, changes, options, userId) => {
         });
     }
 });
+
+// =======================
+//  HUD
+// =======================
+
+Hooks.on("controlToken", (token, controlled) => {
+    $("#ikrpg-token-hud").remove();
+
+    if (!controlled || !token.actor) return;
+
+    const actor = token.actor;
+    const hud = $(`
+    <div id="ikrpg-token-hud" style="
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.8); padding: 8px; border-radius: 10px;
+      z-index: 100; min-width: 300px; font-family: sans-serif; color: white;
+    "></div>
+  `).appendTo(document.body);
+
+    // Agrupar itens por tipo
+    const grouped = {};
+    for (const item of actor.items) {
+        const type = item.type;
+        if (!grouped[type]) grouped[type] = [];
+        grouped[type].push(item);
+    }
+
+    // Lista ordenada de categorias que queremos mostrar
+    const categories = [
+        {key: "meleeWeapon", label: "Melee"},
+        {key: "rangedWeapon", label: "Ranged"},
+        {key: "spell", label: "Spell"},
+        {key: "equipment", label: "Equipment"},
+        {key: "feat", label: "Features"},
+    ];
+
+    // Criar seções para cada categoria
+    for (const cat of categories) {
+        const items = grouped[cat.key];
+        if (!items || items.length === 0) continue;
+
+        const section = $(`
+      <div class="hud-section" style="margin-bottom: 6px;">
+        <div class="hud-header" style="cursor: pointer; font-weight: bold; padding: 4px 6px; background: #222; border-radius: 4px;">
+          ▶ ${cat.label}
+        </div>
+        <div class="hud-items" style="display: none; margin-top: 4px;"></div>
+      </div>
+    `);
+
+        const itemContainer = section.find(".hud-items");
+
+        for (const item of items) {
+            const btn = $(`
+        <button style="background: #444; border: none; color: white; padding: 4px 6px; margin: 2px 0; border-radius: 4px; width: 100%; text-align: left;">
+          ${item.name}
+        </button>
+      `);
+
+            const rollHandlers = {
+                spell: handleSpellRoll,
+                weapon: handleItemRoll,
+                consumable: handleItemRoll,
+                equipment: handleItemRoll,
+                feat: handleItemRoll
+            };
+            btn.click(() => {
+                const handler = rollHandlers[item.type] || handleItemRoll;
+                handler(item, actor);
+            });
+            itemContainer.append(btn);
+        }
+
+        // Expand/Collapse lógica
+        const header = section.find(".hud-header");
+        header.click(() => {
+            const visible = itemContainer.is(":visible");
+            itemContainer.toggle(!visible);
+            header.html(`${visible ? "▶" : "▼"} ${cat.label}`);
+        });
+
+        hud.append(section);
+    }
+});
+
 
 // =======================
 //  Helpers
@@ -124,7 +209,7 @@ Hooks.on("refreshToken", (token) => {
 function addDirectionIndicator(token) {
     if (!token) return;
 
-    // Remove anteriores, se existirem
+    // Remove previous drawings
     if (token.directionIndicator) {
         token.removeChild(token.directionIndicator);
         token.directionIndicator.destroy();
@@ -134,27 +219,29 @@ function addDirectionIndicator(token) {
         token.rearIndicator.destroy();
     }
 
-    let arrowWidth = 30
-    let arrowHeight = 65
-    let arrowBaseHeight = 50
+    let arrowWidth = 30;
+    let arrowHeight = 65 * token.h/120;
+    let arrowBaseHeight = 50 * token.h/120;
     const mainArrow = new PIXI.Graphics();
     mainArrow.beginFill(0xEEFFEE, 0.8);
-    mainArrow.moveTo(-arrowWidth, -arrowBaseHeight);
-    mainArrow.lineTo(arrowWidth, -arrowBaseHeight);
-    mainArrow.lineTo(0, -arrowHeight);
-    mainArrow.lineTo(-arrowWidth, -arrowBaseHeight);
+    mainArrow.lineStyle(1, 0x000000, 1);
+    mainArrow.moveTo(-arrowWidth, arrowBaseHeight);
+    mainArrow.lineTo(arrowWidth, arrowBaseHeight);
+    mainArrow.lineTo(0, arrowHeight);
+    mainArrow.lineTo(-arrowWidth, arrowBaseHeight);
     mainArrow.endFill();
 
-    let backUpperWidth = 65
-    let backLowerWidth = 30
-    let backHeight = 55
+    let backLargeWidth = 84
+    let backSmallWidth = 44
+    let backHeight = 75
     const backArrow = new PIXI.Graphics();
-    backArrow.beginFill(0x0000FF, 0.3);
-    backArrow.moveTo(-backUpperWidth, 0);
-    backArrow.lineTo(-backLowerWidth, backHeight);
-    backArrow.lineTo(backLowerWidth, backHeight);
-    backArrow.lineTo(backUpperWidth, 0);
-    backArrow.lineTo(-backUpperWidth, 0);
+    backArrow.beginFill(0xff8f17, 0.3);
+    backArrow.lineStyle(1, 0x000000, 1);
+    backArrow.moveTo(-backLargeWidth, 0);
+    backArrow.lineTo(-backSmallWidth, -backHeight);
+    backArrow.lineTo(backSmallWidth, -backHeight);
+    backArrow.lineTo(backLargeWidth, 0);
+    backArrow.lineTo(-backLargeWidth, 0);
     backArrow.endFill();
 
     // Calculando a rotação correta para o token
@@ -626,87 +713,19 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
 
         html.find(".item-roll").click(async ev => {
             ev.preventDefault();
-
             const li = ev.currentTarget.closest(".item");
             const item = this.actor.items.get(li.dataset.itemId);
             if (!item) return;
 
-            // Identificar alvos
-            const targets = Array.from(game.user.targets);
-
-            const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
-            let targetInfo = targets.length > 0
-                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-                : `<p>🎯 Sem alvos</p>`;
-
-            const content = `
-        <div class="chat-weapon-roll">
-            <h3>${item.name}</h3>
-            ${targetInfo}
-            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
-                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
-            </div>
-        </div>
-    `;
-
-            ChatMessage.create({
-                speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                content: content
-            });
+            handleItemRoll(item, this.actor)
         });
 
         html.find(".spell-roll").click(async ev => {
             ev.preventDefault();
-
             const li = ev.currentTarget.closest(".item");
             const item = this.actor.items.get(li.dataset.itemId);
             if (!item) return;
-
-            // Identificar alvos
-            const targets = Array.from(game.user.targets);
-
-            if (checkFocus(this.actor, item.system.cost) || this.actor.system.fatigue.enabled){
-                if (item.system.offensive) {
-                    const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
-                    let targetInfo = targets.length > 0
-                        ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-                        : `<p>🎯 Sem alvos</p>`;
-
-                    const content = `
-        <div class="chat-spell-roll">a
-            <h3>Casting -> ${item.name}</h3>
-            ${targetInfo}
-            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
-                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
-            </div>
-        </div>
-    `;
-
-                    ChatMessage.create({
-                        speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                        content: content
-                    });
-                }
-            }
-
-            if (this.actor.type === "character" && this.actor.system.fatigue.enabled) {
-                ChatMessage.create({
-                    speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                    content: `<strong>${this.actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
-                });
-                increaseFatigue(this.actor, item.system.cost)
-                            }
-            if (this.actor.type === "character" && this.actor.system.focus.enabled) {
-                if (checkFocus(this.actor, item.system.cost)){
-                    ChatMessage.create({
-                        speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                        content: `<strong>${this.actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
-                    });
-                }
-                useFocus(this.actor, item.system.cost)
-            }
+            handleSpellRoll(item, this.actor)
         });
     }
 }

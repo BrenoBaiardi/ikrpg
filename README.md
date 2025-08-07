@@ -49,6 +49,10 @@ This system aims to provide a structured and automated experience for campaigns 
   <img src="./assets/token-appearance.png" alt="token-appearance" width="20%" />
   </p>  
 
+### 🎛️ Token HUD Integration (experimental)
+- Token Items and spells appear on top of the screen on a HUD.
+- Elements on the HUD are grouped by category.
+- Elements can be used by the HUD instead of opening character sheet.
 
 ### Steamjack Support
 - Dedicated actor type and sheet
@@ -62,6 +66,7 @@ This system aims to provide a structured and automated experience for campaigns 
 - 🎲 Spell-roll button rolls `2d6 + POW` in chat, tagged with spell name
 - “New Spell” button to create and manage spell items
 - Isolated spell-sheet template for editing spells
+- Automations for Fatigue (Will-Weavers) and Focus (Focusers) management
 
 ### 🛡 Optional Fatigue & Focus
 - **Toggleable** per character: enable “Fatigue” and/or “Focus” in the header (pending Focus automation)
@@ -93,7 +98,7 @@ This system aims to provide a structured and automated experience for campaigns 
 - Status and condition tracking
 - Steamjack damage grid. 
 - Advanced ability/spell effects (area, duration, conditions)
-- No official compendium creation (legal/maintenance constraints)
+- No plans for official compendium creation (legal/maintenance constraints)
 
 ---
 

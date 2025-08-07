@@ -431,6 +431,77 @@ export async function handleAttackRoll(event, message) {
     }
 }
 
+export async function handleItemRoll(item, actor) {
+    const targets = Array.from(game.user.targets);
+
+    const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+    let targetInfo = targets.length > 0
+        ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+        : `<p>🎯 Sem alvos</p>`;
+
+    const content = `
+        <div class="chat-weapon-roll">
+            <h3>${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
+        </div>
+    `;
+
+    ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({actor: actor}),
+        content: content
+    });
+}
+
+export async function handleSpellRoll(item, actor) {
+    const targets = Array.from(game.user.targets);
+
+    if (checkFocus(actor, item.system.cost) || actor.system.fatigue.enabled){
+        if (item.system.offensive) {
+            const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
+            let targetInfo = targets.length > 0
+                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
+                : `<p>🎯 Sem alvos</p>`;
+
+            const content = `
+        <div class="chat-spell-roll">a
+            <h3>Casting -> ${item.name}</h3>
+            ${targetInfo}
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="button" class="attack-roll" data-item-id="${item.id}">🎯 Attack</button>
+                <button type="button" class="damage-roll" data-item-id="${item.id}">💥 Damage</button>
+            </div>
+        </div>
+    `;
+
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor: actor}),
+                content: content
+            });
+        }
+    }
+
+    if (actor.type === "character" && actor.system.fatigue.enabled) {
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({actor: actor}),
+            content: `<strong>${actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
+        });
+        increaseFatigue(actor, item.system.cost)
+    }
+    if (actor.type === "character" && actor.system.focus.enabled) {
+        if (checkFocus(actor, item.system.cost)){
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor: actor}),
+                content: `<strong>${actor.name}</strong> used <strong>${item.name}</strong> and spent <strong>${item.system.cost}</strong> Focus points.`
+            });
+        }
+        useFocus(actor, item.system.cost)
+    }
+}
+
 // Damage grid operations
 const DEFAULT_HEIGHT = 1;
 const DEFAULT_CELL = {type: " Blank", destroyed: false};
