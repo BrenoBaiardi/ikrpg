@@ -108,6 +108,80 @@ Hooks.on("updateToken", (document, changes, options, userId) => {
 });
 
 // =======================
+//  HUD
+// =======================
+
+Hooks.on("controlToken", (token, controlled) => {
+    $("#ikrpg-token-hud").remove();
+
+    if (!controlled || !token.actor) return;
+
+    const actor = token.actor;
+    const hud = $(`
+    <div id="ikrpg-token-hud" style="
+      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.8); padding: 8px; border-radius: 10px;
+      z-index: 100; min-width: 300px; font-family: sans-serif; color: white;
+    "></div>
+  `).appendTo(document.body);
+
+    // Agrupar itens por tipo
+    const grouped = {};
+    for (const item of actor.items) {
+        const type = item.type;
+        if (!grouped[type]) grouped[type] = [];
+        grouped[type].push(item);
+    }
+
+    // Lista ordenada de categorias que queremos mostrar
+    const categories = [
+        { key: "meleeWeapon", label: "Melee" },
+        { key: "rangedWeapon", label: "Ranged" },
+        { key: "spell", label: "Spell" },
+        { key: "equipment", label: "Equipment" },
+        { key: "feat", label: "Features" },
+    ];
+
+    // Criar seções para cada categoria
+    for (const cat of categories) {
+        const items = grouped[cat.key];
+        if (!items || items.length === 0) continue;
+
+        const section = $(`
+      <div class="hud-section" style="margin-bottom: 6px;">
+        <div class="hud-header" style="cursor: pointer; font-weight: bold; padding: 4px 6px; background: #222; border-radius: 4px;">
+          ▶ ${cat.label}
+        </div>
+        <div class="hud-items" style="display: none; margin-top: 4px;"></div>
+      </div>
+    `);
+
+        const itemContainer = section.find(".hud-items");
+
+        for (const item of items) {
+            const btn = $(`
+        <button style="background: #444; border: none; color: white; padding: 4px 6px; margin: 2px 0; border-radius: 4px; width: 100%; text-align: left;">
+          ${item.name}
+        </button>
+      `);
+            btn.click(() => item.roll());
+            itemContainer.append(btn);
+        }
+
+        // Expand/Collapse lógica
+        const header = section.find(".hud-header");
+        header.click(() => {
+            const visible = itemContainer.is(":visible");
+            itemContainer.toggle(!visible);
+            header.html(`${visible ? "▶" : "▼"} ${cat.label}`);
+        });
+
+        hud.append(section);
+    }
+});
+
+
+// =======================
 //  Helpers
 // =======================
 Handlebars.registerHelper('tagsToString', function (tags) {
