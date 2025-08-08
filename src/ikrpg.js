@@ -601,6 +601,16 @@ class IKRPGBaseSheet extends ActorSheet {
             });
         });
 
+        html.find(".item-info").click(ev => {
+            const li = ev.currentTarget.closest(".item");
+            const item = this.actor.items.get(li.dataset.itemId)
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                content: "<strong>" + item.name + "</strong><br>" + item.system.description
+            });
+        });
+
+
         html.find(".item-delete").click(ev => {
             ev.preventDefault();
             const li = ev.currentTarget.closest(".item");
@@ -768,8 +778,6 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
                 type: type,
                 system: {}
             };
-            console.log("Actor -:>", this.actor);
-            console.log("ItemData -:>", itemData);
             this.actor.createEmbeddedDocuments("Item", [itemData]);
         });
 
