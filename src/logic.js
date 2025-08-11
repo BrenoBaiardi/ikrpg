@@ -342,7 +342,7 @@ export function buildHitResult(targets, roll) {
         const hitMessage = success
             ? `style="color: green;"> ✅ Hit!`
             : `style="color: red;">❌ Miss!`;
-        return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef}`;
+        return `<strong ${hitMessage} </strong> Contra ${t.name}: DEF ${targetDef}`; // do not localize without fixing tests localization
     }).join("<br>");
 }
 
