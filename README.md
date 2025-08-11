@@ -34,9 +34,18 @@ This system aims to provide a structured and automated experience for campaigns 
   - Social skills allow neutral attribute association (using `--`)
 
   <p align="center">
-  <img src="./assets/char-sheet-a.png" alt="char-sheet-a" width="45%" />
-  <img src="./assets/char-sheet-b.png" alt="char-sheet-b" width="45%" />
+  <img src="./assets/character-actor-sheet.png" alt="char-sheet-a" />
   </p>
+
+1. Character information.
+2. Will Weaver toggle for magic casters.
+3. Focuser toggle for warcasters.
+4. Tabs for adding and managing weapons, equipment and spells.
+   1. Items may be used directly from sheet by clicking 🎲.
+   2. Item information will be thrown in chat by clicking 🔎.
+   3. Add items by clickint corresponding ➕ icon.
+5. Character atributes and derived values tab.
+6. Skills tab - military and ocupational.
 
 ### Inventory & Combat
 - **Dynamic Inventory:** melee weapons, ranged weapons, armor, equipment tabs
@@ -103,7 +112,8 @@ This system aims to provide a structured and automated experience for campaigns 
 
 ---
 
-## 📜 Licensing
+## 📜 Licensing 
+<img src="./assets/ik-logo.png" alt="char-sheet-a" width="250"/>
 
 This system is a **fan-made adaptation** of the Iron Kingdoms RPG for use with Foundry VTT.  
 All intellectual property related to Iron Kingdoms is owned by its respective owners.  
