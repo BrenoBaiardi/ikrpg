@@ -65,6 +65,7 @@
                     <th>{{t "IKRPG.Table.Header.Tags"}}</th>
                     <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
                     <th class="col-mod">{{t "IKRPG.Table.Header.Mod"}}</th>
+                    <th class="col-item-info">🔎</th>
                     <th class="col-item-roll">🎲</th>
                     <th class="col-manage">⚙️</th>
                 </tr>
@@ -84,6 +85,9 @@
                     </td>
                     <td>{{item.system.pow}}</td>
                     <td>{{item.system.attackMod}}</td>
+                    <td>
+                        <button class="item-info info-button">🔎</button>
+                    </td>
                     <td>
                         <button class="item-roll dice-button">🎲</button>
                     </td>
@@ -111,6 +115,7 @@
                     <th>{{t "IKRPG.Table.Header.Tags"}}</th>
                     <th>{{t "IKRPG.Table.Header.Range"}}</th>
                     <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
+                    <th class="col-item-info">🔎</th>
                     <th class="col-item-roll">🎲</th>
                     <th class="col-manage">⚙️</th>
                 </tr>
@@ -128,6 +133,9 @@
                     </td>
                     <td>{{item.system.effectiveRange}}</td>
                     <td>{{item.system.pow}}</td>
+                    <td>
+                        <button class="item-info info-button">🔎</button>
+                    </td>
                     <td>
                         <button class="item-roll dice-button">🎲</button>
                     </td>
@@ -155,6 +163,7 @@
                     <th>{{t "IKRPG.Table.Header.ARM"}}</th>
                     <th>{{t "IKRPG.Table.Header.DEF"}}</th>
                     <th>{{t "IKRPG.Table.Header.SPD"}}</th>
+                    <th class="col-item-info">🔎</th>
                     <th class="col-manage">⚙️</th>
                 </tr>
                 </thead>
@@ -173,6 +182,9 @@
                     <td>{{item.system.armorBonus}}</td>
                     <td>{{item.system.defPenalty}}</td>
                     <td>{{item.system.spdPenalty}}</td>
+                    <td>
+                        <button class="item-info info-button">🔎</button>
+                    </td>
                     <td class="action-buttons">
                         <div class="button-group">
                             <button class="item-edit edit-button">✎</button>

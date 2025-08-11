@@ -171,6 +171,7 @@
                         <th>{{t "IKRPG.Table.Header.Tags"}}</th>
                         <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
                         <th class="col-mod">{{t "IKRPG.Table.Header.Mod"}}</th>
+                        <th class="col-item-info">🔎</th>
                         <th class="col-item-roll">🎲</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
@@ -190,6 +191,9 @@
                         </td>
                         <td>{{item.system.pow}}</td>
                         <td>{{item.system.attackMod}}</td>
+                        <td>
+                            <button class="item-info info-button">🔎</button>
+                        </td>
                         <td>
                             <button class="item-roll dice-button">🎲</button>
                         </td>
@@ -218,6 +222,7 @@
                         <th>{{t "IKRPG.Table.Header.Tags"}}</th>
                         <th>{{t "IKRPG.Table.Header.Range"}}</th>
                         <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
+                        <th class="col-item-info">🔎</th>
                         <th class="col-item-roll">🎲</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
@@ -235,6 +240,9 @@
                         </td>
                         <td>{{item.system.effectiveRange}}</td>
                         <td>{{item.system.pow}}</td>
+                        <td>
+                            <button class="item-info info-button">🔎</button>
+                        </td>
                         <td>
                             <button class="item-roll dice-button">🎲</button>
                         </td>
@@ -264,6 +272,7 @@
                         <th>{{t "IKRPG.Table.Header.ARM"}}</th>
                         <th>{{t "IKRPG.Table.Header.DEF"}}</th>
                         <th>{{t "IKRPG.Table.Header.SPD"}}</th>
+                        <th class="col-item-info">🔎</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
                     </thead>
@@ -282,6 +291,9 @@
                         <td>{{item.system.armorBonus}}</td>
                         <td>{{item.system.defPenalty}}</td>
                         <td>{{item.system.spdPenalty}}</td>
+                        <td>
+                            <button class="item-info info-button">🔎</button>
+                        </td>
                         <td class="action-buttons">
                             <div class="button-group">
                                 <button class="item-edit edit-button">✎</button>
@@ -301,6 +313,7 @@
                     <thead>
                     <tr>
                         <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                        <th class="col-item-info">🔎</th>
                         <th class="col-manage">⚙️</th>
                     </tr>
                     </thead>
@@ -309,6 +322,9 @@
                     {{#if (eq item.type "equipment")}}
                     <tr class="item" data-item-id="{{item._id}}">
                         <td>{{item.name}}</td>
+                        <td>
+                            <button class="item-info info-button">🔎</button>
+                        </td>
                         <td class="action-buttons">
                             <div class="button-group">
                                 <button class="item-edit edit-button">✎</button>
@@ -338,6 +354,7 @@
                             <th>{{t "IKRPG.Table.Header.Upkeep"}}</th>
                             <th>{{t "IKRPG.Table.Header.Offensive"}}</th>
                             <th>{{t "IKRPG.Table.Header.AoE"}}</th>
+                            <th class="col-item-info">🔎</th>
                             <th>🎲</th>
                             <th>⚙️</th>
                         </tr>
@@ -353,6 +370,9 @@
                             <td>{{#if item.system.upkeep}}✔️{{/if}}</td>
                             <td>{{#if item.system.offensive}}✔️{{/if}}</td>
                             <td>{{item.system.AOE}}</td>
+                            <td>
+                                <button class="item-info info-button">🔎</button>
+                            </td>
                             <td>
                                 <button class="spell-roll dice-button">🎲</button>
                             </td>
@@ -482,7 +502,6 @@
                                            value="{{this.level}}"
                                            min="0"/>
                                 </td>
-
                                 <td class="text-center">
                                     <button type="button" class="roll-skill dice-button" data-idx="{{@index}}">🎲
                                     </button>

@@ -82,5 +82,11 @@
   "IKRPG.Chat.Fatigue.Roll": "Teste de Fadiga (Fadiga = {fatigue})",
   "IKRPG.Chat.Fatigue.Fail": "❌ {name} falhou e agora está exausto (rolou {total}).",
   "IKRPG.Chat.Fatigue.Success": "✅ {name} resistiu à fadiga (rolou {total}).",
+  "IKRPG.Chat.Target.List": "\uD83C\uDFAF Alvos: {formattedTargets}",
+  "IKRPG.Chat.Target.Empty": "\uD83C\uDFAF Sem alvos",
+  "IKRPG.Chat.Attack.Result": "Resultado da rollagem de {itemName}",
+  "IKRPG.Chat.Damage.Apply": "Aplicar Dano ({itemName})",
+  "IKRPG.Chat.Damage.Description": "\uD83D\uDCA5 Dano de {itemName}",
+  "IKRPG.Chat.Damage.Total": "Aplicar {total} dano a {name}",
   "IKRPG.Chat.Damage.Applied": "🗡️ {name} sofreu <strong>{damageTaken}</strong> de dano ({damageInput} - {armUsed} ARM), restando <strong>{hpAfter}</strong> de HP."
 }

@@ -34,9 +34,18 @@ This system aims to provide a structured and automated experience for campaigns 
   - Social skills allow neutral attribute association (using `--`)
 
   <p align="center">
-  <img src="./assets/char-sheet-a.png" alt="char-sheet-a" width="45%" />
-  <img src="./assets/char-sheet-b.png" alt="char-sheet-b" width="45%" />
+  <img src="./assets/character-actor-sheet.png" alt="char-sheet-a" />
   </p>
+
+1. Character information.
+2. Will Weaver toggle for magic casters.
+3. Focuser toggle for warcasters.
+4. Tabs for adding and managing weapons, equipment and spells.
+   1. Items may be used directly from sheet by clicking 🎲.
+   2. Item information will be thrown in chat by clicking 🔎.
+   3. Add items by clickint corresponding ➕ icon.
+5. Character atributes and derived values tab.
+6. Skills tab - military and ocupational.
 
 ### Inventory & Combat
 - **Dynamic Inventory:** melee weapons, ranged weapons, armor, equipment tabs
@@ -45,8 +54,8 @@ This system aims to provide a structured and automated experience for campaigns 
 - **Armor Integration:** equipped armor modifies DEF, ARM, and MOVE
 
   <p align="center">
-  <img src="./assets/attack-roll-chat.png" alt="attack-roll" width="20%" />
-  <img src="./assets/token-appearance.png" alt="token-appearance" width="20%" />
+  
+  <img src="./assets/combat-example.png" alt="token-appearance" />
   </p>  
 
 ### 🎛️ Token HUD Integration (experimental)
@@ -69,11 +78,11 @@ This system aims to provide a structured and automated experience for campaigns 
 - Automations for Fatigue (Will-Weavers) and Focus (Focusers) management
 
 ### 🛡 Optional Fatigue & Focus
-- **Toggleable** per character: enable “Fatigue” and/or “Focus” in the header (pending Focus automation)
+- **Toggleable** per character: enable “Fatigue” and/or “Focus” in the header
 - Numeric **value** and **max** fields appear only if enabled
 - Automatic regeneration at start of character’s turn in combat.
   - Subtracts ARC from current Fatigue (never below 0)
-  - Checks weather a fatigue roll is needed.
+  - Adds ARC To current Focus, and set to 0 at turn end.
 - **Fatigue Roll** when spending beyond ARC:
   - As soon as you exceed ARC, rolls **2d6** vs your current Fatigue points
   - On failure: actor is marked **Exhausted**.
@@ -90,6 +99,7 @@ This system aims to provide a structured and automated experience for campaigns 
 
 - **Supported languages:** pt-BR and en
 - Open to addition of new json files for new languages. (not planned)
+- Lots of strings still pending to be translated. Expect a few portuguese lines/words.
 
 ---
 
@@ -102,7 +112,8 @@ This system aims to provide a structured and automated experience for campaigns 
 
 ---
 
-## 📜 Licensing
+## 📜 Licensing 
+<img src="./assets/ik-logo.png" alt="char-sheet-a" width="250"/>
 
 This system is a **fan-made adaptation** of the Iron Kingdoms RPG for use with Foundry VTT.  
 All intellectual property related to Iron Kingdoms is owned by its respective owners.  
