@@ -329,7 +329,7 @@ export function findMilitarySkill(item, actor) {
 async function sendAttackToChat(roll, actor, item) {
     await roll.toMessage({
         speaker: ChatMessage.getSpeaker({actor}),
-        flavor: `<h3>🎯 Resultado do ataque de ${item.name}</h3>`
+        flavor: `<h3>${game.i18n.format("IKRPG.Chat.Attack.Result", {itemName: item.name})}</h3>`
     });
     return roll;
 }
@@ -421,7 +421,7 @@ export async function handleAttackRoll(event, message) {
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor}),
             content: `
-                <h3>Resultado do Ataque (${item.name})</h3>
+                <h3>${game.i18n.format("IKRPG.Chat.Attack.Result", {itemName: item.name})}</h3>
                 ${results}
             `
         });
