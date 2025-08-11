@@ -84,5 +84,8 @@
   "IKRPG.Chat.Fatigue.Roll": "Fatigue Roll (Fatigue = {fatigue})",
   "IKRPG.Chat.Fatigue.Fail": "❌ {name} failed and is now exhausted (rolled {total}).",
   "IKRPG.Chat.Fatigue.Success": "✅ {name} resists fatigue (rolled {total}).",
+  "IKRPG.Chat.Damage.Apply": "Apply Damage ({itemName})",
+  "IKRPG.Chat.Damage.Description": "\uD83D\uDCA5 {itemName} damage",
+  "IKRPG.Chat.Damage.Total": "Apply {total} damage to {name}",
   "IKRPG.Chat.Damage.Applied": "🗡️ {name} suffered <strong>{damageTaken}</strong> damage ({damageInput} - {armUsed} ARM), remaining <strong>{hpAfter}</strong> HP."
 }

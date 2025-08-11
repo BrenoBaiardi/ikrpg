@@ -85,7 +85,7 @@ export async function handleDamageRoll(event, message) {
 
     await damageRoll.toMessage({
         speaker: ChatMessage.getSpeaker({actor}),
-        flavor: `<h3>💥 Dano de ${item.name}</h3>`
+        flavor: `<h3> ${game.i18n.format("IKRPG.Chat.Damage.Description", {itemName:item.name})}</h3>`
     });
 
     const targets = Array.from(game.user.targets);
@@ -93,15 +93,12 @@ export async function handleDamageRoll(event, message) {
     if (targets.length > 0) {
         const buttons = targets.map(t => `
         <button type="button" class="apply-damage" data-target-id="${t.id}" data-damage="${damageRoll.total}">
-            Aplicar ${damageRoll.total} em ${t.name}
+            ${game.i18n.format("IKRPG.Chat.Damage.Total", {total: damageRoll.total, name: t.name})}
         </button>`).join("<br>");
 
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor}),
-            content: `
-            <h3>Aplicar Dano (${item.name})</h3>
-            ${buttons}
-        `
+            content: "<h3>"+game.i18n.format("IKRPG.Chat.Damage.Apply", {itemName:item.name}) + "</h3>" + buttons,
         });
     }
 }
@@ -467,7 +464,7 @@ export async function handleSpellRoll(item, actor) {
                 : `<p>🎯 Sem alvos</p>`;
 
             const content = `
-        <div class="chat-spell-roll">a
+        <div class="chat-spell-roll">
             <h3>Casting -> ${item.name}</h3>
             ${targetInfo}
             <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
