@@ -45,8 +45,8 @@ This system aims to provide a structured and automated experience for campaigns 
 - **Armor Integration:** equipped armor modifies DEF, ARM, and MOVE
 
   <p align="center">
-  <img src="./assets/attack-roll-chat.png" alt="attack-roll" width="20%" />
-  <img src="./assets/token-appearance.png" alt="token-appearance" width="20%" />
+  
+  <img src="./assets/combat-example.png" alt="token-appearance" />
   </p>  
 
 ### 🎛️ Token HUD Integration (experimental)
@@ -69,11 +69,11 @@ This system aims to provide a structured and automated experience for campaigns 
 - Automations for Fatigue (Will-Weavers) and Focus (Focusers) management
 
 ### 🛡 Optional Fatigue & Focus
-- **Toggleable** per character: enable “Fatigue” and/or “Focus” in the header (pending Focus automation)
+- **Toggleable** per character: enable “Fatigue” and/or “Focus” in the header
 - Numeric **value** and **max** fields appear only if enabled
 - Automatic regeneration at start of character’s turn in combat.
   - Subtracts ARC from current Fatigue (never below 0)
-  - Checks weather a fatigue roll is needed.
+  - Adds ARC To current Focus, and set to 0 at turn end.
 - **Fatigue Roll** when spending beyond ARC:
   - As soon as you exceed ARC, rolls **2d6** vs your current Fatigue points
   - On failure: actor is marked **Exhausted**.
@@ -90,6 +90,7 @@ This system aims to provide a structured and automated experience for campaigns 
 
 - **Supported languages:** pt-BR and en
 - Open to addition of new json files for new languages. (not planned)
+- Lots of strings still pending to be translated. Expect a few portuguese lines/words.
 
 ---
 
