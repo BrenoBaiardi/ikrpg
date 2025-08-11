@@ -788,13 +788,13 @@ class IKRPGSteamjackSheet extends IKRPGBaseSheet {
             const item = this.actor.items.get(li.dataset.itemId);
             if (!item) return;
 
-            // Identificar alvos
+            // Identify targets
             const targets = Array.from(game.user.targets);
 
             const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
             let targetInfo = targets.length > 0
-                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-                : `<p>🎯 Sem alvos</p>`;
+                ? `<p>${game.i18n.format("IKRPG.Chat.Target.List", {formattedTargets: formattedTargets})}</p>`
+                : `<p>${game.i18n.format("IKRPG.Chat.Target.Empty")}</p>`;
 
             const content = `
         <div class="chat-weapon-roll">

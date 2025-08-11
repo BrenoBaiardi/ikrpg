@@ -433,8 +433,8 @@ export async function handleItemRoll(item, actor) {
 
     const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
     let targetInfo = targets.length > 0
-        ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-        : `<p>🎯 Sem alvos</p>`;
+        ? `<p>${game.i18n.format("IKRPG.Chat.Target.List", {formattedTargets: formattedTargets})}</p>`
+        : `<p>${game.i18n.format("IKRPG.Chat.Target.Empty")}</p>`;
 
     const content = `
         <div class="chat-weapon-roll">
@@ -460,8 +460,8 @@ export async function handleSpellRoll(item, actor) {
         if (item.system.offensive) {
             const formattedTargets = targets.map(t => `<strong>${t.name}</strong>`).join(", ");
             let targetInfo = targets.length > 0
-                ? `<p>🎯 Alvos: ${formattedTargets}</p>`
-                : `<p>🎯 Sem alvos</p>`;
+                ? `<p>${game.i18n.format("IKRPG.Chat.Target.List", {formattedTargets: formattedTargets})}</p>`
+                : `<p>${game.i18n.format("IKRPG.Chat.Target.Empty")}</p>`;
 
             const content = `
         <div class="chat-spell-roll">
