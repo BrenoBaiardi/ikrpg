@@ -138,4 +138,5 @@ No proprietary text, images or compendium entries are distributed with the modul
 
 This project is a work in progress. If you'd like to contribute code, help test, or provide feedback, feel free to fork
 or contact the author.
+
 ---

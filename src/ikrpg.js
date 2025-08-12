@@ -535,6 +535,17 @@ class IKRPGBaseSheet extends ActorSheet {
             this.actor.update({"system.fatigue.value": this.actor.system.fatigue.value - 1});
         });
 
+        html.find(".toggle-zero-skills").click(async ev => {
+            const current = this.actor.getFlag("ikrpg", "showAllSkills") || false;
+            const newVal = !current;
+            await this.actor.setFlag("ikrpg", "showAllSkills", newVal);
+
+            const wrapper = html.find(".skills-wrapper");
+            const btn = $(ev.currentTarget);
+            wrapper.toggleClass("skill-show-all", newVal);
+            btn.text(newVal ? "Ocultar skills vazias" : "Mostrar todas");
+        });
+
         // Rolar atributos
         html.find(".roll-attr").click(async ev => {
             // Ignores clicks from input
@@ -703,6 +714,10 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
 
     activateListeners(html) {
         super.activateListeners(html);
+
+        const showAll = this.actor.getFlag("ikrpg", "showAllSkills") || false;
+        html.find(".skills-wrapper").toggleClass("skill-show-all", showAll);
+        html.find(".toggle-zero-skills").text(showAll ? "Ocultar skills vazias" : "Mostrar todas");
 
         // Editar item
         html.find(".item-edit").click(ev => {
