@@ -45,6 +45,7 @@
   "IKRPG.Sheet.Tab.Skills": "Skills",
   "IKRPG.Table.Header.Name": "Name",
   "IKRPG.Table.Header.Skill": "Skill",
+  "IKRPG.Table.Header.MilSkill": "Military Skill",
   "IKRPG.Table.Header.Tags": "Tags",
   "IKRPG.Table.Header.POW": "POW",
   "IKRPG.Table.Header.Mod": "Mod.",

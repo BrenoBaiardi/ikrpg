@@ -587,7 +587,7 @@ class IKRPGBaseSheet extends ActorSheet {
             await roll.evaluate({async: true});
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Teste de ${skill.name}`
+                flavor: `${game.i18n.format("IKRPG.Table.Header.Skill")}: ${skill.name}`
             });
         });
 
@@ -608,16 +608,52 @@ class IKRPGBaseSheet extends ActorSheet {
 
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Perícia Militar: ${skill.name}`
+                flavor: `${game.i18n.format("IKRPG.Table.Header.MilSkill")}: ${skill.name}`
             });
         });
 
         html.find(".item-info").click(ev => {
             const li = ev.currentTarget.closest(".item");
-            const item = this.actor.items.get(li.dataset.itemId)
+            const item = this.actor.items.get(li.dataset.itemId);
+
+            // Name and description
+            let content = `<strong>${item.name}</strong>`;
+            if (item.system.description) {
+                content += `<br>${item.system.description}`;
+            }
+
+            // List of fields in order they will appear
+            const fieldLabels = {
+                skill: game.i18n.format("IKRPG.Table.Header.MilSkill"),
+                cost: game.i18n.format("IKRPG.Table.Header.Cost"),
+                pow: game.i18n.format("IKRPG.Table.Header.POW"),
+                attackMod: game.i18n.format("IKRPG.Table.Header.AttackMod"),
+                tags: game.i18n.format("IKRPG.Table.Header.Tags"),
+                effectiveRange: game.i18n.format("IKRPG.Table.Header.EffectiveRange"),
+                extremeRange: game.i18n.format("IKRPG.Table.Header.ExtremeRange"),
+                AOE: game.i18n.format("IKRPG.Table.Header.AOE"),
+                ammo: game.i18n.format("IKRPG.Table.Header.Ammo"),
+                upkeep: game.i18n.format("IKRPG.Table.Header.Upkeep"),
+                offensive: game.i18n.format("IKRPG.Table.Header.Offensive"),
+                armorBonus: game.i18n.format("IKRPG.Sheet.Labels.ARM"),
+                defPenalty: game.i18n.format("IKRPG.Sheet.Labels.DEF"),
+                spdPenalty: game.i18n.format("IKRPG.Sheet.Labels.SPD")
+            };
+
+            // Attribute table
+            let attrTable = `<table style="margin-top: 0.5em;">`;
+            for (const [key, label] of Object.entries(fieldLabels)) {
+                if (item.system[key] !== undefined && item.system[key] !== null && item.system[key] !== "") {
+                    attrTable += `<tr><td><strong>${label}:</strong></td><td>${item.system[key]}</td></tr>`;
+                }
+            }
+            attrTable += `</table>`;
+
+            content += attrTable;
+
             ChatMessage.create({
-                speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                content: "<strong>" + item.name + "</strong><br>" + item.system.description
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                content
             });
         });
 
