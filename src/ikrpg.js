@@ -6,11 +6,9 @@ import {
     handleAttackRoll,
     regenerateFatigue,
     promptBonus,
-    increaseFatigue,
     addFocus,
     clearFocus,
-    useFocus,
-    checkFocus, handleSpellRoll, handleItemRoll
+    handleSpellRoll, handleItemRoll
 } from "./logic.js";
 
 
