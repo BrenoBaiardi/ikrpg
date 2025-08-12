@@ -201,7 +201,7 @@
         <!-- Atributos -->
 
         <section class="sheet-body tabbed-area card">
-            <div class="fixed-height-400">
+            <div class="attribute-section">
 
                 <div class="flexrow">
 
@@ -210,10 +210,9 @@
                         <div class="grid-2cols">
                             {{#each system.mainAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}">{{key}}
-                                    <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
-                                           value="{{value}}"/>
-                                </label>
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}</label>
+                                <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
+                                       value="{{value}}"/>
                             </div>
                             {{/each}}
                         </div>
@@ -224,10 +223,9 @@
                         <div class="grid-2cols">
                             {{#each system.secondaryAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}">{{key}}
-                                    <input type="number" name="system.secondaryAttributes.{{key}}"
-                                           value="{{value}}"/>
-                                </label>
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}</label>
+                                <input type="number" name="system.secondaryAttributes.{{key}}"
+                                       value="{{value}}"/>
                             </div>
                             {{/each}}
                         </div>
@@ -238,9 +236,8 @@
                         <div class="grid-2cols">
                             {{#each system.derivedAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}">{{key}}
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}</label>
                                     <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}"/>
-                                </label>
                             </div>
                             {{/each}}
                         </div>
