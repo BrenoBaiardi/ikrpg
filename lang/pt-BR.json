@@ -80,6 +80,7 @@
   "IKRPG.Sheet.Attributes.Secondary": "Secundários",
   "IKRPG.Sheet.Attributes.Derived": "Derivados",
   "IKRPG.Status.Exhausted": "Exausto",
+  "IKRPG.Chat.Fatigue.AttrRoll": "Teste de {attribute}",
   "IKRPG.Chat.Fatigue.Roll": "Teste de Fadiga (Fadiga = {fatigue})",
   "IKRPG.Chat.Fatigue.Fail": "❌ {name} falhou e agora está exausto (rolou {total}).",
   "IKRPG.Chat.Fatigue.Success": "✅ {name} resistiu à fadiga (rolou {total}).",

@@ -563,7 +563,7 @@ class IKRPGBaseSheet extends ActorSheet {
             await roll.evaluate({async: true});
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Teste de ${attr}`
+                flavor: game.i18n.format("IKRPG.Chat.Fatigue.AttrRoll", {attribute: attr})
             });
         });
 
