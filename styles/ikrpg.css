@@ -1,5 +1,5 @@
 .sheet-ikrpg {
-    width: 850px !important;
+    width: 835px !important;
     height: auto;
     max-height: 95vh;
     overflow-y: auto;
@@ -145,7 +145,6 @@ h2, h3 {
     margin: 0.2rem;
 }
 
-
 .attribute-block{
     margin: 1rem;
 }
@@ -204,6 +203,13 @@ input.big-input {
     justify-content: space-between;
 }
 
+.skill-row.skill-zero {
+    display: none;
+}
+.skill-show-all .skill-row.skill-zero {
+    display: table-row;
+}
+
 form.ikrpg.flexrow {
     margin: 5px;
     align-items: flex-start;
@@ -235,7 +241,7 @@ form.ikrpg.flexrow {
 .grid-2cols {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 5px;
 }
 
 .sheet-item-tabs {
@@ -378,9 +384,10 @@ button.dice-button:active {
     min-width: 40px;
 }
 
-.fixed-height-400 {
+.attribute-section {
+    max-width: 800px;
     max-height: 400px;
-    min-height: 400px;
+    min-height: 200px;
     overflow-y: auto;
 }
 
@@ -405,6 +412,10 @@ select.skill-select{
 
 .roll-attr {
     cursor: pointer;
+}
+
+label.roll-attr:hover {
+    color: red;
 }
 
 th.col-attr {

@@ -1,12 +1,29 @@
 <form class="ikrpg sheet actor sheet-ikrpg" autocomplete="off">
     <div class="sheet-container">
 
-        <div class="character-name-container">
-            <input name="name" type="text" value="{{actor.name}}"  placeholder='{{t "IKRPG.Sheet.Placeholder.Name"}}'
-                   class="character-name"/>
-        </div>
-
         <header class="sheet-header card">
+            <div class="info-block">
+                <input name="name" type="text" value="{{actor.name}}"  placeholder='{{t "IKRPG.Sheet.Placeholder.Name"}}'
+                       class="character-name"/>
+<!--                <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>-->
+                <div class="flexrow">
+                    <div><label>{{t "IKRPG.Sheet.Labels.Player"}}:<input type="text" name="system.player" value="{{system.player}}"/></label>
+                    </div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Archetype"}}:<input type="text" name="system.archetype"
+                                                                            value="{{system.archetype}}"/></label>
+                    </div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Race"}}:<input type="text" name="system.race" value="{{system.race}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Careers"}}:<input type="text" name="system.careers" value="{{system.careers}}"/></label>
+                    </div>
+                </div>
+                <div class="flexrow">
+                    <div><label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Gender"}}:<input type="text" name="system.sex" value="{{system.sex}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Faith"}}:<input type="text" name="system.faith" value="{{system.faith}}"/></label></div>
+                </div>
+            </div>
+
             <div class="flexrow header-flex">
                 <img
                         class="img-profile"
@@ -131,27 +148,6 @@
                             {{checked system.focus.enabled}}/>
                     {{t "IKRPG.Sheet.Labels.Focuser"}}
                 </label>
-            </div>
-
-
-            <div class="info-block">
-                <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>
-                <div class="flexrow">
-                    <div><label>{{t "IKRPG.Sheet.Labels.Player"}}:<input type="text" name="system.player" value="{{system.player}}"/></label>
-                    </div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Archetype"}}:<input type="text" name="system.archetype"
-                                                 value="{{system.archetype}}"/></label>
-                    </div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Race"}}:<input type="text" name="system.race" value="{{system.race}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Careers"}}:<input type="text" name="system.careers" value="{{system.careers}}"/></label>
-                    </div>
-                </div>
-                <div class="flexrow">
-                    <div><label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Gender"}}:<input type="text" name="system.sex" value="{{system.sex}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Faith"}}:<input type="text" name="system.faith" value="{{system.faith}}"/></label></div>
-                </div>
             </div>
         </header>
 
@@ -399,7 +395,7 @@
             <a class="nav-item" data-tab="occupationalSkills">{{t "IKRPG.Sheet.Tab.Skills"}}</a>
         </nav>
         <section class="sheet-body tabbed-area card">
-            <div class="fixed-height-400">
+            <div class="attribute-section">
 
                 <div class="tab" data-group="primary" data-tab="attributes">
                     <div class="flexrow">
@@ -409,10 +405,9 @@
                             <div class="grid-2cols">
                                 {{#each system.mainAttributes as |value key|}}
                                 <div class="attribute">
-                                    <label class="roll-attr" data-attr="{{key}}">{{key}}
+                                    <label for="main-{{key}}" class="roll-attr" data-attr="{{key}}">{{key}}</label>
                                         <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
                                                value="{{value}}"/>
-                                    </label>
                                 </div>
                                 {{/each}}
                             </div>
@@ -423,10 +418,9 @@
                             <div class="grid-2cols">
                                 {{#each system.secondaryAttributes as |value key|}}
                                 <div class="attribute">
-                                    <label class="roll-attr" data-attr="{{key}}">{{key}}
-                                        <input type="number" name="system.secondaryAttributes.{{key}}"
+                                    <label for="secondary-{{key}}" class="roll-attr" data-attr="{{key}}">{{key}}</label>
+                                        <input id="secondary-{{key}}" type="number" name="system.secondaryAttributes.{{key}}"
                                                value="{{value}}"/>
-                                    </label>
                                 </div>
                                 {{/each}}
                             </div>
@@ -437,10 +431,8 @@
                             <div class="grid-2cols">
                                 {{#each system.derivedAttributes as |value key|}}
                                 <div class="attribute">
-                                    <label class="roll-attr" data-attr="{{key}}">{{key}}
-                                        <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}"
-                                               disabled/>
-                                    </label>
+                                    <label for="derived-{{key}}" class="roll-attr" data-attr="{{key}}">{{key}}</label>
+                                        <input id="derived-{{key}}" type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled/>
                                 </div>
                                 {{/each}}
                             </div>
@@ -461,7 +453,11 @@
                     </div>
                 </div>
                 <div class="tab" data-group="primary" data-tab="occupationalSkills">
+                <div class="skills-controls">
+                    <button type="button" class="toggle-zero-skills">Mostrar todas</button>
+                </div>
                     <div class="skills-wrapper">
+
                         <table class="skills-table">
                             <thead>
                             <tr>
@@ -473,8 +469,8 @@
                             </thead>
                             <tbody>
                             {{#each system.occupationalSkills}}
-                            <tr>
-                                <td>
+                            <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
+                            <td>
                                     {{this.name}}
                                     <input type="hidden" name="system.occupationalSkills.{{@index}}.name"
                                            value="{{this.name}}"/>
@@ -521,7 +517,7 @@
                             </thead>
                             <tbody>
                             {{#each system.militarySkills}}
-                            <tr>
+                            <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
                                 <td>
                                     {{this.name}}
                                     <input type="hidden" name="system.militarySkills.{{@index}}.name"

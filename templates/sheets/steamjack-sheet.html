@@ -1,12 +1,7 @@
 <form class="ikrpg sheet actor steamjack-sheet" autocomplete="off">
     <div class="sheet-container">
 
-        <!-- Nome e Imagem -->
-        <div class="character-name-container">
-            <label>
-                <input name="name" type="text" value="{{actor.name}}" placeholder='{{t "IKRPG.Sheet.Labels.Steamjack"}}' class="character-name"/>
-            </label>
-        </div>
+
 
         <div class="flexrow header-flex card">
             <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="steamjack portrait"/>
@@ -41,14 +36,15 @@
                 </div>
 
                 <div class="info-block">
-                    <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>
+                    <label>
+                        <input name="name" type="text" value="{{actor.name}}" placeholder='{{t "IKRPG.Sheet.Labels.Steamjack"}}' class="character-name"/>
+                    </label>
                     <div>
-                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Chassis"}}:<input type="text" name="system.chassis"
-                                                                         value="{{system.chassis}}"/></label></div>
-                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Cortex"}}:<input type="text" name="system.cortex"
-                                                                         value="{{system.cortex}}"/></label></div>
-                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Imprint"}}:<input type="text" name="system.imprint"
-                                                                          value="{{system.imprint}}"/></label></div>
+                        <div class="info-attribute"><label>{{t "IKRPG.Sheet.Labels.Chassis"}}:<input type="text" name="system.chassis" value="{{system.chassis}}"/></label></div>
+                        <div class="info-attribute">
+                            <label>{{t "IKRPG.Sheet.Labels.Cortex"}}:<input type="text" name="system.cortex" value="{{system.cortex}}"/></label>
+                            <label>{{t "IKRPG.Sheet.Labels.Imprint"}}:<input type="text" name="system.imprint" value="{{system.imprint}}"/></label>
+                        </div>
                         <div class="info-attribute">
                             <label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}"/></label>
                             <label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}"/></label>
@@ -205,7 +201,7 @@
         <!-- Atributos -->
 
         <section class="sheet-body tabbed-area card">
-            <div class="fixed-height-400">
+            <div class="attribute-section">
 
                 <div class="flexrow">
 
@@ -214,10 +210,9 @@
                         <div class="grid-2cols">
                             {{#each system.mainAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}">{{key}}
-                                    <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
-                                           value="{{value}}"/>
-                                </label>
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}</label>
+                                <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
+                                       value="{{value}}"/>
                             </div>
                             {{/each}}
                         </div>
@@ -228,10 +223,9 @@
                         <div class="grid-2cols">
                             {{#each system.secondaryAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}">{{key}}
-                                    <input type="number" name="system.secondaryAttributes.{{key}}"
-                                           value="{{value}}"/>
-                                </label>
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}</label>
+                                <input type="number" name="system.secondaryAttributes.{{key}}"
+                                       value="{{value}}"/>
                             </div>
                             {{/each}}
                         </div>
@@ -242,9 +236,8 @@
                         <div class="grid-2cols">
                             {{#each system.derivedAttributes as |value key|}}
                             <div class="attribute">
-                                <label class="roll-attr" data-attr="{{key}}">{{key}}
+                                <label class="roll-attr" data-attr="{{key}}">{{key}}</label>
                                     <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}"/>
-                                </label>
                             </div>
                             {{/each}}
                         </div>

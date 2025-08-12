@@ -6,11 +6,9 @@ import {
     handleAttackRoll,
     regenerateFatigue,
     promptBonus,
-    increaseFatigue,
     addFocus,
     clearFocus,
-    useFocus,
-    checkFocus, handleSpellRoll, handleItemRoll
+    handleSpellRoll, handleItemRoll
 } from "./logic.js";
 
 
@@ -535,6 +533,17 @@ class IKRPGBaseSheet extends ActorSheet {
             this.actor.update({"system.fatigue.value": this.actor.system.fatigue.value - 1});
         });
 
+        html.find(".toggle-zero-skills").click(async ev => {
+            const current = this.actor.getFlag("ikrpg", "showAllSkills") || false;
+            const newVal = !current;
+            await this.actor.setFlag("ikrpg", "showAllSkills", newVal);
+
+            const wrapper = html.find(".skills-wrapper");
+            const btn = $(ev.currentTarget);
+            wrapper.toggleClass("skill-show-all", newVal);
+            btn.text(newVal ? "Ocultar skills vazias" : "Mostrar todas");
+        });
+
         // Rolar atributos
         html.find(".roll-attr").click(async ev => {
             // Ignores clicks from input
@@ -554,7 +563,7 @@ class IKRPGBaseSheet extends ActorSheet {
             await roll.evaluate({async: true});
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Teste de ${attr}`
+                flavor: game.i18n.format("IKRPG.Chat.Fatigue.AttrRoll", {attribute: attr})
             });
         });
 
@@ -576,7 +585,7 @@ class IKRPGBaseSheet extends ActorSheet {
             await roll.evaluate({async: true});
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Teste de ${skill.name}`
+                flavor: `${game.i18n.format("IKRPG.Table.Header.Skill")}: ${skill.name}`
             });
         });
 
@@ -597,16 +606,52 @@ class IKRPGBaseSheet extends ActorSheet {
 
             roll.toMessage({
                 speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                flavor: `Perícia Militar: ${skill.name}`
+                flavor: `${game.i18n.format("IKRPG.Table.Header.MilSkill")}: ${skill.name}`
             });
         });
 
         html.find(".item-info").click(ev => {
             const li = ev.currentTarget.closest(".item");
-            const item = this.actor.items.get(li.dataset.itemId)
+            const item = this.actor.items.get(li.dataset.itemId);
+
+            // Name and description
+            let content = `<strong>${item.name}</strong>`;
+            if (item.system.description) {
+                content += `<br>${item.system.description}`;
+            }
+
+            // List of fields in order they will appear
+            const fieldLabels = {
+                skill: game.i18n.format("IKRPG.Table.Header.MilSkill"),
+                cost: game.i18n.format("IKRPG.Table.Header.Cost"),
+                pow: game.i18n.format("IKRPG.Table.Header.POW"),
+                attackMod: game.i18n.format("IKRPG.Table.Header.AttackMod"),
+                tags: game.i18n.format("IKRPG.Table.Header.Tags"),
+                effectiveRange: game.i18n.format("IKRPG.Table.Header.EffectiveRange"),
+                extremeRange: game.i18n.format("IKRPG.Table.Header.ExtremeRange"),
+                AOE: game.i18n.format("IKRPG.Table.Header.AOE"),
+                ammo: game.i18n.format("IKRPG.Table.Header.Ammo"),
+                upkeep: game.i18n.format("IKRPG.Table.Header.Upkeep"),
+                offensive: game.i18n.format("IKRPG.Table.Header.Offensive"),
+                armorBonus: game.i18n.format("IKRPG.Sheet.Labels.ARM"),
+                defPenalty: game.i18n.format("IKRPG.Sheet.Labels.DEF"),
+                spdPenalty: game.i18n.format("IKRPG.Sheet.Labels.SPD")
+            };
+
+            // Attribute table
+            let attrTable = `<table style="margin-top: 0.5em;">`;
+            for (const [key, label] of Object.entries(fieldLabels)) {
+                if (item.system[key] !== undefined && item.system[key] !== null && item.system[key] !== "") {
+                    attrTable += `<tr><td><strong>${label}:</strong></td><td>${item.system[key]}</td></tr>`;
+                }
+            }
+            attrTable += `</table>`;
+
+            content += attrTable;
+
             ChatMessage.create({
-                speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                content: "<strong>" + item.name + "</strong><br>" + item.system.description
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                content
             });
         });
 
@@ -703,6 +748,10 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
 
     activateListeners(html) {
         super.activateListeners(html);
+
+        const showAll = this.actor.getFlag("ikrpg", "showAllSkills") || false;
+        html.find(".skills-wrapper").toggleClass("skill-show-all", showAll);
+        html.find(".toggle-zero-skills").text(showAll ? "Ocultar skills vazias" : "Mostrar todas");
 
         // Editar item
         html.find(".item-edit").click(ev => {
