@@ -3,24 +3,20 @@
         <div class="flexrow" style="align-items: center; gap: 1rem;">
             <!-- Imagem do NPC -->
             <div class="profile-img">
-                <img src="{{actor.img}}" data-edit="img"
-                     style="width: 128px; height: 128px; object-fit: cover; border-radius: 8px;"/>
+                <img src="{{actor.img}}" data-edit="img" style="width: 128px; height: 128px; object-fit: cover; border-radius: 8px;" />
             </div>
             <!-- Nome e HP -->
             <div class="name-hp" style="width: fit-content;">
-                <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem"
-                       style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;"/>
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Nome do Personagem" style="text-align:center; font-size:1.5rem; width:100%; margin-bottom: 0.5rem;" />
                 <div class="hp-bar">
 
-                    <div class="flexrow"
-                         style="width: fit-content; gap: 0.5rem; align-items: center; flex-wrap: nowrap;">
-                        <label>HP</label>
+                    <div class="flexrow" style="width: fit-content; gap: 0.5rem; align-items: center; flex-wrap: nowrap;">
+                        <label>{{t "IKRPG.Sheet.Labels.HP"}}</label>
                         <button type="button" class="hp-minus control-button" style="width: 5px; height: 30px;">-</button>
-                        <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;"/>
+                        <input type="number" name="system.hp.value" value="{{system.hp.value}}" style="width: 4ch;" />
                         <button type="button" class="hp-plus control-button" style="width: 5px; height: 30px;">+</button>
-                        <label>Max</label>
-                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled
-                               style="width: 4ch;"/>
+                        <label>{{t "IKRPG.Sheet.Labels.Max"}}</label>
+                        <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled style="width: 4ch;" />
                     </div>
                 </div>
             </div>
@@ -29,17 +25,17 @@
     </header>
 
     <section class="sheet-body" style="padding: 1rem;">
-        <h2>Atributos</h2>
+        <h2>{{t "IKRPG.Sheet.Tab.Attributes"}}</h2>
         <div class="flexrow" style="gap: 2rem; align-items: flex-start;">
 
             <!-- Atributos principais -->
             <div class="attribute-block" style="flex: 1;">
-                <h3>Principais</h3>
+                <h3>{{t "IKRPG.Sheet.Attributes.Main"}}</h3>
                 <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     {{#each system.mainAttributes as |value key|}}
                     <div class="attribute">
                         <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
-                        <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}"/>
+                        <input type="number" name="system.mainAttributes.{{key}}" value="{{value}}" />
                     </div>
                     {{/each}}
                 </div>
@@ -47,12 +43,12 @@
 
             <!-- Atributos secundários -->
             <div class="attribute-block" style="flex: 1;">
-                <h3>Secundários</h3>
+                <h3>{{t "IKRPG.Sheet.Attributes.Secondary"}}</h3>
                 <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     {{#each system.secondaryAttributes as |value key|}}
                     <div class="attribute">
                         <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
-                        <input type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}"/>
+                        <input type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}" />
                     </div>
                     {{/each}}
                 </div>
@@ -60,12 +56,12 @@
 
             <!-- Atributos derivados -->
             <div class="attribute-block" style="flex: 1;">
-                <h3>Derivados</h3>
+                <h3>{{t "IKRPG.Sheet.Attributes.Derived"}}</h3>
                 <div class="grid attributes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     {{#each system.derivedAttributes as |value key|}}
                     <div class="attribute">
                         <label class="roll-attr" data-attr="{{key}}" style="cursor:pointer;">{{key}}</label>
-                        <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled/>
+                        <input type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled />
                     </div>
                     {{/each}}
                 </div>

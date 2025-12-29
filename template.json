@@ -79,7 +79,7 @@
           "level": 0
         },
         {
-          "name": "Animal Handling",
+          "name": "AnimalHandling",
           "attr": "SOC",
           "level": 0
         },
@@ -129,7 +129,7 @@
           "level": 0
         },
         {
-          "name": "Escape Artist",
+          "name": "EscapeArtist",
           "attr": "AGL",
           "level": 0
         },
@@ -139,12 +139,12 @@
           "level": 0
         },
         {
-          "name": "Fell Calling",
+          "name": "FellCalling",
           "attr": "POI",
           "level": 0
         },
         {
-          "name": "Forensic Science",
+          "name": "ForensicScience",
           "attr": "INT",
           "level": 0
         },
@@ -179,7 +179,7 @@
           "level": 0
         },
         {
-          "name": "Lock Picking",
+          "name": "LockPicking",
           "attr": "AGL",
           "level": 0
         },
@@ -189,7 +189,7 @@
           "level": 0
         },
         {
-          "name": "Mechanikal Engineering",
+          "name": "MechanikalEngineering",
           "attr": "INT",
           "level": 0
         },
@@ -229,7 +229,7 @@
           "level": 0
         },
         {
-          "name": "Rope Use",
+          "name": "RopeUse",
           "attr": "AGL",
           "level": 0
         },
@@ -281,12 +281,12 @@
           "level": 0
         },
         {
-          "name": "Great Weapon",
+          "name": "GreatWeapon",
           "attr": "PRW",
           "level": 0
         },
         {
-          "name": "Hand Weapon",
+          "name": "HandWeapon",
           "attr": "PRW",
           "level": 0
         },
@@ -296,7 +296,7 @@
           "level": 0
         },
         {
-          "name": "Light Artillery",
+          "name": "LightArtillery",
           "attr": "POI",
           "level": 0
         },
@@ -316,12 +316,12 @@
           "level": 0
         },
         {
-          "name": "Thrown Weapon",
+          "name": "ThrownWeapon",
           "attr": "PRW",
           "level": 0
         },
         {
-          "name": "Unarmed Combat",
+          "name": "UnarmedCombat",
           "attr": "PRW",
           "level": 0
         }

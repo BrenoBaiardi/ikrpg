@@ -58,13 +58,13 @@ export async function handleDamageRoll(event, message) {
     const actor = ChatMessage.getSpeakerActor(message.speaker);
 
     if (!actor) {
-        ui.notifications.warn("Ator não encontrado.");
+        ui.notifications.warn("Actor does not exist.");
         return;
     }
 
     const item = actor.items.get(itemId);
     if (!item) {
-        ui.notifications.warn("Item não encontrado.");
+        ui.notifications.warn("Item does not exist.");
         return;
     }
 
@@ -109,7 +109,7 @@ export async function useFocus(actor, cost) {
     const current = actor.system.focus.value;
     const newValue = current - cost;
     if (newValue < 0) { // if exceeds ARCx2 - fatigue roll
-        ui.notifications.warn(`Not enough focus to cast spell!`);
+        ui.notifications.warn(`Not enough Focus to cast the spell!`);
         return actor.system.focus.value;
     }
     await actor.update({"system.focus.value": newValue});
@@ -240,10 +240,9 @@ export async function regenerateFatigue(actor) {
 
     const content = `
     <div class="ikrpg-chat-fatigue">
-      <h4>✨ Will Weavers recover their ARC in fatigue each maintenance ✨</h4>
+      <h4>✨ Will Weavers recover their ARC in fatigue each maintenance phase. ✨</h4>
       <p>
-        <strong>${actor.name}</strong> recovered
-        <strong>${actor.system.secondaryAttributes.ARC}</strong> fatigue.
+        <strong>${actor.name}</strong> recovered <strong>${actor.system.secondaryAttributes.ARC}</strong> Fatigue.
       </p>
       <p>
         Fatigue: <s>${current}</s> → <strong>${newValue}</strong>
@@ -281,9 +280,9 @@ export async function clearFocus(actor) {
 
     const content = `
     <div class="ikrpg-chat-fatigue">
-      <h4>✨ Focusers lose their focus at the end of turn✨</h4>
+      <h4>✨ Focusers lose their focus at the end of turn.✨</h4>
       <p>
-        <strong>${actor.name}</strong> has now
+        <strong>${actor.name}</strong> now has
         <strong>0</strong> Focus.
       </p>
     </div>
@@ -300,9 +299,9 @@ export async function addFocus(actor) {
     await actor.update({"system.focus.value": actor.system.secondaryAttributes.ARC});
     const content = `
     <div class="ikrpg-chat-fatigue">
-      <h4>✨ Focusers Gain focus on start of turn✨</h4>
+      <h4>✨ Focusers gain Focus at the start of their turn.✨</h4>
       <p>
-        <strong>${actor.name}</strong> has now
+        <strong>${actor.name}</strong> now has 
         <strong>${actor.system.secondaryAttributes.ARC}</strong> Focus.
       </p>
     </div>
@@ -321,7 +320,7 @@ export function findMilitarySkill(item, actor) {
 
     if (!skill) {
         skill = {name: "undefined", attr: 0, level: 0}
-        ui.notifications.warn(`Perícia militar não encontrada -> [${skillName}].`);
+        ui.notifications.warn(`No Military Skill found -> [${skillName}].`);
     }
     return skill;
 }
@@ -388,14 +387,14 @@ export async function handleAttackRoll(event, message) {
     const actor = ChatMessage.getSpeakerActor(message.speaker);
 
     if (!actor) {
-        ui.notifications.warn("Ator não encontrado.");
+        ui.notifications.warn("Actor does not exist.");
         return;
     }
 
     const item = actor.items.get(itemId);
 
     if (!item) {
-        ui.notifications.warn("Item não encontrado.");
+        ui.notifications.warn("Item does not exist.");
         return;
     }
 
@@ -484,7 +483,7 @@ export async function handleSpellRoll(item, actor) {
     if (actor.type === "character" && actor.system.fatigue.enabled) {
         ChatMessage.create({
             speaker: ChatMessage.getSpeaker({actor: actor}),
-            content: `<strong>${actor.name}</strong> usou <strong>${item.name}</strong> e acumulou <strong>${item.system.cost}</strong> ponto(s) de Fadiga`
+            content: `<strong>${actor.name}</strong> used <strong>${item.name}</strong> and accumulated <strong>${item.system.cost}</strong> point(s) of Fatigue`
         });
         increaseFatigue(actor, item.system.cost)
     }

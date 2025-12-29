@@ -1,166 +1,135 @@
 <form class="ikrpg item-sheet" autocomplete="off">
     <header class="sheet-header">
-        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:90%"/></h1>
+        <h1><input name="name" type="text" value="{{item.name}}" placeholder="Nome do Item" style="width:90%" /></h1>
     </header>
 
     <section class="sheet-body" style="padding: 0.5rem;">
         <div class="form-group">
             <label>{{t "IKRPG.Table.Header.Type"}}</label>
-            <input type="text" value="{{item.type}}" disabled/>
+            <input type="text" value="{{item.type}}" disabled />
         </div>
 
         <div>
             <label>{{t "IKRPG.Sheet.Item.Tags"}}:</label>
-            <input type="text" name="system.tags" value="{{tagsToString system.tags}}"/>
+            <input type="text" name="system.tags" value="{{tagsToString system.tags}}" />
         </div>
 
         {{#if (eq item.type "meleeWeapon")}}
 
         <div class="form-group">
-            <label>Perícia</label>
+            <label>{{t "IKRPG.Table.Header.MilSkill"}}</label>
             <select name="system.skill">
                 <option value="">—</option>
-                <option value="Archery" {{#if (eq system.skill
-                "Archery")}}selected{{/if}}>Archery</option>
-                <option value="Crossbow" {{#if (eq system.skill
-                "Crossbow")}}selected{{/if}}>Crossbow</option>
-                <option value="Great Weapon" {{#if (eq system.skill
-                "Great Weapon")}}selected{{/if}}>Great Weapon</option>
-                <option value="Hand Weapon" {{#if (eq system.skill
-                "Hand Weapon")}}selected{{/if}}>Hand Weapon</option>
-                <option value="Lance" {{#if (eq system.skill
-                "Lance")}}selected{{/if}}>Lance</option>
-                <option value="Light Artillery" {{#if (eq system.skill
-                "Light Artillery")}}selected{{/if}}>Light Artillery</option>
-                <option value="Pistol" {{#if (eq system.skill
-                "Pistol")}}selected{{/if}}>Pistol</option>
-                <option value="Rifle" {{#if (eq system.skill
-                "Rifle")}}selected{{/if}}>Rifle</option>
-                <option value="Shield" {{#if (eq system.skill
-                "Shield")}}selected{{/if}}>Shield</option>
-                <option value="Thrown Weapon" {{#if (eq system.skill
-                "Thrown Weapon")}}selected{{/if}}>Thrown Weapon</option>
-                <option value="Unarmed Combat" {{#if (eq system.skill
-                "Unarmed Combat")}}selected{{/if}}>Unarmed Combat</option>
+                <option value="Archery" {{#if (eq system.skill "Archery" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Archery"}}</option>
+                <option value="Crossbow" {{#if (eq system.skill "Crossbow" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Crossbow"}}</option>
+                <option value="GreatWeapon" {{#if (eq system.skill "GreatWeapon" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.GreatWeapon"}}</option>
+                <option value="HandWeapon" {{#if (eq system.skill "HandWeapon" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.HandWeapon"}}</option>
+                <option value="Lance" {{#if (eq system.skill "Lance" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Lance"}}</option>
+                <option value="LightArtillery" {{#if (eq system.skill "LightArtillery" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.LightArtillery"}}</option>
+                <option value="Pistol" {{#if (eq system.skill "Pistol" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Pistol"}}</option>
+                <option value="Rifle" {{#if (eq system.skill "Rifle" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Rifle"}}</option>
+                <option value="Shield" {{#if (eq system.skill "Shield" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Shield"}}</option>
+                <option value="ThrownWeapon" {{#if (eq system.skill "ThrownWeapon" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.ThrownWeapon"}}</option>
+                <option value="UnarmedCombat" {{#if (eq system.skill "UnarmedCombat" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.UnarmedCombat"}}</option>
             </select>
         </div>
         <div class="form-group">
             <label>{{t "IKRPG.Table.Header.AttackMod"}}</label>
-            <input type="number" name="system.attackMod" value="{{system.attackMod}}"/>
+            <input type="number" name="system.attackMod" value="{{system.attackMod}}" />
         </div>
         <div class="form-group">
             <label>{{t "IKRPG.Table.Header.POW"}}</label>
-            <input type="number" name="system.pow" value="{{system.pow}}"/>
+            <input type="number" name="system.pow" value="{{system.pow}}" />
         </div>
         {{/if}}
 
         {{#if (eq item.type "rangedWeapon")}}
         <div class="form-group">
             <label>{{t "IKRPG.Table.Header.Ammo"}}</label>
-            <input type="text" name="system.ammo" value="{{system.ammo}}"/>
+            <input type="text" name="system.ammo" value="{{system.ammo}}" />
         </div>
         <div class="form-group">
             <label>{{t "IKRPG.Table.Header.EffectiveRange"}}</label>
-            <input type="text" name="system.effectiveRange" value="{{system.effectiveRange}}"/>
+            <input type="text" name="system.effectiveRange" value="{{system.effectiveRange}}" />
         </div>
         <div class="form-group">
             <label>{{t "IKRPG.Table.Header.ExtremeRange"}}</label>
-            <input type="text" name="system.extremeRange" value="{{system.extremeRange}}"/>
+            <input type="text" name="system.extremeRange" value="{{system.extremeRange}}" />
         </div>
         <div class="form-group">
-            <label>Perícia</label>
+            <label>{{t "IKRPG.Table.Header.MilSkill"}}</label>
             <select name="system.skill">
                 <option value="">—</option>
-                <option value="Archery" {{#if (eq system.skill
-                "Archery")}}selected{{/if}}>Archery</option>
-                <option value="Crossbow" {{#if (eq system.skill
-                "Crossbow")}}selected{{/if}}>Crossbow</option>
-                <option value="Great Weapon" {{#if (eq system.skill
-                "Great Weapon")}}selected{{/if}}>Great Weapon</option>
-                <option value="Hand Weapon" {{#if (eq system.skill
-                "Hand Weapon")}}selected{{/if}}>Hand Weapon</option>
-                <option value="Lance" {{#if (eq system.skill
-                "Lance")}}selected{{/if}}>Lance</option>
-                <option value="Light Artillery" {{#if (eq system.skill
-                "Light Artillery")}}selected{{/if}}>Light Artillery</option>
-                <option value="Pistol" {{#if (eq system.skill
-                "Pistol")}}selected{{/if}}>Pistol</option>
-                <option value="Rifle" {{#if (eq system.skill
-                "Rifle")}}selected{{/if}}>Rifle</option>
-                <option value="Shield" {{#if (eq system.skill
-                "Shield")}}selected{{/if}}>Shield</option>
-                <option value="Thrown Weapon" {{#if (eq system.skill
-                "Thrown Weapon")}}selected{{/if}}>Thrown Weapon</option>
-                <option value="Unarmed Combat" {{#if (eq system.skill
-                "Unarmed Combat")}}selected{{/if}}>Unarmed Combat</option>
+                <option value="Archery" {{#if (eq system.skill "Archery" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Archery"}}</option>
+                <option value="Crossbow" {{#if (eq system.skill "Crossbow" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Crossbow"}}</option>
+                <option value="GreatWeapon" {{#if (eq system.skill "GreatWeapon" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.GreatWeapon"}}</option>
+                <option value="HandWeapon" {{#if (eq system.skill "HandWeapon" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.HandWeapon"}}</option>
+                <option value="Lance" {{#if (eq system.skill "Lance" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Lance"}}</option>
+                <option value="LightArtillery" {{#if (eq system.skill "LightArtillery" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.LightArtillery"}}</option>
+                <option value="Pistol" {{#if (eq system.skill "Pistol" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Pistol"}}</option>
+                <option value="Rifle" {{#if (eq system.skill "Rifle" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Rifle"}}</option>
+                <option value="Shield" {{#if (eq system.skill "Shield" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.Shield"}}</option>
+                <option value="ThrownWeapon" {{#if (eq system.skill "ThrownWeapon" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.ThrownWeapon"}}</option>
+                <option value="UnarmedCombat" {{#if (eq system.skill "UnarmedCombat" )}}selected{{/if}}>{{t "IKRPG.Sheet.MilSkills.UnarmedCombat"}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Mod. de Ataque</label>
-            <input type="number" name="system.attackMod" value="{{system.attackMod}}"/>
+            <label>{{t "IKRPG.Table.Header.AttackMod"}}</label>
+            <input type="number" name="system.attackMod" value="{{system.attackMod}}" />
         </div>
         <div class="form-group">
-            <label>POW</label>
-            <input type="number" name="system.pow" value="{{system.pow}}"/>
+            <label>{{t "IKRPG.Table.Header.POW"}}</label>
+            <input type="number" name="system.pow" value="{{system.pow}}" />
         </div>
         <div class="form-group">
-            <label>AOE</label>
-            <input type="text" name="system.AOE" value="{{system.aoe}}"/>
+            <label>{{t "IKRPG.Table.Header.AoE"}}</label>
+            <input type="text" name="system.AOE" value="{{system.aoe}}" />
         </div>
         {{/if}}
 
         {{#if (eq item.type "armor")}}
         <div class="form-group">
             <label>{{t "IKRPG.Sheet.Item.Armor"}}</label>
-            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}"
-                   style="width: 4ch; text-align: center;"/>
+            <input type="number" name="system.armorBonus" value="{{system.armorBonus}}" style="width: 4ch; text-align: center;" />
         </div>
         <div>
             <label>{{t "IKRPG.Table.Header.Equipped"}}:</label>
-            <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}}/>
+            <input type="checkbox" name="system.isEquipped" {{checked system.isEquipped}} />
         </div>
         <div class="form-group">
             <label>{{t "IKRPG.Sheet.Item.DefPenalty"}}:</label>
-            <input type="number"
-                   name="system.defPenalty"
-                   value="{{item.system.defPenalty}}"
-                   oninput="this.value = Math.abs(this.value) * -1"
-                   style="width: 4ch; text-align: center;"/>
+            <input type="number" name="system.defPenalty" value="{{item.system.defPenalty}}" oninput="this.value = Math.abs(this.value) * -1" style="width: 4ch; text-align: center;" />
         </div>
         <div class="form-group">
             <label>{{t "IKRPG.Sheet.Item.SpdPenalty"}}:</label>
-            <input type="number"
-                   name="system.spdPenalty"
-                   value="{{item.system.spdPenalty}}"
-                   oninput="this.value = Math.abs(this.value) * -1"
-                   style="width: 4ch; text-align: center;"/>
+            <input type="number" name="system.spdPenalty" value="{{item.system.spdPenalty}}" oninput="this.value = Math.abs(this.value) * -1" style="width: 4ch; text-align: center;" />
         </div>
         {{/if}}
 
         {{#if (eq item.type "spell")}}
         <div class="form-group">
             <label for="system.cost">{{t "IKRPG.Table.Header.Cost"}}</label>
-            <input id="system.cost" name="system.cost" type="number" value="{{system.cost}}"/>
+            <input id="system.cost" name="system.cost" type="number" value="{{system.cost}}" />
         </div>
         <div class="form-group">
             <label for="system.rng">{{t "IKRPG.Table.Header.Range"}}</label>
-            <input id="system.rng" name="system.rng" type="text" value="{{system.rng}}"/>
+            <input id="system.rng" name="system.rng" type="text" value="{{system.rng}}" />
         </div>
         <div class="form-group">
             <label for="system.pow">{{t "IKRPG.Table.Header.POW"}}</label>
-            <input id="system.pow" name="system.pow" type="number" value="{{system.pow}}"/>
+            <input id="system.pow" name="system.pow" type="number" value="{{system.pow}}" />
         </div>
         <div class="form-group inline-group">
-            <input id="system.upkeep" name="system.upkeep" type="checkbox" {{checked system.upkeep}}/>
+            <input id="system.upkeep" name="system.upkeep" type="checkbox" {{checked system.upkeep}} />
             <label for="system.upkeep">{{t "IKRPG.Table.Header.Upkeep"}}</label>
         </div>
         <div class="form-group inline-group">
-            <input id="system.offensive" name="system.offensive" type="checkbox" {{checked system.offensive}}/>
+            <input id="system.offensive" name="system.offensive" type="checkbox" {{checked system.offensive}} />
             <label for="system.offensive">{{t "IKRPG.Table.Header.Offensive"}}</label>
         </div>
         <div class="form-group">
             <label for="system.AOE">{{t "IKRPG.Table.Header.AoE"}}</label>
-            <input id="system.AOE" name="system.AOE" type="text" value="{{system.AOE}}"/>
+            <input id="system.AOE" name="system.AOE" type="text" value="{{system.AOE}}" />
         </div>
         {{/if}}
 

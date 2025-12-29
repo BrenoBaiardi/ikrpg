@@ -57,10 +57,10 @@ Hooks.once("init", function () {
     Items.registerSheet("ikrpg", IKRPGItemSheet, {
         makeDefault: true
     });
-    Items.registerSheet("ikrpg", IKRPGSpellSheet, {
-        types: ["spell"],
-        makeDefault: true,
-        label: "IKRPG Feitiço"
+
+    Handlebars.registerHelper("concat", function (...args) {
+        args.pop();
+        return args.join("");
     });
 });
 
@@ -541,7 +541,7 @@ class IKRPGBaseSheet extends ActorSheet {
             const wrapper = html.find(".skills-wrapper");
             const btn = $(ev.currentTarget);
             wrapper.toggleClass("skill-show-all", newVal);
-            btn.text(newVal ? "Ocultar skills vazias" : "Mostrar todas");
+            btn.text(newVal ? game.i18n.localize("IKRPG.Table.Header.HideSkills") : game.i18n.localize("IKRPG.Table.Header.ShowSkills"));
         });
 
         // Rolar atributos
@@ -751,7 +751,7 @@ class IKRPGActorSheet extends IKRPGBaseSheet {
 
         const showAll = this.actor.getFlag("ikrpg", "showAllSkills") || false;
         html.find(".skills-wrapper").toggleClass("skill-show-all", showAll);
-        html.find(".toggle-zero-skills").text(showAll ? "Ocultar skills vazias" : "Mostrar todas");
+        html.find(".toggle-zero-skills").text(showAll ? game.i18n.localize("IKRPG.Table.Header.HideSkills") : game.i18n.localize("IKRPG.Table.Header.ShowSkills"));
 
         // Editar item
         html.find(".item-edit").click(ev => {
@@ -873,7 +873,7 @@ class IKRPGBasicNPCSheet extends IKRPGBaseSheet {
             classes: ["ikrpg", "sheet", "npc"],
             template: "systems/ikrpg/templates/sheets/npc-sheet.html",
             width: 500,
-            height: 500,
+            height: 650,
             dragDrop: [],
             resizable: true,
             minWidth: 500,

@@ -3,35 +3,27 @@
 
         <header class="sheet-header card">
             <div class="info-block">
-                <input name="name" type="text" value="{{actor.name}}"  placeholder='{{t "IKRPG.Sheet.Placeholder.Name"}}'
-                       class="character-name"/>
-<!--                <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>-->
+                <input name="name" type="text" value="{{actor.name}}" placeholder='{{t "IKRPG.Sheet.Placeholder.Name"}}' class="character-name" />
+                <!--                <h2>{{t "IKRPG.Sheet.Header.Information"}}</h2>-->
                 <div class="flexrow">
-                    <div><label>{{t "IKRPG.Sheet.Labels.Player"}}:<input type="text" name="system.player" value="{{system.player}}"/></label>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Player"}}:<input type="text" name="system.player" value="{{system.player}}" /></label>
                     </div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Archetype"}}:<input type="text" name="system.archetype"
-                                                                            value="{{system.archetype}}"/></label>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Archetype"}}:<input type="text" name="system.archetype" value="{{system.archetype}}" /></label>
                     </div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Race"}}:<input type="text" name="system.race" value="{{system.race}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Careers"}}:<input type="text" name="system.careers" value="{{system.careers}}"/></label>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Race"}}:<input type="text" name="system.race" value="{{system.race}}" /></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Careers"}}:<input type="text" name="system.careers" value="{{system.careers}}" /></label>
                     </div>
                 </div>
                 <div class="flexrow">
-                    <div><label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Gender"}}:<input type="text" name="system.sex" value="{{system.sex}}"/></label></div>
-                    <div><label>{{t "IKRPG.Sheet.Labels.Faith"}}:<input type="text" name="system.faith" value="{{system.faith}}"/></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Height"}}:<input type="text" name="system.height" value="{{system.height}}" /></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Weight"}}:<input type="text" name="system.weight" value="{{system.weight}}" /></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Gender"}}:<input type="text" name="system.sex" value="{{system.sex}}" /></label></div>
+                    <div><label>{{t "IKRPG.Sheet.Labels.Faith"}}:<input type="text" name="system.faith" value="{{system.faith}}" /></label></div>
                 </div>
             </div>
 
             <div class="flexrow header-flex">
-                <img
-                        class="img-profile"
-                        id="img-profile"
-                        src="{{actor.img}}"
-                        data-edit="img"
-                        alt="character portrait"
-                />
+                <img class="img-profile" id="img-profile" src="{{actor.img}}" data-edit="img" alt="character portrait" />
 
                 <div class="stats-group">
                     <!-- Row 1: HP e Max HP -->
@@ -41,12 +33,7 @@
                             <button type="button" class="hp-minus control-button">–</button>
                             <label>
                                 {{t "IKRPG.Sheet.Labels.HP"}}
-                                <input
-                                        type="number"
-                                        name="system.hp.value"
-                                        value="{{system.hp.value}}"
-                                        class="small-field"
-                                />
+                                <input type="number" name="system.hp.value" value="{{system.hp.value}}" class="small-field" />
                             </label>
                             <button type="button" class="hp-plus control-button">+</button>
                         </div>
@@ -54,13 +41,7 @@
                         <div class="hp-max">
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Max"}}
-                                <input
-                                        type="number"
-                                        name="system.hp.max"
-                                        value="{{system.hp.max}}"
-                                        disabled
-                                        class="small-field"
-                                />
+                                <input type="number" name="system.hp.max" value="{{system.hp.max}}" disabled class="small-field" />
                             </label>
                         </div>
                     </div>
@@ -71,29 +52,14 @@
                             <button type="button" class="fatigue-minus control-button">-</button>
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Fatigue"}}
-                                <input
-                                        id="system.fatigue.value"
-                                        name="system.fatigue.value"
-                                        type="number"
-                                        value="{{system.fatigue.value}}"
-                                        min="0"
-                                        class="small-field"
-                                />
+                                <input id="system.fatigue.value" name="system.fatigue.value" type="number" value="{{system.fatigue.value}}" min="0" class="small-field" />
                             </label>
                             <button type="button" class="fatigue-plus control-button">+</button>
                         </div>
                         <div class="fatigue-max">
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Max"}}
-                                <input
-                                        id="system.fatigue.max"
-                                        name="system.fatigue.max"
-                                        type="number"
-                                        value="{{system.fatigue.max}}"
-                                        min="0"
-                                        disabled
-                                        class="small-field"
-                                />
+                                <input id="system.fatigue.max" name="system.fatigue.max" type="number" value="{{system.fatigue.max}}" min="0" disabled class="small-field" />
                             </label>
                         </div>
                     </div>
@@ -104,48 +70,25 @@
                             <button type="button" class="focus-minus control-button">-</button>
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Focus"}}
-                                <input
-                                        id="system.focus.value"
-                                        name="system.focus.value"
-                                        type="number"
-                                        value="{{system.focus.value}}"
-                                        min="0"
-                                        class="small-field"
-                                />
+                                <input id="system.focus.value" name="system.focus.value" type="number" value="{{system.focus.value}}" min="0" class="small-field" />
                             </label>
                             <button type="button" class="focus-plus control-button">+</button>
                         </div>
                         <div class="focus-max">
                             <label>
                                 {{t "IKRPG.Sheet.Labels.Max"}}
-                                <input
-                                        id="system.focus.max"
-                                        name="system.focus.max"
-                                        type="number"
-                                        value="{{system.focus.max}}"
-                                        min="0"
-                                        disabled
-                                        class="small-field"
-                                />
+                                <input id="system.focus.max" name="system.focus.max" type="number" value="{{system.focus.max}}" min="0" disabled class="small-field" />
                             </label>
                         </div>
                     </div>
                     {{/if}}
                 </div>
                 <label for="system.fatigue.enabled">
-                    <input
-                            id="system.fatigue.enabled"
-                            type="checkbox"
-                            name="system.fatigue.enabled"
-                            {{checked system.fatigue.enabled}}/>
+                    <input id="system.fatigue.enabled" type="checkbox" name="system.fatigue.enabled" {{checked system.fatigue.enabled}} />
                     {{t "IKRPG.Sheet.Labels.Weaver"}}
                 </label>
                 <label for="system.focus.enabled">
-                    <input
-                            id="system.focus.enabled"
-                            type="checkbox"
-                            name="system.focus.enabled"
-                            {{checked system.focus.enabled}}/>
+                    <input id="system.focus.enabled" type="checkbox" name="system.focus.enabled" {{checked system.focus.enabled}} />
                     {{t "IKRPG.Sheet.Labels.Focuser"}}
                 </label>
             </div>
@@ -161,47 +104,47 @@
             <div class="tab" data-group="inventory" data-tab="weapons">
                 <table class="item-table">
                     <thead>
-                    <tr>
-                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
-                        <th>{{t "IKRPG.Table.Header.Skill"}}</th>
-                        <th>{{t "IKRPG.Table.Header.Tags"}}</th>
-                        <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
-                        <th class="col-mod">{{t "IKRPG.Table.Header.Mod"}}</th>
-                        <th class="col-item-info">🔎</th>
-                        <th class="col-item-roll">🎲</th>
-                        <th class="col-manage">⚙️</th>
-                    </tr>
+                        <tr>
+                            <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Skill"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Tags"}}</th>
+                            <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
+                            <th class="col-mod">{{t "IKRPG.Table.Header.Mod"}}</th>
+                            <th class="col-item-info">🔎</th>
+                            <th class="col-item-roll">🎲</th>
+                            <th class="col-manage">⚙️</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {{#each items as |item|}}
-                    {{#if (eq item.type "meleeWeapon")}}
-                    <tr class="item text-center" data-item-id="{{item._id}}">
-                        <td>{{item.name}}</td>
-                        <td>{{item.system.skill}}</td>
-                        <td>
-                            <div class="tags-container">
-                                {{#each item.system.tags}}
-                                <span class="tag">{{this}}</span>
-                                {{/each}}
-                            </div>
-                        </td>
-                        <td>{{item.system.pow}}</td>
-                        <td>{{item.system.attackMod}}</td>
-                        <td>
-                            <button class="item-info info-button">🔎</button>
-                        </td>
-                        <td>
-                            <button class="item-roll dice-button">🎲</button>
-                        </td>
-                        <td class="action-buttons">
-                            <div class="button-group">
-                                <button class="item-edit edit-button">✎</button>
-                                <button class="item-delete trash-button">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                    {{/if}}
-                    {{/each}}
+                        {{#each items as |item|}}
+                        {{#if (eq item.type "meleeWeapon")}}
+                        <tr class="item text-center" data-item-id="{{item._id}}">
+                            <td>{{item.name}}</td>
+                            <td>{{item.system.skill}}</td>
+                            <td>
+                                <div class="tags-container">
+                                    {{#each item.system.tags}}
+                                    <span class="tag">{{this}}</span>
+                                    {{/each}}
+                                </div>
+                            </td>
+                            <td>{{item.system.pow}}</td>
+                            <td>{{item.system.attackMod}}</td>
+                            <td>
+                                <button class="item-info info-button">🔎</button>
+                            </td>
+                            <td>
+                                <button class="item-roll dice-button">🎲</button>
+                            </td>
+                            <td class="action-buttons">
+                                <div class="button-group">
+                                    <button class="item-edit edit-button">✎</button>
+                                    <button class="item-delete trash-button">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
                     </tbody>
                 </table>
                 <div class="add-item">
@@ -212,45 +155,45 @@
 
                 <table class="item-table">
                     <thead>
-                    <tr>
-                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
-                        <th>{{t "IKRPG.Table.Header.Skill"}}</th>
-                        <th>{{t "IKRPG.Table.Header.Tags"}}</th>
-                        <th>{{t "IKRPG.Table.Header.Range"}}</th>
-                        <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
-                        <th class="col-item-info">🔎</th>
-                        <th class="col-item-roll">🎲</th>
-                        <th class="col-manage">⚙️</th>
-                    </tr>
+                        <tr>
+                            <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Skill"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Tags"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Range"}}</th>
+                            <th class="col-pow">{{t "IKRPG.Table.Header.POW"}}</th>
+                            <th class="col-item-info">🔎</th>
+                            <th class="col-item-roll">🎲</th>
+                            <th class="col-manage">⚙️</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {{#each items as |item|}}
-                    {{#if (eq item.type "rangedWeapon")}}
-                    <tr class="item text-center" data-item-id="{{item._id}}">
-                        <td>{{item.name}}</td>
-                        <td>{{item.system.skill}}</td>
-                        <td class="text-center">
-                            {{#each item.system.tags}}
-                            <span class="tag">{{this}}</span>
-                            {{/each}}
-                        </td>
-                        <td>{{item.system.effectiveRange}}</td>
-                        <td>{{item.system.pow}}</td>
-                        <td>
-                            <button class="item-info info-button">🔎</button>
-                        </td>
-                        <td>
-                            <button class="item-roll dice-button">🎲</button>
-                        </td>
-                        <td class="action-buttons">
-                            <div class="button-group">
-                                <button class="item-edit edit-button">✎</button>
-                                <button class="item-delete trash-button">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                    {{/if}}
-                    {{/each}}
+                        {{#each items as |item|}}
+                        {{#if (eq item.type "rangedWeapon")}}
+                        <tr class="item text-center" data-item-id="{{item._id}}">
+                            <td>{{item.name}}</td>
+                            <td>{{item.system.skill}}</td>
+                            <td class="text-center">
+                                {{#each item.system.tags}}
+                                <span class="tag">{{this}}</span>
+                                {{/each}}
+                            </td>
+                            <td>{{item.system.effectiveRange}}</td>
+                            <td>{{item.system.pow}}</td>
+                            <td>
+                                <button class="item-info info-button">🔎</button>
+                            </td>
+                            <td>
+                                <button class="item-roll dice-button">🎲</button>
+                            </td>
+                            <td class="action-buttons">
+                                <div class="button-group">
+                                    <button class="item-edit edit-button">✎</button>
+                                    <button class="item-delete trash-button">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
                     </tbody>
                 </table>
                 <div class="add-item">
@@ -262,43 +205,43 @@
             <div class="tab" data-group="inventory" data-tab="equipment">
                 <table class="item-table">
                     <thead>
-                    <tr>
-                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
-                        <th>{{t "IKRPG.Table.Header.Equipped"}}</th>
-                        <th>{{t "IKRPG.Table.Header.ARM"}}</th>
-                        <th>{{t "IKRPG.Table.Header.DEF"}}</th>
-                        <th>{{t "IKRPG.Table.Header.SPD"}}</th>
-                        <th class="col-item-info">🔎</th>
-                        <th class="col-manage">⚙️</th>
-                    </tr>
+                        <tr>
+                            <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                            <th>{{t "IKRPG.Table.Header.Equipped"}}</th>
+                            <th>{{t "IKRPG.Table.Header.ARM"}}</th>
+                            <th>{{t "IKRPG.Table.Header.DEF"}}</th>
+                            <th>{{t "IKRPG.Table.Header.SPD"}}</th>
+                            <th class="col-item-info">🔎</th>
+                            <th class="col-manage">⚙️</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {{#each items as |item|}}
-                    {{#if (eq item.type "armor")}}
-                    <tr class="item text-center" data-item-id="{{item._id}}">
-                        <td>{{item.name}}</td>
-                        <td>
-                            {{#if item.system.isEquipped}}
-                            ✔️
-                            {{else}}
-                            ⚪
-                            {{/if}}
-                        </td>
-                        <td>{{item.system.armorBonus}}</td>
-                        <td>{{item.system.defPenalty}}</td>
-                        <td>{{item.system.spdPenalty}}</td>
-                        <td>
-                            <button class="item-info info-button">🔎</button>
-                        </td>
-                        <td class="action-buttons">
-                            <div class="button-group">
-                                <button class="item-edit edit-button">✎</button>
-                                <button class="item-delete trash-button">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                    {{/if}}
-                    {{/each}}
+                        {{#each items as |item|}}
+                        {{#if (eq item.type "armor")}}
+                        <tr class="item text-center" data-item-id="{{item._id}}">
+                            <td>{{item.name}}</td>
+                            <td>
+                                {{#if item.system.isEquipped}}
+                                ✔️
+                                {{else}}
+                                ⚪
+                                {{/if}}
+                            </td>
+                            <td>{{item.system.armorBonus}}</td>
+                            <td>{{item.system.defPenalty}}</td>
+                            <td>{{item.system.spdPenalty}}</td>
+                            <td>
+                                <button class="item-info info-button">🔎</button>
+                            </td>
+                            <td class="action-buttons">
+                                <div class="button-group">
+                                    <button class="item-edit edit-button">✎</button>
+                                    <button class="item-delete trash-button">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
                     </tbody>
                 </table>
                 <div class="add-item">
@@ -307,29 +250,29 @@
                 </div>
                 <table class="item-table">
                     <thead>
-                    <tr>
-                        <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
-                        <th class="col-item-info">🔎</th>
-                        <th class="col-manage">⚙️</th>
-                    </tr>
+                        <tr>
+                            <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                            <th class="col-item-info">🔎</th>
+                            <th class="col-manage">⚙️</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {{#each items as |item|}}
-                    {{#if (eq item.type "equipment")}}
-                    <tr class="item" data-item-id="{{item._id}}">
-                        <td>{{item.name}}</td>
-                        <td>
-                            <button class="item-info info-button">🔎</button>
-                        </td>
-                        <td class="action-buttons">
-                            <div class="button-group">
-                                <button class="item-edit edit-button">✎</button>
-                                <button class="item-delete trash-button">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                    {{/if}}
-                    {{/each}}
+                        {{#each items as |item|}}
+                        {{#if (eq item.type "equipment")}}
+                        <tr class="item" data-item-id="{{item._id}}">
+                            <td>{{item.name}}</td>
+                            <td>
+                                <button class="item-info info-button">🔎</button>
+                            </td>
+                            <td class="action-buttons">
+                                <div class="button-group">
+                                    <button class="item-edit edit-button">✎</button>
+                                    <button class="item-delete trash-button">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/if}}
+                        {{/each}}
                     </tbody>
                 </table>
                 <div class="add-item">
@@ -342,45 +285,45 @@
                 <section data-tab="spells">
                     <table class="item-table">
                         <thead>
-                        <tr>
-                            <th>{{t "IKRPG.Table.Header.Name"}}</th>
-                            <th>{{t "IKRPG.Table.Header.Cost"}}</th>
-                            <th>{{t "IKRPG.Table.Header.Range"}}</th>
-                            <th>{{t "IKRPG.Table.Header.POW"}}</th>
-                            <th>{{t "IKRPG.Table.Header.Upkeep"}}</th>
-                            <th>{{t "IKRPG.Table.Header.Offensive"}}</th>
-                            <th>{{t "IKRPG.Table.Header.AoE"}}</th>
-                            <th class="col-item-info">🔎</th>
-                            <th>🎲</th>
-                            <th>⚙️</th>
-                        </tr>
+                            <tr>
+                                <th>{{t "IKRPG.Table.Header.Name"}}</th>
+                                <th>{{t "IKRPG.Table.Header.Cost"}}</th>
+                                <th>{{t "IKRPG.Table.Header.Range"}}</th>
+                                <th>{{t "IKRPG.Table.Header.POW"}}</th>
+                                <th>{{t "IKRPG.Table.Header.Upkeep"}}</th>
+                                <th>{{t "IKRPG.Table.Header.Offensive"}}</th>
+                                <th>{{t "IKRPG.Table.Header.AoE"}}</th>
+                                <th class="col-item-info">🔎</th>
+                                <th>🎲</th>
+                                <th>⚙️</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {{#each items as |item|}}
-                        {{#if (eq item.type "spell")}}
-                        <tr class="item text-center" data-item-id="{{item._id}}">
-                            <td>{{item.name}}</td>
-                            <td>{{item.system.cost}}</td>
-                            <td>{{item.system.rng}}</td>
-                            <td>{{item.system.pow}}</td>
-                            <td>{{#if item.system.upkeep}}✔️{{/if}}</td>
-                            <td>{{#if item.system.offensive}}✔️{{/if}}</td>
-                            <td>{{item.system.AOE}}</td>
-                            <td>
-                                <button class="item-info info-button">🔎</button>
-                            </td>
-                            <td>
-                                <button class="spell-roll dice-button">🎲</button>
-                            </td>
-                            <td class="action-buttons">
-                                <div class="button-group">
-                                    <button class="item-edit edit-button">✎</button>
-                                    <button class="item-delete trash-button">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                        {{/if}}
-                        {{/each}}
+                            {{#each items as |item|}}
+                            {{#if (eq item.type "spell")}}
+                            <tr class="item text-center" data-item-id="{{item._id}}">
+                                <td>{{item.name}}</td>
+                                <td>{{item.system.cost}}</td>
+                                <td>{{item.system.rng}}</td>
+                                <td>{{item.system.pow}}</td>
+                                <td>{{#if item.system.upkeep}}✔️{{/if}}</td>
+                                <td>{{#if item.system.offensive}}✔️{{/if}}</td>
+                                <td>{{item.system.AOE}}</td>
+                                <td>
+                                    <button class="item-info info-button">🔎</button>
+                                </td>
+                                <td>
+                                    <button class="spell-roll dice-button">🎲</button>
+                                </td>
+                                <td class="action-buttons">
+                                    <div class="button-group">
+                                        <button class="item-edit edit-button">✎</button>
+                                        <button class="item-delete trash-button">🗑️</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {{/if}}
+                            {{/each}}
                         </tbody>
                     </table>
                     <div class="add-item">
@@ -406,8 +349,7 @@
                                 {{#each system.mainAttributes as |value key|}}
                                 <div class="attribute">
                                     <label for="main-{{key}}" class="roll-attr" data-attr="{{key}}">{{key}}</label>
-                                        <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}"
-                                               value="{{value}}"/>
+                                    <input type="number" id="main-{{key}}" name="system.mainAttributes.{{key}}" value="{{value}}" />
                                 </div>
                                 {{/each}}
                             </div>
@@ -419,8 +361,7 @@
                                 {{#each system.secondaryAttributes as |value key|}}
                                 <div class="attribute">
                                     <label for="secondary-{{key}}" class="roll-attr" data-attr="{{key}}">{{key}}</label>
-                                        <input id="secondary-{{key}}" type="number" name="system.secondaryAttributes.{{key}}"
-                                               value="{{value}}"/>
+                                    <input id="secondary-{{key}}" type="number" name="system.secondaryAttributes.{{key}}" value="{{value}}" />
                                 </div>
                                 {{/each}}
                             </div>
@@ -432,7 +373,7 @@
                                 {{#each system.derivedAttributes as |value key|}}
                                 <div class="attribute">
                                     <label for="derived-{{key}}" class="roll-attr" data-attr="{{key}}">{{key}}</label>
-                                        <input id="derived-{{key}}" type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled/>
+                                    <input id="derived-{{key}}" type="number" name="system.derivedAttributes.{{key}}" value="{{value}}" disabled />
                                 </div>
                                 {{/each}}
                             </div>
@@ -440,113 +381,100 @@
                         <div class="additional-fields">
                             <div class="additional-field">
                                 <label for="system.featPoints" class="big-label">{{t "IKRPG.Sheet.Label.FeatPoints"}}:</label>
-                                <input type="number" name="system.featPoints" value="{{system.featPoints}}" min="0"
-                                       class="big-input"/>
+                                <input type="number" name="system.featPoints" value="{{system.featPoints}}" min="0" class="big-input" />
                             </div>
                             <div class="additional-field">
                                 <label for="system.gold" class="big-label">{{t "IKRPG.Sheet.Label.Gold"}}:</label>
-                                <input type="number" name="system.gold" value="{{system.gold}}" min="0"
-                                       class="big-input"/>
+                                <input type="number" name="system.gold" value="{{system.gold}}" min="0" class="big-input" />
                             </div>
                         </div>
 
                     </div>
                 </div>
                 <div class="tab" data-group="primary" data-tab="occupationalSkills">
-                <div class="skills-controls">
-                    <button type="button" class="toggle-zero-skills">Mostrar todas</button>
-                </div>
+                    <div class="skills-controls">
+                        <button type="button" class="toggle-zero-skills">{{t "IKRPG.Table.Header.ShowSkills"}}</button>
+                    </div>
                     <div class="skills-wrapper">
 
                         <table class="skills-table">
                             <thead>
-                            <tr>
-                                <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
-                                <th class="col-attr">{{t "IKRPG.Table.Header.Attribute"}}</th>
-                                <th class="col-lvl">{{t "IKRPG.Table.Header.Level"}}</th>
-                                <th class="col-skill-roll">🎲</th>
-                            </tr>
+                                <tr>
+                                    <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                                    <th class="col-attr">{{t "IKRPG.Table.Header.Attribute"}}</th>
+                                    <th class="col-lvl">{{t "IKRPG.Table.Header.Level"}}</th>
+                                    <th class="col-skill-roll">🎲</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {{#each system.occupationalSkills}}
-                            <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
-                            <td>
-                                    {{this.name}}
-                                    <input type="hidden" name="system.occupationalSkills.{{@index}}.name"
-                                           value="{{this.name}}"/>
-                                </td>
+                                {{#each system.occupationalSkills}}
+                                <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
+                                    <td>
+                                        {{t (concat "IKRPG.Sheet.OcSkills." this.name)}}
+                                        <input type="hidden" name="system.occupationalSkills.{{@index}}.name" value="{{this.name}}" />
+                                    </td>
 
-                                <td>
-                                    <select name="system.occupationalSkills.{{@index}}.attr" class="skill-select">
-                                        <option value="SOC" {{#if (eq
-                                        "SOC" this.attr)}}selected{{/if}}>--</option>
+                                    <td>
+                                        <select name="system.occupationalSkills.{{@index}}.attr" class="skill-select">
+                                            <option value="SOC" {{#if (eq "SOC" this.attr)}}selected{{/if}}>--</option>
 
-                                        {{#each ../system.mainAttributes as |val attrKey|}}
-                                        <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                        /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                        {{/each}}
+                                            {{#each ../system.mainAttributes as |val attrKey|}}
+                                            <option value="{{attrKey}}" {{#if (eq attrKey .. /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                            {{/each}}
 
-                                        {{#each ../system.secondaryAttributes as |val attrKey|}}
-                                        <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                        /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                        {{/each}}
-                                    </select>
-                                </td>
+                                            {{#each ../system.secondaryAttributes as |val attrKey|}}
+                                            <option value="{{attrKey}}" {{#if (eq attrKey .. /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </td>
 
-                                <td class="text-center">
-                                    <input type="number" name="system.occupationalSkills.{{@index}}.level"
-                                           value="{{this.level}}"
-                                           min="0"/>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="roll-skill dice-button" data-idx="{{@index}}">🎲
-                                    </button>
-                                </td>
-                            </tr>
-                            {{/each}}
+                                    <td class="text-center">
+                                        <input type="number" name="system.occupationalSkills.{{@index}}.level" value="{{this.level}}" min="0" />
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="roll-skill dice-button" data-idx="{{@index}}">🎲
+                                        </button>
+                                    </td>
+                                </tr>
+                                {{/each}}
                             </tbody>
                         </table>
                         <table class="skills-table">
                             <thead>
-                            <tr>
-                                <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
-                                <th class="col-attr">{{t "IKRPG.Table.Header.Attribute"}}</th>
-                                <th class="col-lvl">{{t "IKRPG.Table.Header.Level"}}</th>
-                                <th class="col-skill-roll">🎲</th>
-                            </tr>
+                                <tr>
+                                    <th class="col-name">{{t "IKRPG.Table.Header.Name"}}</th>
+                                    <th class="col-attr">{{t "IKRPG.Table.Header.Attribute"}}</th>
+                                    <th class="col-lvl">{{t "IKRPG.Table.Header.Level"}}</th>
+                                    <th class="col-skill-roll">🎲</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {{#each system.militarySkills}}
-                            <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
-                                <td>
-                                    {{this.name}}
-                                    <input type="hidden" name="system.militarySkills.{{@index}}.name"
-                                           value="{{this.name}}"/>
-                                </td>
-                                <td>
-                                    <select name="system.militarySkills.{{@index}}.attr" class="skill-select">
-                                        {{#each ../system.mainAttributes as |val attrKey|}}
-                                        <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                        /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                        {{/each}}
-                                        {{#each ../system.secondaryAttributes as |val attrKey|}}
-                                        <option value="{{attrKey}}" {{#if (eq attrKey ..
-                                        /this.attr)}}selected{{/if}}>{{attrKey}}</option>
-                                        {{/each}}
-                                    </select>
-                                </td>
-                                <td class="text-center">
-                                    <input type="number" name="system.militarySkills.{{@index}}.level"
-                                           value="{{this.level}}"
-                                           min="0"/>
-                                </td>
-                                <td class="text-center">
-                                    <button type="button" class="roll-military-skill dice-button" data-idx="{{@index}}">
-                                        🎲
-                                    </button>
-                                </td>
-                            </tr>
-                            {{/each}}
+                                {{#each system.militarySkills}}
+                                <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
+                                    <td>
+                                        {{t (concat "IKRPG.Sheet.MilSkills." this.name)}}
+                                        <input type="hidden" name="system.militarySkills.{{@index}}.name" value="{{this.name}}" />
+                                    </td>
+                                    <td>
+                                        <select name="system.militarySkills.{{@index}}.attr" class="skill-select">
+                                            {{#each ../system.mainAttributes as |val attrKey|}}
+                                            <option value="{{attrKey}}" {{#if (eq attrKey .. /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                            {{/each}}
+                                            {{#each ../system.secondaryAttributes as |val attrKey|}}
+                                            <option value="{{attrKey}}" {{#if (eq attrKey .. /this.attr)}}selected{{/if}}>{{attrKey}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number" name="system.militarySkills.{{@index}}.level" value="{{this.level}}" min="0" />
+                                    </td>
+                                    <td class="text-center">
+                                        <button type="button" class="roll-military-skill dice-button" data-idx="{{@index}}">
+                                            🎲
+                                        </button>
+                                    </td>
+                                </tr>
+                                {{/each}}
                             </tbody>
                         </table>
                     </div>
