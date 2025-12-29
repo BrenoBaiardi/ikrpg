@@ -410,7 +410,7 @@
                                 {{#each system.occupationalSkills}}
                                 <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
                                     <td>
-                                        {{this.name}}
+                                        {{t (concat "IKRPG.Sheet.OcSkills." this.name)}}
                                         <input type="hidden" name="system.occupationalSkills.{{@index}}.name" value="{{this.name}}" />
                                     </td>
 
@@ -452,7 +452,7 @@
                                 {{#each system.militarySkills}}
                                 <tr class="skill-row {{#if (eq this.level 0)}}skill-zero{{/if}}" data-level="{{this.level}}">
                                     <td>
-                                        {{this.name}}
+                                        {{t (concat "IKRPG.Sheet.MilSkills." this.name)}}
                                         <input type="hidden" name="system.militarySkills.{{@index}}.name" value="{{this.name}}" />
                                     </td>
                                     <td>

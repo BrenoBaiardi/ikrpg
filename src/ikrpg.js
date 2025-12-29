@@ -57,6 +57,11 @@ Hooks.once("init", function () {
     Items.registerSheet("ikrpg", IKRPGItemSheet, {
         makeDefault: true
     });
+
+    Handlebars.registerHelper("concat", function (...args) {
+        args.pop();
+        return args.join("");
+    });
 });
 
 Hooks.once("ready", () => {
