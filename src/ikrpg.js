@@ -365,7 +365,7 @@ Hooks.on("updateCombat", (combat, changed) => {
 });
 
 
-Hooks.on("renderChatMessageHTML", (message, html, data) => {
+Hooks.on("renderChatMessage", (message, html, data) => {
 
     // Botão de Ataque
     html.find(".attack-roll").click(event => handleAttackRoll(event, message));
