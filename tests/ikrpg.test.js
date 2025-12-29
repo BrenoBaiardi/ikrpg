@@ -205,7 +205,7 @@ describe("findMilitarySkill", () => {
 
         const result = findMilitarySkill(item, actor);
         expect(result).toEqual({name: "undefined", attr: 0, level: 0});
-        expect(mockWarn).toHaveBeenCalledWith('Perícia militar não encontrada -> [Gunsmithing].');
+        expect(mockWarn).toHaveBeenCalledWith('No Military Skill found -> [Gunsmithing].');
     });
 
 });
@@ -389,7 +389,7 @@ describe("getAttackValues", () => {
 
             const result = getAttackValues(sampleActor, item);
             expect(result).toEqual({attr: 0, skill: 0});
-            expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("Perícia militar não encontrada -> [Inexistente]."));
+            expect(global.ui.notifications.warn).toHaveBeenCalledWith(expect.stringContaining("No Military Skill found -> [Inexistente]."));
         });
     });
 
